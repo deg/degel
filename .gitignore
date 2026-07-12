@@ -1,0 +1,19 @@
+# Local dev tooling & agent config.
+#
+# These live in the PRIVATE companion repo `website-internal-assets` (a sibling
+# directory), symlinked into this working copy so the tooling works in place.
+# They must never be published to the public gh-pages site (degel.com) or the
+# public repo (github.com/deg/degel).
+.beads/
+.claude
+.codex
+.agents
+CLAUDE.md
+AGENTS.md
+_website_notes.txt
+
+# Beads / Dolt runtime files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads/proxieddb/
