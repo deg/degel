@@ -120,12 +120,6 @@ nav::after { content: ""; display: block; height: 3px; background: var(--spectru
 header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--paper), var(--tint-a)); }
 .waveband { line-height: 0; background: var(--tint-a); }
 .waveband svg { width: 100%; height: 110px; display: block; }
-.wavespan {
-  background-image: var(--spectrum);
-  background-repeat: no-repeat;
-  background-position: 0 94%;
-  background-size: 100% .13em;
-}
 .hero h1 {
   font-size: clamp(2.7rem, 7vw, 4.6rem);
   letter-spacing: -0.015em;
@@ -192,9 +186,11 @@ section { padding: 5.5rem 0; }
 .artifacts .chip {
   display: inline-flex; align-items: center; justify-content: center;
   background: var(--chip-bg); border: 1px solid var(--line); border-radius: 7px;
-  padding: .38rem .7rem; height: 2.3rem;
+  padding: .38rem .7rem; height: 2.5rem;
+  position: relative; transition: transform .18s ease, box-shadow .18s ease;
 }
-.artifacts img { max-height: 1.35rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
+.artifacts .chip:hover { transform: scale(1.9); z-index: 5; box-shadow: var(--shadow); }
+.artifacts img { max-height: 1.5rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
 .artifacts .chip:hover img { filter: none; opacity: 1; }
 .artifacts .chip.degel-chip img { filter: none; opacity: 1; }
 .artifacts .label { font-size: .72rem; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-right: .3rem; }
@@ -238,6 +234,7 @@ section { padding: 5.5rem 0; }
 .quotes figure:nth-child(1) { --qc: var(--w4); }
 .quotes figure:nth-child(2) { --qc: var(--w2); }
 .quotes figure:nth-child(3) { --qc: var(--w3); }
+.quotes figure:nth-child(4) { --qc: var(--w5); }
 .quotes blockquote {
   margin: 0 0 .8rem;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -310,7 +307,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   <div class="wrap">
     <p class="eyebrow">Degel Software Ltd &middot; founded 1988</p>
     <h1>Your next product, prototyped at AI&nbsp;speed.</h1>
-    <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. Rapid prototyping, technical due diligence, patent guidance, and senior technical judgment &mdash; backed by hands-on shipping through <span class="wavespan">every technology wave since 1980</span>. <strong>The AI wave is the biggest yet, and I build with it every day.</strong></p>
+    <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. Rapid prototyping, technical due diligence, patent guidance, and senior technical judgment &mdash; backed by hands-on shipping through <a href="#waves">every technology wave since 1980</a>. <strong>The AI wave is the biggest yet, and I build with it every day.</strong></p>
     <div class="hero-ctas">
       <a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a>
       <a class="btn quiet" href="#waves">See the track record</a>
@@ -402,6 +399,10 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
           <span class="years eyebrow">1996&ndash;2001</span>
           <h3>The first internet boom</h3>
           <p>Co-founded 2AM Inc. as VP Technology and directed its core <em>Creation</em> engine &mdash; the scripting and runtime environment for a massively distributed, peer-to-peer game platform that served over 250,000 users in the dial-up era.</p>
+          <div class="artifacts">
+            <span class="label">Era artifacts</span>
+            <span class="chip degel-chip"><img src="{{IMG:2am-logo.jpg}}" alt="2AM &mdash; It&rsquo;s Time for Internet Games"></span>
+          </div>
         </div>
       </div>
 
@@ -442,7 +443,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">2023&ndash;now</span>
           <h3>AI-augmented development</h3>
-          <p>The biggest shift I&rsquo;ve seen in four decades, and I work inside it daily: LLM data pipelines, AI-accelerated MVPs, agentic coding workflows, AI-assisted patent drafting. Not a tourist &mdash; a resident. One recent weekend, working alongside Claude, I built a <a href="https://github.com/deg/nscheme">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite.</p>
+          <p>The biggest shift I&rsquo;ve seen in four decades, and I work inside it daily: LLM data pipelines, AI-accelerated MVPs, agentic coding workflows, AI-assisted patent drafting. Not a tourist &mdash; a resident. One recent weekend, working alongside Claude, I built a <a href="https://github.com/deg/nscheme">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite. The weekend after: a <a href="https://github.com/deg/CPeMulator">Z80 and CP/M emulator</a> that boots the genuine 1979 operating system and runs WordStar, Turbo Pascal, and Zork.</p>
         </div>
       </div>
     </div>
@@ -452,8 +453,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <section id="work">
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Recent work</p>
-      <h2>What shipping looks like now</h2>
+      <p class="eyebrow">Portfolio</p>
+      <h2>Recent work</h2>
     </div>
     <div class="work-grid">
       <div class="case" data-client="marketbuzzr">
@@ -491,6 +492,10 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <figure>
         <blockquote>&ldquo;&hellip;one of the most featured and usable Talk Now clients we have, and this was no mean feat.&rdquo;</blockquote>
         <figcaption>Mick Angel &middot; Application Design Manager, Orange</figcaption>
+      </figure>
+      <figure>
+        <blockquote>&ldquo;Knowledgeable, creative, methodical, never fearing to explore.&rdquo;</blockquote>
+        <figcaption>Eyal Barel &middot; LinkedIn recommendation</figcaption>
       </figure>
     </div>
   </div>
@@ -537,6 +542,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
           <li>Co-founded 2AM Inc., 1996</li>
           <li>Co-founded Vringo (CTO) &mdash; IPO&rsquo;d as NYSE:VRNG</li>
           <li>Named inventor on four US patents</li>
+          <li>ACM member since 1982 &middot; IEEE member since 1988</li>
+          <li>ACM Computing Reviews featured reviewer</li>
           <li>Beit Shemesh, Israel &middot; clients worldwide</li>
         </ul>
       </div>
@@ -553,6 +560,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <span>+972&nbsp;54&nbsp;723&#8209;0120</span>
       <span>+1&nbsp;781&nbsp;923&#8209;0120</span>
       <a href="https://www.linkedin.com/in/davidegoldfarb/">LinkedIn</a>
+      <a href="https://github.com/deg">GitHub</a>
     </div>
   </div>
 </section>
