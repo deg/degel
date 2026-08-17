@@ -192,7 +192,7 @@ section { padding: 5.5rem 0; }
 .artifacts .chip:hover { transform: scale(1.9); z-index: 5; background: #fff; box-shadow: var(--shadow); }
 .artifacts img { max-height: 1.5rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
 .artifacts .chip:hover img { filter: none; opacity: 1; }
-.artifacts .chip.degel-chip img { filter: none; opacity: 1; }
+.artifacts .chip.color-chip img { filter: none; opacity: 1; }
 .artifacts .label { font-size: .72rem; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-right: .3rem; }
 
 /* ============ services ============ */
@@ -229,12 +229,14 @@ section { padding: 5.5rem 0; }
 .work-note { margin-top: 1.6rem; font-size: .88rem; color: var(--faint); }
 
 /* ============ quotes ============ */
-.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.6rem; margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
 .quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
 .quotes figure:nth-child(1) { --qc: var(--w4); }
 .quotes figure:nth-child(2) { --qc: var(--w2); }
 .quotes figure:nth-child(3) { --qc: var(--w3); }
 .quotes figure:nth-child(4) { --qc: var(--w5); }
+.quotes figure:nth-child(5) { --qc: var(--w1); }
+.quotes figure:nth-child(6) { --qc: var(--w6); }
 .quotes blockquote {
   margin: 0 0 .8rem;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -401,7 +403,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
           <p>Co-founded 2AM Inc. as VP Technology and directed its core <em>Creation</em> engine &mdash; the scripting and runtime environment for a massively distributed, peer-to-peer game platform that served over 250,000 users in the dial-up era.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
-            <span class="chip degel-chip"><img src="{{IMG:2am-logo.jpg}}" alt="2AM &mdash; It&rsquo;s Time for Internet Games"></span>
+            <span class="chip color-chip"><img src="{{IMG:2am-logo.jpg}}" alt="2AM &mdash; It&rsquo;s Time for Internet Games"></span>
           </div>
         </div>
       </div>
@@ -414,12 +416,12 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
           <p>Ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones. Built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients. Push-to-talk for Orange UK. Shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written. Symbian named Degel a Platinum Partner, and Degel-built apps swept the Handango Champion awards. Co-founded Vringo as CTO, steered its mobile products through the arrival of the modern smartphone, and guided it to a NYSE IPO.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
-            <span class="chip degel-chip"><img src="{{IMG:degel-swat.png}}" alt="Degel Software S.W.A.T. Team &mdash; our logo in the mobile era"></span>
+            <span class="chip color-chip"><img src="{{IMG:degel-swat.png}}" alt="Degel Software S.W.A.T. Team &mdash; our logo in the mobile era"></span>
             <span class="chip"><img src="{{IMG:sun.gif}}" alt="Sun Microsystems"></span>
             <span class="chip"><img src="{{IMG:icq_logo_new.gif}}" alt="ICQ"></span>
             <span class="chip"><img src="{{IMG:logo_orange.gif}}" alt="Orange"></span>
             <span class="chip"><img src="{{IMG:logo_intel.gif}}" alt="Intel"></span>
-            <span class="chip"><img src="{{IMG:logo_vringo.png}}" alt="Vringo"></span>
+            <span class="chip color-chip"><img src="{{IMG:logo_vringo.png}}" alt="Vringo"></span>
             <span class="chip"><img src="{{IMG:logo_iskoot.png}}" alt="iSkoot"></span>
           </div>
         </div>
@@ -494,6 +496,14 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <figure>
         <blockquote>&ldquo;&hellip;one of the most featured and usable Talk Now clients we have, and this was no mean feat.&rdquo;</blockquote>
         <figcaption>Mick Angel &middot; Application Design Manager, Orange</figcaption>
+      </figure>
+      <figure>
+        <blockquote>&ldquo;They have a good (and rare) feeling for what makes a good application. &hellip; All the little choices they made &hellip; were always perfect.&rdquo;</blockquote>
+        <figcaption>Patrice Uzan &middot; VP Marketing, Natural Widgets</figcaption>
+      </figure>
+      <figure>
+        <blockquote>&ldquo;&hellip;a smart, customizable web interface that enabled us to produce a compelling demo and secure a critical round of financing.&rdquo;</blockquote>
+        <figcaption>Hillel Rom &middot; CTO, 3dMe</figcaption>
       </figure>
       <figure>
         <blockquote>&ldquo;Knowledgeable, creative, methodical, never fearing to explore.&rdquo;</blockquote>
