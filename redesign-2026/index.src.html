@@ -170,6 +170,7 @@ section + section { border-top: 1px solid var(--line); }
 }
 .artifacts img { max-height: 1.35rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
 .artifacts .chip:hover img { filter: none; opacity: 1; }
+.artifacts .chip.degel-chip img { filter: none; opacity: 1; }
 .artifacts .label { font-size: .72rem; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-right: .3rem; }
 
 /* ============ services ============ */
@@ -178,7 +179,7 @@ section + section { border-top: 1px solid var(--line); }
   background: var(--card); border: 1px solid var(--line); border-radius: 14px;
   padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
 }
-.svc h3 { font-size: 1.28rem; margin: .8rem 0 .7rem; }
+.svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--accent); padding-top: .9rem; }
 .svc p { color: var(--muted); font-size: .98rem; }
 .svc .flag { width: 1.05rem; height: 1.45rem; color: var(--faint); }
 
@@ -190,6 +191,10 @@ section + section { border-top: 1px solid var(--line); }
   display: flex; flex-direction: column; gap: .75rem;
 }
 .case .sector { color: var(--accent); }
+.case .client { display: flex; align-items: center; gap: .55rem; }
+.case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
+.case .client img.wide { height: 1.15rem; }
+.case .client a { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
 .case p { color: var(--muted); font-size: .96rem; flex: 1; }
 .case .stack { display: flex; flex-wrap: wrap; gap: .4rem; }
 .case .stack span {
@@ -198,6 +203,27 @@ section + section { border-top: 1px solid var(--line); }
   padding: .18rem .55rem; border-radius: 999px;
 }
 .work-note { margin-top: 1.6rem; font-size: .88rem; color: var(--faint); }
+
+/* ============ quotes ============ */
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.6rem; margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+.quotes figure { margin: 0; }
+.quotes blockquote {
+  margin: 0 0 .8rem;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic; font-size: 1.02rem; line-height: 1.55; color: var(--ink);
+}
+.quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
+
+/* ============ writing ============ */
+.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
+.articles li { border-left: 3px solid var(--accent); padding-left: 1.1rem; }
+.articles a {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.18rem; font-weight: 600; color: var(--ink);
+}
+.articles a:hover { color: var(--accent); }
+.articles p { color: var(--muted); font-size: .95rem; margin-top: .3rem; }
+.more-writing { margin-top: 1.8rem; font-size: .85rem; }
 
 /* ============ about ============ */
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
@@ -234,14 +260,12 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 
 <nav aria-label="Site">
   <div class="nav-inner">
-    <a class="brand" href="#top" aria-label="Degel Software home">
-      <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
-      Degel
-    </a>
+    <a class="brand" href="#top" aria-label="Degel Software home">Degel Software</a>
     <div class="nav-links">
       <a href="#waves">The waves</a>
       <a href="#services">What I do</a>
       <a href="#work">Recent work</a>
+      <a href="#writing">Writing</a>
       <a href="#about">About</a>
       <a class="cta" href="mailto:deg@degel.com">Email David</a>
     </div>
@@ -251,13 +275,13 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <header class="hero" id="top">
   <div class="wrap">
     <p class="eyebrow">Degel Software Ltd &middot; founded 1988</p>
-    <h1>Every wave since&nbsp;1988<svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="4" x2="4" y2="26"/><path class="cloth" d="M5.5 5 L17.5 8.6 L5.5 12.6 Z"/></svg></h1>
+    <h1>Every wave since&nbsp;1980.</h1>
     <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. I&rsquo;ve shipped through Lisp machines, the first internet boom, the mobile revolution, and the modern web. <strong>Now I build with AI every day, and it&rsquo;s the biggest wave yet.</strong> I can take your idea from whiteboard to working software faster than you think possible.</p>
     <div class="hero-ctas">
       <a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a>
       <a class="btn quiet" href="#waves">See the track record</a>
     </div>
-    <p class="kicker mono">1988 &rarr; 2026 &middot; six technology waves &middot; still shipping</p>
+    <p class="kicker mono">1980 &rarr; 2026 &middot; six technology waves &middot; still shipping</p>
   </div>
 </header>
 
@@ -266,22 +290,26 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="section-head">
       <p class="eyebrow">Track record</p>
       <h2>A flag on every wave</h2>
-      <p><span class="he" lang="he" dir="rtl">דגל</span> (<em>degel</em>) is Hebrew for &ldquo;flag.&rdquo; Since 1988 I&rsquo;ve planted one on each technology wave as it arrived &mdash; not watching from shore, but shipping commercial software inside every shift.</p>
+      <p><span class="he" lang="he" dir="rtl">דגל</span> (<em>degel</em>) is Hebrew for &ldquo;flag.&rdquo; I&rsquo;ve planted one on every technology wave since 1980 &mdash; not watching from shore, but shipping commercial software inside each shift.</p>
     </div>
 
     <div class="waves">
       <div class="wave">
-        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
-          <span class="years eyebrow">1984&ndash;1990</span>
-          <h3>Lisp machines &amp; symbolic AI</h3>
-          <p>Fresh from MIT and newly moved to Israel, I designed and built image-processing research toolkits on Symbolics Lisp machines &mdash; working in AI decades before it was fashionable.</p>
+          <span class="years eyebrow">1980&ndash;1990</span>
+          <h3>TCP/IP, Lisp machines &amp; the first AI wave</h3>
+          <p>At MIT in 1980, I worked with the group developing the Internet&rsquo;s TCP/IP protocols. From there, straight into the first AI wave: Symbolics &mdash; maker of the Lisp machine, and holder of the internet&rsquo;s first registered domain (symbolics.com, 1985) &mdash; then International Lisp Associates, then Lisp-machine image-processing toolkits after moving to Israel.</p>
+          <div class="artifacts">
+            <span class="label">Era artifacts</span>
+            <span class="chip"><img src="{{IMG:symbolics.svg}}" alt="Symbolics"></span>
+          </div>
           <span class="aside">I still keep a Lisp machine emulator running. Some loves last.</span>
         </div>
       </div>
 
       <div class="wave">
-        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">1990&ndash;1996</span>
           <h3>Windows, machine vision &amp; translation</h3>
@@ -296,7 +324,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       </div>
 
       <div class="wave">
-        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">1996&ndash;2001</span>
           <h3>The first internet boom</h3>
@@ -305,13 +333,14 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       </div>
 
       <div class="wave">
-        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2001&ndash;2010</span>
           <h3>Mobile, before the iPhone</h3>
-          <p>Ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones. Built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients. Push-to-talk for Orange UK. Shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written. Co-founded Vringo as CTO, steered its mobile products through the arrival of the modern smartphone, and guided it to a NYSE IPO.</p>
+          <p>Ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones. Built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients. Push-to-talk for Orange UK. Shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written. Symbian named Degel a Platinum Partner, and Degel-built apps swept the Handango Champion awards. Co-founded Vringo as CTO, steered its mobile products through the arrival of the modern smartphone, and guided it to a NYSE IPO.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
+            <span class="chip degel-chip"><img src="{{IMG:degel-swat.png}}" alt="Degel Software S.W.A.T. Team &mdash; our logo in the mobile era"></span>
             <span class="chip"><img src="{{IMG:sun.gif}}" alt="Sun Microsystems"></span>
             <span class="chip"><img src="{{IMG:icq_logo_new.gif}}" alt="ICQ"></span>
             <span class="chip"><img src="{{IMG:logo_orange.gif}}" alt="Orange"></span>
@@ -323,20 +352,24 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       </div>
 
       <div class="wave">
-        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2010&ndash;2022</span>
           <h3>The modern web &amp; NLP</h3>
           <p>Full-stack product work for startups and established clients: biotech, financial systems, single-page applications. As Principal Software Engineer at Basis Technology, I designed and built the <em>Adaptation Studio</em> and <em>Identity Studio</em> NLP front ends &mdash; and spearheaded the company&rsquo;s early adoption of ChatGPT and LLM techniques, my on-ramp to the next wave.</p>
+          <div class="artifacts">
+            <span class="label">Era artifacts</span>
+            <span class="chip"><img src="{{IMG:basistech.svg}}" alt="BasisTech"></span>
+          </div>
         </div>
       </div>
 
       <div class="wave now">
-        <svg class="marker flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <svg class="marker flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2023&ndash;now</span>
           <h3>AI-augmented development</h3>
-          <p>The biggest shift I&rsquo;ve seen in four decades, and I work inside it daily: LLM data pipelines, AI-accelerated MVPs, agentic coding workflows, AI-assisted patent drafting. Not a tourist &mdash; a resident.</p>
+          <p>The biggest shift I&rsquo;ve seen in four decades, and I work inside it daily: LLM data pipelines, AI-accelerated MVPs, agentic coding workflows, AI-assisted patent drafting. Not a tourist &mdash; a resident. One recent weekend, working alongside Claude, I built a <a href="https://github.com/deg/nscheme">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite.</p>
         </div>
       </div>
     </div>
@@ -352,22 +385,18 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     </div>
     <div class="svc-grid">
       <div class="svc">
-        <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
-        <h3>Zero to sixty, AI edition</h3>
-        <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks &mdash; Python, FastAPI, React, and LLM pipelines where they earn their keep. Prototyping instinct built over four decades, now at AI speed.</p>
+        <h3>Rapid prototyping, at AI speed</h3>
+        <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks &mdash; Python, FastAPI, React, and LLM pipelines where they earn their keep. Prototyping instinct built over four decades, delivering at today&rsquo;s pace.</p>
       </div>
       <div class="svc">
-        <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
         <h3>Technical due diligence</h3>
         <p>Considering an investment, an acquisition, or a rebuild? I evaluate technology stacks, architectures, and teams &mdash; and tell you what&rsquo;s really there, with the eye of someone who has built, bought, and retired every generation of them.</p>
       </div>
       <div class="svc">
-        <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
         <h3>Patent &amp; technical IP guidance</h3>
         <p>I help you find your product&rsquo;s inventive bits and work alongside your patent attorneys through the whole arc &mdash; provisionals, utility applications, office actions, allowance. Lately that includes AI-assisted drafting workflows, proven inside a working practice. I&rsquo;m a named inventor on four US patents myself &mdash; I&rsquo;ve sat on your side of the table.</p>
       </div>
       <div class="svc">
-        <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
         <h3>Senior technical judgment</h3>
         <p>Mentoring for development teams and their leaders, technology strategy, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. Ask someone who has already made the mistakes and shipped anyway.</p>
       </div>
@@ -382,29 +411,71 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <h2>What shipping looks like now</h2>
     </div>
     <div class="work-grid">
-      <!-- upgrade slot: set data-client + add logo chip when permission is granted -->
-      <div class="case" data-client="">
+      <div class="case" data-client="marketbuzzr">
+        <div class="client"><img src="{{IMG:marketbuzzr-favicon.svg}}" alt=""><a href="https://marketbuzzr.com">MarketBuzzr</a></div>
         <span class="sector eyebrow">Market intelligence &middot; 2025&ndash;</span>
-        <p>Founding-team engineering for a market-intelligence venture: a multi-stage LLM content pipeline, FastAPI backend, and React 19 front end &mdash; concept to working MVP.</p>
+        <p>Founding-team engineering: a multi-stage LLM content pipeline, FastAPI backend, and React 19 front end &mdash; concept to working MVP.</p>
         <div class="stack"><span>Python</span><span>FastAPI</span><span>React</span><span>LLM pipeline</span></div>
       </div>
-      <div class="case" data-client="">
-        <span class="sector eyebrow">Patent practice &middot; 2026</span>
-        <p>An AI-assisted patent-drafting methodology for a working US practice: a rigorous style guide and drafting workflow, hardened across a dozen attorney review rounds.</p>
-        <div class="stack"><span>LLM workflows</span><span>Technical writing</span></div>
+      <div class="case" data-client="heidibrun">
+        <div class="client"><img src="{{IMG:heidibrun-favicon.jpg}}" alt=""><a href="https://www.heidibrun.com/">Heidi Brun Associates</a></div>
+        <span class="sector eyebrow">Patent practice &middot; 2024&ndash;</span>
+        <p>An AI-assisted patent-drafting methodology for a working patent practice: a rigorous style guide and drafting workflow, hardened across a dozen attorney review rounds &mdash; plus the firm&rsquo;s internal portfolio tooling.</p>
+        <div class="stack"><span>LLM workflows</span><span>Technical writing</span><span>FastAPI</span><span>React</span></div>
+      </div>
+      <div class="case" data-client="basistech">
+        <div class="client"><a href="https://www.basistech.com/" aria-label="BasisTech"><img src="{{IMG:basistech.svg}}" alt="BasisTech" class="wide"></a></div>
+        <span class="sector eyebrow">NLP &amp; early LLM adoption &middot; 2020&ndash;2022</span>
+        <p>Principal-engineer work at BasisTech: designed and built the Adaptation Studio and Identity Studio NLP front ends, prototyped Cyber Events, and spearheaded early adoption of ChatGPT/LLM techniques.</p>
+        <div class="stack"><span>NLP</span><span>React</span><span>LLM techniques</span></div>
       </div>
       <div class="case" data-client="">
         <span class="sector eyebrow">Home automation &middot; 2024&ndash;</span>
         <p>Monitoring and alerting for a smart-home device fleet: live dashboards, historical analysis, and a Flask backend integrated with the Hubitat ecosystem.</p>
         <div class="stack"><span>Python</span><span>Flask</span><span>IoT</span></div>
       </div>
-      <div class="case" data-client="">
-        <span class="sector eyebrow">Investment tracking &middot; ongoing</span>
-        <p>Financial and portfolio tracking for a private firm: FastAPI backend, React front end, and the reporting that makes the numbers trustworthy.</p>
-        <div class="stack"><span>Python</span><span>FastAPI</span><span>React</span></div>
-      </div>
     </div>
-    <p class="work-note">Client names are shared on request &mdash; and will appear here as permissions land.</p>
+    <p class="work-note">More client names appear here as permissions land.</p>
+
+    <div class="quotes">
+      <figure>
+        <blockquote>&ldquo;When they made it run nearly twice as fast, we were really impressed! &hellip; These guys are true professionals, and they&rsquo;re a pleasure to work with.&rdquo;</blockquote>
+        <figcaption>Nancy Yavne &middot; General Manager, Sun Israel Development Center</figcaption>
+      </figure>
+      <figure>
+        <blockquote>&ldquo;&hellip;great ability to develop reliable, complex software that get included in some of the best-selling applications available on Symbian OS platform.&rdquo;</blockquote>
+        <figcaption>Gregory Zaoui &middot; Head of Israel Business Development, Symbian</figcaption>
+      </figure>
+      <figure>
+        <blockquote>&ldquo;&hellip;one of the most featured and usable Talk Now clients we have, and this was no mean feat.&rdquo;</blockquote>
+        <figcaption>Mick Angel &middot; Application Design Manager, Orange</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="writing">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Field notes</p>
+      <h2>Writing from inside the AI wave</h2>
+      <p>I write about working with AI agents as they actually behave, not as advertised.</p>
+    </div>
+    <ul class="articles">
+      <li>
+        <a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099">Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
+        <p>One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing &mdash; and what it taught me about managing an AI that keeps declaring &ldquo;done.&rdquo;</p>
+      </li>
+      <li>
+        <a href="https://medium.com/@DavidEGoldfarb/the-persistence-of-memory-2aca4c8cf603">The Persistence of Memory</a>
+        <p>Agent memory files are configuration, not notes &mdash; and for the first time, the configuration writes itself.</p>
+      </li>
+      <li>
+        <a href="https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1">The Slash Command That Knew Too Much</a>
+        <p>My development workflows are now programs written in English, run by an LLM.</p>
+      </li>
+    </ul>
+    <p class="more-writing mono"><a href="https://medium.com/@DavidEGoldfarb">More on Medium &rarr;</a></p>
   </div>
 </section>
 
