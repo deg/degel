@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" id="logo" viewBox="0 0 640 114">
+<svg width="640" height="114" xmlns="http://www.w3.org/2000/svg" id="logo" viewBox="0 0 640 114">
   <title> BasisTech Logo </title>
   <circle fill="#61A60E" cx="57" cy="57" r="54"></circle>
   <g fill="#FFFFFF" transform="translate(-4,-2.4)">

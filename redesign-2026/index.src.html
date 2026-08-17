@@ -20,7 +20,7 @@
   --accent:     #0038b8;   /* flag blue */
   --accent-ink: #ffffff;
   --accent-dim: #dce5f7;
-  --chip-bg:    #ffffff;
+  --chip-bg:    transparent;
   --shadow:     0 1px 2px rgba(23,32,45,.06), 0 8px 24px rgba(23,32,45,.07);
   /* era spectrum: one color per technology wave, ending in flag blue */
   --w1: #6d28d9;  /* Lisp & first AI */
@@ -185,11 +185,11 @@ section { padding: 5.5rem 0; }
 .artifacts { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.05rem; align-items: center; }
 .artifacts .chip {
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--chip-bg); border: 1px solid var(--line); border-radius: 7px;
+  background: var(--chip-bg); border-radius: 7px;
   padding: .38rem .7rem; height: 2.5rem;
-  position: relative; transition: transform .18s ease, box-shadow .18s ease;
+  position: relative; transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
-.artifacts .chip:hover { transform: scale(1.9); z-index: 5; box-shadow: var(--shadow); }
+.artifacts .chip:hover { transform: scale(1.9); z-index: 5; background: #fff; box-shadow: var(--shadow); }
 .artifacts img { max-height: 1.5rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
 .artifacts .chip:hover img { filter: none; opacity: 1; }
 .artifacts .chip.degel-chip img { filter: none; opacity: 1; }
@@ -434,6 +434,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip"><img src="{{IMG:basis-technology.svg}}" alt="Basis Technology"></span>
+            <span class="chip"><img src="{{IMG:clojure.png}}" alt="Clojure"></span>
+            <span class="chip"><img src="{{IMG:nus.png}}" alt="National University of Singapore"></span>
           </div>
         </div>
       </div>
