@@ -168,11 +168,12 @@ section + section { border-top: 1px solid var(--line); }
   background: var(--chip-bg); border: 1px solid var(--line); border-radius: 7px;
   padding: .38rem .7rem; height: 2.3rem;
 }
-.artifacts img { max-height: 1.35rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; }
+.artifacts img { max-height: 1.35rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
+.artifacts .chip:hover img { filter: none; opacity: 1; }
 .artifacts .label { font-size: .72rem; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-right: .3rem; }
 
 /* ============ services ============ */
-.svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.3rem; }
+.svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: 1.3rem; }
 .svc {
   background: var(--card); border: 1px solid var(--line); border-radius: 14px;
   padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
@@ -201,7 +202,7 @@ section + section { border-top: 1px solid var(--line); }
 /* ============ about ============ */
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
 .about-row .portrait {
-  width: 9.5rem; border-radius: 12px; border: 1px solid var(--line);
+  width: 9.5rem; height: auto; border-radius: 12px; border: 1px solid var(--line);
   filter: grayscale(.35); flex-shrink: 0;
 }
 .about-row .facts { flex: 1; min-width: 16rem; }
@@ -242,7 +243,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <a href="#services">What I do</a>
       <a href="#work">Recent work</a>
       <a href="#about">About</a>
-      <a class="cta" href="mailto:info@degel.com">Email David</a>
+      <a class="cta" href="mailto:deg@degel.com">Email David</a>
     </div>
   </div>
 </nav>
@@ -253,7 +254,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <h1>Every wave since&nbsp;1988<svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="4" x2="4" y2="26"/><path class="cloth" d="M5.5 5 L17.5 8.6 L5.5 12.6 Z"/></svg></h1>
     <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. I&rsquo;ve shipped through Lisp machines, the first internet boom, the mobile revolution, and the modern web. <strong>Now I build with AI every day, and it&rsquo;s the biggest wave yet.</strong> I can take your idea from whiteboard to working software faster than you think possible.</p>
     <div class="hero-ctas">
-      <a class="btn primary" href="mailto:info@degel.com">Tell me what you&rsquo;re building</a>
+      <a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a>
       <a class="btn quiet" href="#waves">See the track record</a>
     </div>
     <p class="kicker mono">1988 &rarr; 2026 &middot; six technology waves &middot; still shipping</p>
@@ -299,7 +300,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">1996&ndash;2001</span>
           <h3>The first internet boom</h3>
-          <p>Co-founded 2AM Inc., building a programming environment for massively distributed, peer-to-peer internet applications &mdash; innovative multiplayer games in the dial-up era.</p>
+          <p>Co-founded 2AM Inc. as VP Technology and directed its core <em>Creation</em> engine &mdash; the scripting and runtime environment for a massively distributed, peer-to-peer game platform that served over 250,000 users in the dial-up era.</p>
         </div>
       </div>
 
@@ -308,7 +309,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">2001&ndash;2010</span>
           <h3>Mobile, before the iPhone</h3>
-          <p>Ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones. Built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients. Push-to-talk for Orange UK. Shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written. Co-founded Vringo, which IPO&rsquo;d on the NYSE.</p>
+          <p>Ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones. Built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients. Push-to-talk for Orange UK. Shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written. Co-founded Vringo as CTO, steered its mobile products through the arrival of the modern smartphone, and guided it to a NYSE IPO.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip"><img src="{{IMG:sun.gif}}" alt="Sun Microsystems"></span>
@@ -325,8 +326,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2010&ndash;2022</span>
-          <h3>The modern web</h3>
-          <p>Full-stack product work for startups and established clients: internationalization tooling, biotech, financial systems, single-page applications &mdash; plus the unglamorous parts that make projects succeed: transparent schedules, honest code review, and teams that actually ship.</p>
+          <h3>The modern web &amp; NLP</h3>
+          <p>Full-stack product work for startups and established clients: biotech, financial systems, single-page applications. As Principal Software Engineer at Basis Technology, I designed and built the <em>Adaptation Studio</em> and <em>Identity Studio</em> NLP front ends &mdash; and spearheaded the company&rsquo;s early adoption of ChatGPT and LLM techniques, my on-ramp to the next wave.</p>
         </div>
       </div>
 
@@ -347,7 +348,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="section-head">
       <p class="eyebrow">Services</p>
       <h2>What I do</h2>
-      <p>Three things, done with four decades of judgment and current-generation tools.</p>
+      <p>Four things, done with four decades of judgment and current-generation tools.</p>
     </div>
     <div class="svc-grid">
       <div class="svc">
@@ -357,13 +358,18 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       </div>
       <div class="svc">
         <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
+        <h3>Technical due diligence</h3>
+        <p>Considering an investment, an acquisition, or a rebuild? I evaluate technology stacks, architectures, and teams &mdash; and tell you what&rsquo;s really there, with the eye of someone who has built, bought, and retired every generation of them.</p>
+      </div>
+      <div class="svc">
+        <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
         <h3>Patent &amp; technical IP guidance</h3>
-        <p>I help you find your product&rsquo;s inventive bits and work alongside your patent attorneys through the whole arc &mdash; provisionals, utility applications, office actions, allowance. Lately that includes AI-assisted drafting workflows, proven inside a working practice.</p>
+        <p>I help you find your product&rsquo;s inventive bits and work alongside your patent attorneys through the whole arc &mdash; provisionals, utility applications, office actions, allowance. Lately that includes AI-assisted drafting workflows, proven inside a working practice. I&rsquo;m a named inventor on four US patents myself &mdash; I&rsquo;ve sat on your side of the table.</p>
       </div>
       <div class="svc">
         <svg class="flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5.5 3.5 L17 6.8 L5.5 10.5 Z"/></svg>
         <h3>Senior technical judgment</h3>
-        <p>Technology strategy, product assessment, and the 2 a.m. questions of a first-time founder. Ask someone who has already made the mistakes &mdash; and shipped anyway.</p>
+        <p>Mentoring for development teams and their leaders, technology strategy, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. Ask someone who has already made the mistakes and shipped anyway.</p>
       </div>
     </div>
   </div>
@@ -411,12 +417,13 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="about-row">
       <img class="portrait" src="{{IMG:david.jpg}}" alt="David Goldfarb" width="214" height="253">
       <div class="facts">
-        <p>Degel Software is me &mdash; and, when a project needs it, the like-minded senior developers I&rsquo;ve worked with for years. I&rsquo;ve kept the company deliberately small since 1988 so that everything it ships meets one quality standard: mine. If you ask me to build something that seems wrong, I&rsquo;ll tell you before I build it. My goal is your project&rsquo;s success, not billable hours.</p>
+        <p>Degel Software is me &mdash; and, when a project needs it, the like-minded senior developers I&rsquo;ve worked with for years. I&rsquo;ve kept the company deliberately small since 1988 so that everything it ships meets one quality standard: mine. If you ask me to build something that seems wrong, I&rsquo;ll tell you before I build it. My goal is your project&rsquo;s success, not billable hours. Clients across the decades have ranged from AOL, Sun, and Intel to Israel Aircraft Industries and the National University of Singapore.</p>
         <ul class="cred">
           <li>B.S. Computer Science, MIT, 1984</li>
           <li>Founded Degel Software Ltd., 1988</li>
           <li>Co-founded 2AM Inc., 1996</li>
-          <li>Co-founded Vringo &mdash; IPO&rsquo;d as NYSE:VRNG</li>
+          <li>Co-founded Vringo (CTO) &mdash; IPO&rsquo;d as NYSE:VRNG</li>
+          <li>Named inventor on four US patents</li>
           <li>Beit Shemesh, Israel &middot; clients worldwide</li>
         </ul>
       </div>
@@ -428,10 +435,10 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   <div class="wrap">
     <p class="eyebrow">Contact</p>
     <h2>Tell me what you&rsquo;re building.</h2>
-    <p class="big-mail"><a href="mailto:info@degel.com">info@degel.com</a></p>
+    <p class="big-mail"><a href="mailto:deg@degel.com">deg@degel.com</a></p>
     <div class="contact-meta">
       <span>+972&nbsp;54&nbsp;723&#8209;0120</span>
-      <a href="https://www.linkedin.com/pub/david-goldfarb/0/9/850">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/davidegoldfarb/">LinkedIn</a>
     </div>
   </div>
 </section>
