@@ -14,14 +14,24 @@
   --paper:      #f4f6f8;
   --card:       #ffffff;
   --ink:        #17202d;
-  --muted:      #596372;
-  --faint:      #8b95a5;
+  --muted:      #4a5568;
+  --faint:      #7b8698;
   --line:       #d9dfe7;
   --accent:     #0038b8;   /* flag blue */
   --accent-ink: #ffffff;
   --accent-dim: #dce5f7;
   --chip-bg:    #ffffff;
   --shadow:     0 1px 2px rgba(23,32,45,.06), 0 8px 24px rgba(23,32,45,.07);
+  /* era spectrum: one color per technology wave, ending in flag blue */
+  --w1: #6d28d9;  /* Lisp & first AI */
+  --w2: #0f766e;  /* Windows/vision/translation */
+  --w3: #c2410c;  /* first internet boom */
+  --w4: #be185d;  /* mobile */
+  --w5: #15803d;  /* modern web & NLP */
+  --w6: #0038b8;  /* AI now = flag blue */
+  --tint-a: color-mix(in srgb, var(--accent) 4%, var(--paper));
+  --tint-b: color-mix(in srgb, var(--w3) 4%, var(--paper));
+  --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -36,6 +46,7 @@
     --accent-dim: #1d2a45;
     --chip-bg:    #f2f4f7;
     --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+    --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
   }
 }
 :root[data-theme="dark"] {
@@ -50,6 +61,7 @@
   --accent-dim: #1d2a45;
   --chip-bg:    #f2f4f7;
   --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+  --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
 }
 
 /* ============ base ============ */
@@ -60,7 +72,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font: 400 1.0625rem/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font: 400 1.125rem/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 .serif { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; }
@@ -89,8 +101,8 @@ nav {
   position: sticky; top: 0; z-index: 10;
   background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
 }
+nav::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
 .nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
 .brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
@@ -105,14 +117,22 @@ nav {
 @media (max-width: 40rem) { .nav-links a:not(.cta) { display: none; } }
 
 /* ============ hero ============ */
-header.hero { padding: 6.5rem 0 4.5rem; }
+header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--paper), var(--tint-a)); }
+.waveband { line-height: 0; background: var(--tint-a); }
+.waveband svg { width: 100%; height: 110px; display: block; }
+.wavespan {
+  background-image: var(--spectrum);
+  background-repeat: no-repeat;
+  background-position: 0 94%;
+  background-size: 100% .13em;
+}
 .hero h1 {
   font-size: clamp(2.7rem, 7vw, 4.6rem);
   letter-spacing: -0.015em;
   margin: 1.1rem 0 1.4rem;
 }
 .hero h1 .flag { width: .78em; height: 1.05em; margin-left: .06em; }
-.hero .lede { max-width: 38em; font-size: 1.17rem; color: var(--muted); }
+.hero .lede { max-width: 38em; font-size: 1.22rem; color: var(--muted); }
 .hero .lede strong { color: var(--ink); font-weight: 600; }
 .hero-ctas { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 2.1rem; }
 .btn {
@@ -126,10 +146,12 @@ header.hero { padding: 6.5rem 0 4.5rem; }
 .hero .kicker { margin-top: 3rem; font-size: .78rem; color: var(--faint); letter-spacing: .12em; }
 
 /* ============ sections ============ */
-section { padding: 4.5rem 0; }
-section + section { border-top: 1px solid var(--line); }
+section { padding: 5.5rem 0; }
+#services { background: var(--tint-a); }
+#writing { background: var(--tint-b); }
+#contact { background: var(--tint-a); }
 .section-head { margin-bottom: 2.6rem; max-width: 42em; }
-.section-head h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); margin: .5rem 0 .9rem; }
+.section-head h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: .5rem 0 .9rem; }
 .section-head p { color: var(--muted); }
 .he { unicode-bidi: isolate; }
 
@@ -137,8 +159,13 @@ section + section { border-top: 1px solid var(--line); }
 .waves { position: relative; margin-left: .55rem; }
 .waves::before {
   content: ""; position: absolute; left: 0; top: .4rem; bottom: .4rem;
-  width: 2px; background: var(--line); border-radius: 1px;
+  width: 3px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
 }
+.wave.w1 { --wc: var(--w1); } .wave.w2 { --wc: var(--w2); } .wave.w3 { --wc: var(--w3); }
+.wave.w4 { --wc: var(--w4); } .wave.w5 { --wc: var(--w5); } .wave.w6 { --wc: var(--w6); }
+.wave .marker .cloth { fill: var(--wc, var(--accent)); stroke: none; }
+.wave .years { color: var(--wc, var(--muted)); font-weight: 600; }
 .wave { position: relative; padding: 0 0 3rem 2.4rem; }
 .wave:last-child { padding-bottom: .5rem; }
 .wave .marker {
@@ -176,10 +203,13 @@ section + section { border-top: 1px solid var(--line); }
 /* ============ services ============ */
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); gap: 1.3rem; }
 .svc {
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  background: color-mix(in srgb, var(--sc, var(--accent)) 4%, var(--card));
+  border: 1px solid var(--line); border-radius: 14px;
   padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
 }
-.svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--accent); padding-top: .9rem; }
+.svc.s1 { --sc: var(--w6); } .svc.s2 { --sc: var(--w2); }
+.svc.s3 { --sc: var(--w1); } .svc.s4 { --sc: var(--w4); }
+.svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--sc, var(--accent)); padding-top: .9rem; }
 .svc p { color: var(--muted); font-size: .98rem; }
 .svc .flag { width: 1.05rem; height: 1.45rem; color: var(--faint); }
 
@@ -187,9 +217,14 @@ section + section { border-top: 1px solid var(--line); }
 .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.3rem; }
 .case {
   background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  border-top: 4px solid var(--cc, var(--line));
   padding: 1.5rem 1.5rem 1.4rem; box-shadow: var(--shadow);
   display: flex; flex-direction: column; gap: .75rem;
 }
+.case[data-client="marketbuzzr"] { --cc: var(--w6); }
+.case[data-client="heidibrun"] { --cc: var(--w1); }
+.case[data-client="basis-technology"] { --cc: var(--w5); }
+.case[data-client="basistech"] { --cc: var(--w2); }
 .case .sector { color: var(--accent); }
 .case .client { display: flex; align-items: center; gap: .55rem; }
 .case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
@@ -206,7 +241,10 @@ section + section { border-top: 1px solid var(--line); }
 
 /* ============ quotes ============ */
 .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.6rem; margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
-.quotes figure { margin: 0; }
+.quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
+.quotes figure:nth-child(1) { --qc: var(--w4); }
+.quotes figure:nth-child(2) { --qc: var(--w2); }
+.quotes figure:nth-child(3) { --qc: var(--w3); }
 .quotes blockquote {
   margin: 0 0 .8rem;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -216,7 +254,10 @@ section + section { border-top: 1px solid var(--line); }
 
 /* ============ writing ============ */
 .articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
-.articles li { border-left: 3px solid var(--accent); padding-left: 1.1rem; }
+.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
+.articles li:nth-child(1) { --ac: var(--w6); }
+.articles li:nth-child(2) { --ac: var(--w1); }
+.articles li:nth-child(3) { --ac: var(--w5); }
 .articles a {
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   font-size: 1.18rem; font-weight: 600; color: var(--ink);
@@ -229,7 +270,7 @@ section + section { border-top: 1px solid var(--line); }
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
 .about-row .portrait {
   width: 9.5rem; height: auto; border-radius: 12px; border: 1px solid var(--line);
-  filter: grayscale(.35); flex-shrink: 0;
+  flex-shrink: 0;
 }
 .about-row .facts { flex: 1; min-width: 16rem; }
 .about-row .facts p { color: var(--muted); max-width: 42em; margin-bottom: 1.3rem; }
@@ -275,7 +316,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <header class="hero" id="top">
   <div class="wrap">
     <p class="eyebrow">Degel Software Ltd &middot; founded 1988</p>
-    <h1>Every wave since&nbsp;1980.</h1>
+    <h1><span class="wavespan">Every wave</span> since&nbsp;1980.</h1>
     <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. I&rsquo;ve shipped through Lisp machines, the first internet boom, the mobile revolution, and the modern web. <strong>Now I build with AI every day, and it&rsquo;s the biggest wave yet.</strong> I can take your idea from whiteboard to working software faster than you think possible.</p>
     <div class="hero-ctas">
       <a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a>
@@ -284,6 +325,17 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <p class="kicker mono">1980 &rarr; 2026 &middot; six technology waves &middot; still shipping</p>
   </div>
 </header>
+
+<div class="waveband" aria-hidden="true">
+  <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
+    <path fill="var(--w1)" opacity=".22" d="M0,96 C240,60 480,120 720,92 C960,64 1200,110 1440,84 L1440,150 L0,150 Z"/>
+    <path fill="var(--w2)" opacity=".22" d="M0,108 C260,80 520,128 780,102 C1040,76 1240,118 1440,96 L1440,150 L0,150 Z"/>
+    <path fill="var(--w3)" opacity=".2" d="M0,118 C300,96 560,136 820,114 C1080,92 1260,126 1440,108 L1440,150 L0,150 Z"/>
+    <path fill="var(--w4)" opacity=".2" d="M0,126 C280,108 540,142 800,124 C1060,106 1240,134 1440,118 L1440,150 L0,150 Z"/>
+    <path fill="var(--w5)" opacity=".24" d="M0,134 C320,120 600,148 860,134 C1120,120 1280,142 1440,128 L1440,150 L0,150 Z"/>
+    <path fill="var(--w6)" opacity=".5" d="M0,142 C320,132 640,152 920,142 C1200,132 1320,148 1440,138 L1440,150 L0,150 Z"/>
+  </svg>
+</div>
 
 <section id="waves">
   <div class="wrap">
@@ -294,7 +346,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     </div>
 
     <div class="waves">
-      <div class="wave">
+      <div class="wave w1">
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">1980&ndash;1990</span>
@@ -308,7 +360,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         </div>
       </div>
 
-      <div class="wave">
+      <div class="wave w2">
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">1990&ndash;1996</span>
@@ -323,7 +375,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         </div>
       </div>
 
-      <div class="wave">
+      <div class="wave w3">
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">1996&ndash;2001</span>
@@ -332,7 +384,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         </div>
       </div>
 
-      <div class="wave">
+      <div class="wave w4">
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2001&ndash;2010</span>
@@ -351,7 +403,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         </div>
       </div>
 
-      <div class="wave">
+      <div class="wave w5">
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2010&ndash;2022</span>
@@ -364,7 +416,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         </div>
       </div>
 
-      <div class="wave now">
+      <div class="wave now w6">
         <svg class="marker flag" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">2023&ndash;now</span>
@@ -384,19 +436,19 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <p>Four things, done with four decades of judgment and current-generation tools.</p>
     </div>
     <div class="svc-grid">
-      <div class="svc">
+      <div class="svc s1">
         <h3>Rapid prototyping, at AI speed</h3>
         <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks &mdash; Python, FastAPI, React, and LLM pipelines where they earn their keep. Prototyping instinct built over four decades, delivering at today&rsquo;s pace.</p>
       </div>
-      <div class="svc">
+      <div class="svc s2">
         <h3>Technical due diligence</h3>
         <p>Considering an investment, an acquisition, or a rebuild? I evaluate technology stacks, architectures, and teams &mdash; and tell you what&rsquo;s really there, with the eye of someone who has built, bought, and retired every generation of them.</p>
       </div>
-      <div class="svc">
+      <div class="svc s3">
         <h3>Patent &amp; technical IP guidance</h3>
         <p>I help you find your product&rsquo;s inventive bits and work alongside your patent attorneys through the whole arc &mdash; provisionals, utility applications, office actions, allowance. Lately that includes AI-assisted drafting workflows, proven inside a working practice. I&rsquo;m a named inventor on four US patents myself &mdash; I&rsquo;ve sat on your side of the table.</p>
       </div>
-      <div class="svc">
+      <div class="svc s4">
         <h3>Senior technical judgment</h3>
         <p>Mentoring for development teams and their leaders, technology strategy, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. Ask someone who has already made the mistakes and shipped anyway.</p>
       </div>
