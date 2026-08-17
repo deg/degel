@@ -17,3 +17,6 @@ _website_notes.txt
 *.db
 .beads-credential-key
 .beads/proxieddb/
+
+# macOS noise
+.DS_Store
