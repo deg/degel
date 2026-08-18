@@ -1,0 +1,3 @@
+<HTML><HEAD><TITLE></TITLE>
+<META HTTP-EQUIV="Refresh" CONTENT="0; URL=..\ICQ-News-Release-10Sep02.htm">
+</HEAD><BODY></BODY></HTML>

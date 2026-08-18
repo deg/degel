@@ -1,0 +1,10 @@
+ <a href="http://www.basistech.com" target="_blank">
+ <img src="pics/logo_basis.gif" width="142" height="77" border="0"
+      alt="Basis Technology logo">
+ </a>>
+ <li>
+ <a href="http://www.basistech.com" target="_blank">
+ <b><font size="2">Basis Technology</a>&nbsp;</b></font><font size="2">a
+ Massachusetts software firm specializing in
+ localization for the Japanese market. Degel has subcontracted on many
+ jobs for their clients.</font><p>
