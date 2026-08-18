@@ -16,17 +16,23 @@ The 2026 single-page site for Degel Software Ltd. Launched 2026-08-18.
 
 ## Workflow
 
+`make` is the front door — `make help` lists targets.
+
 ```bash
 # edit index.src.html, then:
-python3 build.py
+make build                        # regenerate index.html
+make serve                        # preview at http://localhost:8000
 
-# deploy (from repo root):
-git checkout gh-pages
-git checkout <source-branch> -- index.html og.png robots.txt sitemap.xml history
-git commit -m "Deploy: <what changed>"
-git push origin gh-pages
-git checkout <source-branch>
+# commit the source change on this branch, then:
+make deploy MSG="what changed"    # publish to degel.com via a temp worktree
+make check-live                   # verify degel.com serves this exact build
 ```
+
+Deploy never switches your checkout: it opens `gh-pages` in a temporary
+worktree (`.deploy-tmp/`, gitignored), copies the built artifacts
+(`index.html`, `og.png`, `robots.txt`, `sitemap.xml`, `history/`),
+commits, pushes, and cleans up. It refuses to run with uncommitted
+source changes.
 
 `gh-pages` on `github.com/deg/degel` (public) serves degel.com via GitHub
 Pages. Deploys copy the built artifacts only — never `index.src.html`,
