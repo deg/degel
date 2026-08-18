@@ -2,14 +2,14 @@
 """Generate index.html from index.src.html.
 
 Replaces {{IMG:name}} placeholders with data URIs. Images are looked up
-first in redesign-2026/assets/, then in the legacy assets/images/client/.
-Run from the repo root:  python3 redesign-2026/build.py
+first in assets/, then in the archived old site's client-logo directory.
+Run from the repo root:  python3 build.py
 """
 import base64, mimetypes, pathlib, re, sys
 
-root = pathlib.Path(__file__).resolve().parent.parent
-src = (root / "redesign-2026/index.src.html").read_text()
-search_dirs = [root / "redesign-2026/assets", root / "assets/images/client"]
+root = pathlib.Path(__file__).resolve().parent
+src = (root / "index.src.html").read_text()
+search_dirs = [root / "assets", root / "history/pre-2026/assets/images/client"]
 
 def sub(m):
     name = m.group(1)
@@ -21,6 +21,6 @@ def sub(m):
     sys.exit(f"missing image: {name}")
 
 out = re.sub(r"\{\{IMG:([^}]+)\}\}", sub, src)
-dest = root / "redesign-2026/index.html"
+dest = root / "index.html"
 dest.write_text(out)
-print(f"wrote {dest}: {len(out)} bytes, {out.count('{{IMG')} placeholders left")
+print(f"wrote {dest.name}: {len(out)} bytes, {out.count('{{IMG')} placeholders left")
