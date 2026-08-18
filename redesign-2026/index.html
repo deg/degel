@@ -11,16 +11,16 @@
 <style>
 /* ============ tokens ============ */
 :root {
-  --paper:      #f4f6f8;
+  --paper:      #d2e5e4;   /* Nirlat Zircon Ice 0664 */
   --card:       #ffffff;
   --ink:        #17202d;
   --muted:      #4a5568;
   --faint:      #7b8698;
-  --line:       #d9dfe7;
+  --line:       #b7cdcc;
   --accent:     #0038b8;   /* flag blue */
   --accent-ink: #ffffff;
   --accent-dim: #dce5f7;
-  --chip-bg:    transparent;
+  --chip-bg:    #ffffff;
   --shadow:     0 1px 2px rgba(23,32,45,.06), 0 8px 24px rgba(23,32,45,.07);
   /* era spectrum: one color per technology wave, ending in flag blue */
   --w1: #6d28d9;  /* Lisp & first AI */
@@ -30,17 +30,17 @@
   --w5: #15803d;  /* modern web & NLP */
   --w6: #0038b8;  /* AI now = flag blue */
   --tint-a: color-mix(in srgb, var(--accent) 4%, var(--paper));
-  --tint-b: color-mix(in srgb, var(--w3) 4%, var(--paper));
+  --tint-b: color-mix(in srgb, #ffffff 45%, var(--paper));
   --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper:      #10151d;
-    --card:       #171e28;
+    --paper:      #0e171a;
+    --card:       #152225;
     --ink:        #e7ecf3;
     --muted:      #9aa6b7;
     --faint:      #6b7687;
-    --line:       #27303d;
+    --line:       #26383b;
     --accent:     #6f98ff;
     --accent-ink: #0c1220;
     --accent-dim: #1d2a45;
@@ -50,12 +50,12 @@
   }
 }
 :root[data-theme="dark"] {
-  --paper:      #10151d;
-  --card:       #171e28;
+  --paper:      #0e171a;
+  --card:       #152225;
   --ink:        #e7ecf3;
   --muted:      #9aa6b7;
   --faint:      #6b7687;
-  --line:       #27303d;
+  --line:       #26383b;
   --accent:     #6f98ff;
   --accent-ink: #0c1220;
   --accent-dim: #1d2a45;
