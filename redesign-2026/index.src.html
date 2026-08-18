@@ -29,7 +29,11 @@
   --w4: #be185d;  /* mobile */
   --w5: #15803d;  /* modern web & NLP */
   --w6: #0038b8;  /* AI now = flag blue */
-  --tint-a: color-mix(in srgb, var(--accent) 4%, var(--paper));
+  --tint-a: color-mix(in srgb, var(--accent) 8%, var(--paper));
+  --deep:       #16242a;   /* dark bookend: nav, contact, footer */
+  --deep-ink:   #e8f0f0;
+  --deep-muted: #9db2b5;
+  --deep-accent:#8fb3ff;
   --tint-b: color-mix(in srgb, #ffffff 45%, var(--paper));
   --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
 }
@@ -47,6 +51,7 @@
     --chip-bg:    #f2f4f7;
     --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
     --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+    --deep: #0a1316;
   }
 }
 :root[data-theme="dark"] {
@@ -62,6 +67,7 @@
   --chip-bg:    #f2f4f7;
   --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
   --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+  --deep: #0a1316;
 }
 
 /* ============ base ============ */
@@ -99,16 +105,16 @@ img { max-width: 100%; }
 /* ============ nav ============ */
 nav {
   position: sticky; top: 0; z-index: 10;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  background: color-mix(in srgb, var(--deep) 92%, transparent);
   backdrop-filter: blur(10px);
 }
 nav::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
 .nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
-.brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); letter-spacing: .01em; }
+.brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
 .nav-links { display: flex; gap: 1.4rem; margin-left: auto; align-items: center; }
-.nav-links a { color: var(--muted); font-size: .92rem; }
-.nav-links a:hover { color: var(--ink); text-decoration: none; }
+.nav-links a { color: var(--deep-muted); font-size: .92rem; }
+.nav-links a:hover { color: var(--deep-ink); text-decoration: none; }
 .nav-links a.cta {
   color: var(--accent-ink); background: var(--accent);
   padding: .45rem .95rem; border-radius: 999px; font-weight: 600;
@@ -117,7 +123,7 @@ nav::after { content: ""; display: block; height: 3px; background: var(--spectru
 @media (max-width: 40rem) { .nav-links a:not(.cta) { display: none; } }
 
 /* ============ hero ============ */
-header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--paper), var(--tint-a)); }
+header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--tint-a), var(--paper)); }
 .waveband { line-height: 0; }
 .waveband svg { width: 100%; height: 110px; display: block; }
 .waveband.divider svg { height: 54px; }
@@ -148,7 +154,7 @@ section { padding: 5.5rem 0; }
 #services { background: var(--tint-a); }
 #work { background: var(--tint-a); }
 #writing { background: var(--tint-b); }
-#contact { background: var(--tint-a); }
+#contact { background: var(--deep); }
 .section-head { margin-bottom: 2.6rem; max-width: 42em; }
 .section-head h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: .5rem 0 .9rem; }
 .section-head p { color: var(--muted); }
@@ -280,18 +286,21 @@ section { padding: 5.5rem 0; }
 
 /* ============ contact ============ */
 .contact { text-align: left; }
+.contact .eyebrow { color: var(--deep-muted); }
+.contact h2 { color: var(--deep-ink); }
+.contact .big-mail a { color: var(--deep-accent); }
 .contact h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin: .5rem 0 1rem; }
 .contact .big-mail {
   font-family: "Iowan Old Style", Palatino, Georgia, serif;
   font-size: clamp(1.3rem, 3.4vw, 2rem); font-weight: 600;
 }
-.contact-meta { margin-top: 1.6rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: .92rem; color: var(--muted); }
-.contact-meta a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
-.contact-meta a:hover { color: var(--accent); }
+.contact-meta { margin-top: 1.6rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: .92rem; color: var(--deep-muted); }
+.contact-meta a { color: var(--deep-muted); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--deep-muted) 40%, transparent); text-underline-offset: 3px; }
+.contact-meta a:hover { color: var(--deep-ink); }
 
 /* ============ footer ============ */
-footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
-.foot-inner { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; font-size: .84rem; color: var(--faint); }
+footer { background: var(--deep); border-top: 1px solid color-mix(in srgb, var(--deep-ink) 12%, transparent); padding: 2.2rem 0 3rem; }
+.foot-inner { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; font-size: .84rem; color: var(--deep-muted); }
 </style>
 </head>
 <body>
@@ -323,7 +332,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   </div>
 </header>
 
-<div class="waveband on-tinta" aria-hidden="true">
+<div class="waveband on-paper" aria-hidden="true">
   <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
     <path fill="var(--w1)" opacity=".4" d="M0,96 C240,60 480,120 720,92 C960,64 1200,110 1440,84 L1440,150 L0,150 Z"/>
     <path fill="var(--w2)" opacity=".4" d="M0,108 C260,80 520,128 780,102 C1040,76 1240,118 1440,96 L1440,150 L0,150 Z"/>
