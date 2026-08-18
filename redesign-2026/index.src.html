@@ -3,11 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Degel Software</title>
-<meta name="description" content="David Goldfarb — rapid prototyping, technical due diligence, and patent guidance from a consultant who has shipped through every technology wave since 1980, now building with AI daily.">
-<meta property="og:title" content="Degel Software">
+<title>David Goldfarb — Software Consultant | Degel Software</title>
+<meta name="description" content="I'm David Goldfarb: rapid prototyping, technical due diligence, and patent guidance — shipping through every technology wave since 1980, now building with AI daily.">
+<meta property="og:title" content="David Goldfarb — Software Consultant | Degel Software">
 <meta property="og:description" content="Your next product, prototyped at AI speed.">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Degel Software">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
 <style>
 /* ============ tokens ============ */
 :root {
@@ -183,6 +187,7 @@ section { padding: 5.5rem 0; }
 .wave .years { display: block; margin-bottom: .35rem; }
 .wave h3 { font-size: 1.35rem; margin-bottom: .55rem; }
 .wave p { color: var(--muted); max-width: 44em; }
+.wave .body p + p { margin-top: .6rem; }
 .wave .aside { display: block; margin-top: .5rem; font-size: .88rem; color: var(--faint); font-style: italic; }
 .wave.now .marker { color: var(--accent); }
 .wave.now h3 { color: var(--accent); }
@@ -218,6 +223,7 @@ section { padding: 5.5rem 0; }
 }
 .svc.s1 { --sc: var(--w6); } .svc.s2 { --sc: var(--w2); }
 .svc.s3 { --sc: var(--w1); } .svc.s4 { --sc: var(--w4); }
+.mid-cta { margin-top: 2.6rem; }
 .svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--sc, var(--accent)); padding-top: .9rem; }
 .svc p { color: var(--muted); font-size: 1.02rem; }
 .svc .flag { width: 1.05rem; height: 1.45rem; color: var(--faint); }
@@ -242,7 +248,9 @@ section { padding: 5.5rem 0; }
 .case p { color: var(--muted); font-size: 1rem; }
 
 /* ============ quotes ============ */
-.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+.quotes-head { margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+.quotes-head .quotes-note { color: var(--muted); font-size: .95rem; margin-top: .4rem; }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 1.6rem; }
 .quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
 .quotes figure:nth-child(1) { --qc: var(--w4); }
 .quotes figure:nth-child(2) { --qc: var(--w2); }
@@ -304,6 +312,22 @@ section { padding: 5.5rem 0; }
 footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 .foot-inner { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; font-size: .84rem; color: var(--faint); }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "David Goldfarb",
+  "jobTitle": "Software Consultant",
+  "worksFor": {"@type": "Organization", "name": "Degel Software Ltd.", "foundingDate": "1988"},
+  "email": "mailto:deg@degel.com",
+  "telephone": "+972-54-723-0120",
+  "address": {"@type": "PostalAddress", "addressLocality": "Beit Shemesh", "addressCountry": "IL"},
+  "alumniOf": {"@type": "CollegeOrUniversity", "name": "Massachusetts Institute of Technology"},
+  "url": "https://degel.com/",
+  "sameAs": ["https://www.linkedin.com/in/davidegoldfarb/", "https://github.com/deg", "https://medium.com/@DavidEGoldfarb"],
+  "knowsAbout": ["Rapid prototyping", "Technical due diligence", "Patent strategy", "LLM engineering", "AI-assisted software development"]
+}
+</script>
 </head>
 <body>
 
@@ -321,11 +345,13 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   </div>
 </nav>
 
+<main id="content">
+
 <header class="hero" id="top">
   <div class="wrap">
-    <p class="eyebrow">Degel Software Ltd &middot; founded 1988</p>
+    <p class="eyebrow">Degel Software Ltd. &middot; founded 1988</p>
     <h1>Your next product, prototyped at AI&nbsp;speed</h1>
-    <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. Rapid prototyping, technical due diligence, patent guidance, and senior technical judgment &mdash; backed by hands-on shipping through <a href="#waves">every technology wave since 1980</a>. <strong>The AI wave is the biggest yet, and I build with it every day.</strong></p>
+    <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. I do rapid prototyping, technical due diligence, patent guidance, and senior technical judgment &mdash; backed by hands-on shipping through <a href="#waves">every technology wave since 1980</a>. <strong>The AI wave is the biggest yet, and I build with it every day.</strong></p>
     <div class="hero-ctas">
       <a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a>
       <a class="btn quiet" href="#waves">See the track record</a>
@@ -350,12 +376,12 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="section-head">
       <p class="eyebrow">Services</p>
       <h2>What I do</h2>
-      <p>Four things, done with four decades of judgment and current-generation tools.</p>
+      <p>Four things, done with four decades of judgment and today&rsquo;s tools.</p>
     </div>
     <div class="svc-grid">
       <div class="svc s1">
         <h3>Rapid prototyping, at AI speed</h3>
-        <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks, with AI leverage wherever it earns its keep. Prototyping instinct built over four decades, delivering at today&rsquo;s pace.</p>
+        <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks, using AI wherever it actually helps.</p>
       </div>
       <div class="svc s2">
         <h3>Technical due diligence</h3>
@@ -367,9 +393,10 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       </div>
       <div class="svc s4">
         <h3>Senior technical judgment</h3>
-        <p>Mentoring for development teams and their leaders, technology strategy, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. Engagements can be as light as a single research report: most recently, on transparent, trust-preserving ranking algorithms for a social-discussion platform. Ask someone who has already made the mistakes and shipped anyway.</p>
+        <p>Mentoring for development teams and their leaders, technology strategy, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. Engagements can be as light as a single research report: most recently, on transparent, trust-preserving ranking algorithms for a social-discussion platform. I&rsquo;ve already made most of these mistakes, and shipped anyway.</p>
       </div>
     </div>
+    <p class="mid-cta"><a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a></p>
   </div>
 </section>
 
@@ -389,7 +416,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="section-head">
       <p class="eyebrow">Track record</p>
       <h2>A flag on every wave</h2>
-      <p><span class="he" lang="he" dir="rtl">דגל</span> (<em>degel</em>) is Hebrew for &ldquo;flag.&rdquo; I&rsquo;ve planted one on every technology wave since 1980 &mdash; not watching from shore, but shipping commercial software inside each shift.</p>
+      <p><span class="he" lang="he" dir="rtl">דגל</span> (<em>degel</em>) is Hebrew for &ldquo;flag&rdquo;. I&rsquo;ve planted one on every technology wave since 1980 &mdash; not watching from shore, but shipping commercial software inside each shift.</p>
     </div>
 
     <div class="waves">
@@ -398,7 +425,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">1980&ndash;1990</span>
           <h3>TCP/IP, Lisp machines &amp; the first AI wave</h3>
-          <p>At MIT in 1980, I worked with the Laboratory for Computer Science team implementing the Internet&rsquo;s TCP/IP protocols. Then straight into the first AI wave: at Symbolics &mdash; maker of the Lisp machine, and holder of the internet&rsquo;s first registered domain (symbolics.com, 1985) &mdash; I built the Command Processor, parts of the window system, and a Lisp-powered constraint-propagation spreadsheet far ahead of the PC spreadsheets of its day &mdash; then co-founded International Lisp Associates. After moving to Israel: image-processing and object-recognition toolkits on Lisp machines for MBT&ndash;Israel Aircraft Industries and several AI and CAD startups.</p>
+          <p>At MIT in 1980, I worked with the Laboratory for Computer Science team implementing the Internet&rsquo;s TCP/IP protocols. Then straight into the first AI wave: at Symbolics &mdash; maker of the Lisp machine, and holder of the Internet&rsquo;s first registered domain (symbolics.com, 1985) &mdash; I built the Command Processor, parts of the window system, and a Lisp-powered constraint-propagation spreadsheet far ahead of the PC spreadsheets of its day. Then I co-founded International Lisp Associates.</p>
+          <p>After moving to Israel: image-processing and object-recognition toolkits on Lisp machines for MBT&ndash;Israel Aircraft Industries and several AI and CAD startups.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip"><img src="{{IMG:symbolics.svg}}" alt="Symbolics"></span>
@@ -412,7 +440,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">1990&ndash;1996</span>
           <h3>Windows, machine vision &amp; translation</h3>
-          <p>Major portions of a paint and drawing program for NTT, Japan&rsquo;s telecom giant. Mission-critical components and advanced C++ techniques for Cognex machine vision. Ported a commercial machine-translation system to English and Japanese Windows. Medical software later acquired by McKesson. Much of the language-technology work ran through Basis Technology &mdash; a client relationship that continues to this day.</p>
+          <p>I wrote major portions of a paint and drawing program for NTT, Japan&rsquo;s telecom giant, and built core components &mdash; plus some genuinely advanced C++ &mdash; for Cognex machine vision. I ported a commercial machine-translation system to English and Japanese Windows, and wrote medical software that McKesson later acquired. Much of the language-technology work ran through Basis Technology &mdash; a client relationship that continues to this day.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip"><img src="{{IMG:logo_ntt-t.png}}" alt="NTT"></span>
@@ -426,8 +454,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
           <span class="years eyebrow">1996&ndash;2001</span>
-          <h3>The first internet boom</h3>
-          <p>Co-founded 2AM Inc. as VP Technology and directed its core <em>Creation</em> engine &mdash; the scripting and runtime environment for a massively distributed, peer-to-peer game platform that served over 250,000 users in the dial-up era.</p>
+          <h3>The first Internet boom</h3>
+          <p>I co-founded 2AM Inc. as VP Technology and directed its core <em>Creation</em> engine &mdash; the scripting and runtime environment for a massively distributed, peer-to-peer game platform that served over 250,000 users in the dial-up era.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip color-chip"><img src="{{IMG:2am-logo.jpg}}" alt="2AM &mdash; It&rsquo;s Time for Internet Games"></span>
@@ -440,10 +468,11 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">2001&ndash;2010</span>
           <h3>Mobile, before the iPhone</h3>
-          <p>Ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones. Built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients. Push-to-talk for Orange UK. Shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written, and portions of QuickOffice, which Google later acquired and folded into Google Docs. Symbian named Degel a Platinum Partner, and Degel-built apps took home multiple Handango Champion awards. Co-founded Vringo as CTO, steered its mobile products through the arrival of the modern smartphone, and helped guide it to a NYSE IPO.</p>
+          <p>I ported Sun&rsquo;s J2ME runtime to the first Symbian smartphones, built ICQ&rsquo;s and AOL&rsquo;s mobile messaging clients, and created Orange UK&rsquo;s push-to-talk client. We shipped dozens of Symbian and J2ME apps &mdash; including a Nokia 9210 device driver that Nokia said couldn&rsquo;t be written (we wrote it), and portions of QuickOffice, which Google later acquired and folded into Google Docs.</p>
+          <p>Symbian named Degel a Platinum Partner, and Degel-built apps took home Handango Champion awards in 2003 and 2004. I co-founded Vringo as CTO, steered its mobile products through the arrival of the modern smartphone, and helped guide it to an NYSE IPO.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
-            <span class="chip color-chip"><img src="{{IMG:degel-swat.png}}" alt="Degel Software S.W.A.T. Team &mdash; our logo in the mobile era"></span>
+            <span class="chip color-chip"><img src="{{IMG:degel-swat.png}}" alt="Degel Software S.W.A.T. Team &mdash; the Degel logo in the mobile era"></span>
             <span class="chip"><img src="{{IMG:sun-t.png}}" alt="Sun Microsystems"></span>
             <span class="chip"><img src="{{IMG:icq_logo_new-t.png}}" alt="ICQ"></span>
             <span class="chip"><img src="{{IMG:logo_orange-t.png}}" alt="Orange"></span>
@@ -458,9 +487,9 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <div class="wave w5">
         <svg class="marker flag ghost" viewBox="0 0 20 28" aria-hidden="true"><line class="pole" x1="4" y1="2.5" x2="4" y2="26"/><path class="cloth" d="M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z"/></svg>
         <div class="body">
-          <span class="years eyebrow">2010&ndash;2022</span>
+          <span class="years eyebrow">2010&ndash;2023</span>
           <h3>The modern web &amp; NLP</h3>
-          <p>Full-stack product work for startups and established clients &mdash; including a Clojure-based biological-computation system for the National University of Singapore. As Principal Software Engineer at Basis Technology, I designed and built the <em>Adaptation Studio</em> and <em>Identity Studio</em> NLP front ends &mdash; and spearheaded the company&rsquo;s early adoption of ChatGPT and LLM techniques, my on-ramp to the next wave.</p>
+          <p>Full-stack product work for startups and established clients &mdash; including a Clojure-based biological-computation system for the National University of Singapore. As Principal Software Engineer at Basis Technology, I designed and built the <em>Adaptation Studio</em> and <em>Identity Studio</em> NLP front ends. I also pushed the company into ChatGPT and LLM techniques early &mdash; my on-ramp to the next wave.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip"><img src="{{IMG:basis-technology.svg}}" alt="Basis Technology"></span>
@@ -475,7 +504,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <div class="body">
           <span class="years eyebrow">2023&ndash;now</span>
           <h3>AI-augmented development</h3>
-          <p>The biggest shift I&rsquo;ve seen in four decades, and I work inside it daily: LLM data pipelines, AI-accelerated MVPs, agentic coding workflows. Not a tourist &mdash; a resident. One recent weekend, working alongside Claude, I built a <a href="https://github.com/deg/nscheme">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite. The weekend after: a <a href="https://github.com/deg/CPeMulator">Z80 and CP/M emulator</a> that boots the genuine 1979 operating system and runs Zork, WordStar, Turbo Pascal, and many other great applications from back then.</p>
+          <p>I work inside this one daily: LLM data pipelines, AI-accelerated MVPs, agentic coding workflows. One recent weekend, working alongside Claude, I built a <a href="https://github.com/deg/nscheme" target="_blank" rel="noopener noreferrer">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite. The weekend after: a <a href="https://github.com/deg/CPeMulator" target="_blank" rel="noopener noreferrer">Z80 and CP/M emulator</a> that boots the genuine 1979 operating system and runs Zork, WordStar, Turbo Pascal, and many other great applications from back then.</p>
         </div>
       </div>
     </div>
@@ -501,22 +530,22 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     </div>
     <div class="work-grid">
       <div class="case" data-client="marketbuzzr">
-        <div class="client"><img src="{{IMG:marketbuzzr-favicon.svg}}" alt=""><a href="https://marketbuzzr.com">MarketBuzzr</a></div>
+        <div class="client"><img src="{{IMG:marketbuzzr-favicon.svg}}" alt=""><a href="https://marketbuzzr.com" target="_blank" rel="noopener noreferrer">MarketBuzzr</a></div>
         <span class="sector eyebrow">Market intelligence &middot; 2025&ndash;</span>
-        <p>Co-founder and technical lead of MarketBuzzr, which tracks your competitors, industry, and market conversations and distills the noise into role-tailored insights, recommendations, and ready-to-use drafts. I built the multi-stage LLM pipeline at its core and the product around it &mdash; concept to working MVP.</p>
+        <p>Co-founder and technical lead of MarketBuzzr, which tracks your competitors, industry, and market conversations &mdash; and turns the flood into a short, role-tailored read with drafts you can actually send. I built the multi-stage LLM pipeline at its core and the product around it, concept to working MVP.</p>
       </div>
       <div class="case" data-client="heidibrun">
-        <div class="client"><img src="{{IMG:heidibrun-favicon.jpg}}" alt=""><a href="https://www.heidibrun.com/">Heidi Brun Associates</a></div>
+        <div class="client"><img src="{{IMG:heidibrun-favicon.jpg}}" alt=""><a href="https://www.heidibrun.com/" target="_blank" rel="noopener noreferrer">Heidi Brun Associates</a></div>
         <span class="sector eyebrow">Patent practice &middot; 2024&ndash;</span>
         <p>AI-driven workflow automation for a working patent practice &mdash; internal tooling that streamlines how the firm manages its portfolio and its day-to-day work.</p>
       </div>
       <div class="case" data-client="basis-technology">
         <div class="client"><img src="{{IMG:basis-technology.svg}}" alt="Basis Technology" class="wide"></div>
         <span class="sector eyebrow">NLP &amp; early LLM adoption &middot; 2015&ndash;2023</span>
-        <p>Principal-engineer work at Basis Technology, the earlier incarnation of today&rsquo;s BasisTech and a client since 1992: Rosette text-analytics demos, then the Adaptation Studio and Identity Studio NLP front ends, the Cyber Events prototype, and early adoption of ChatGPT/LLM techniques &mdash; then steering the NLP and Cyber work through an orderly handover after Rosette&rsquo;s acquisition by Babel Street.</p>
+        <p>Principal-engineer work at Basis Technology &mdash; the earlier incarnation of today&rsquo;s BasisTech, and a client since 1992. Rosette text-analytics demos, then the Adaptation Studio and Identity Studio NLP front ends, then early ChatGPT and LLM work. When Babel Street acquired Rosette, I steered the NLP and Cyber work through the handover.</p>
       </div>
       <div class="case" data-client="basistech">
-        <div class="client"><a href="https://www.basistech.com/" aria-label="BasisTech"><img src="{{IMG:basistech.svg}}" alt="BasisTech" class="wide"></a></div>
+        <div class="client"><a href="https://www.basistech.com/" aria-label="BasisTech" target="_blank" rel="noopener noreferrer"><img src="{{IMG:basistech.svg}}" alt="BasisTech" class="wide"></a></div>
         <span class="sector eyebrow">Operations software &middot; 2024&ndash;</span>
         <p>Climate, air-quality, and device control for a 13,000-square-foot incubator space &mdash; live dashboards and alerting integrated with the building&rsquo;s HVAC and smart-device systems &mdash; plus a Gmail-integrated CRM that keeps their contact pipeline in one place.</p>
       </div>
@@ -526,17 +555,21 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       </div>
       <div class="case" data-client="">
         <span class="sector eyebrow">Social-media analytics &middot; 2025</span>
-        <p>Senior technical guidance for a social-media-analytics startup: steering an LLM-first architecture and proving it through fast prototypes &mdash; a research-grade ML pipeline turned into a working, demoable product &mdash; along with the codebase assessment and team practices to keep it shipping.</p>
+        <p>Senior technical guidance for a social-media-analytics startup: I steered the architecture toward LLMs and proved it with fast prototypes, turning a research ML pipeline into something they could demo. I also reviewed the codebase and set up the practices to keep it shipping.</p>
       </div>
     </div>
 
+    <div class="quotes-head">
+      <p class="eyebrow">In their words</p>
+      <p class="quotes-note">Some of these date back to the Symbian era &mdash; part of the same track record.</p>
+    </div>
     <div class="quotes">
       <figure>
         <blockquote>&ldquo;When they made it run nearly twice as fast, we were really impressed! &hellip; These guys are true professionals, and they&rsquo;re a pleasure to work with.&rdquo;</blockquote>
         <figcaption>Nancy Yavne &middot; General Manager, Sun Israel Development Center</figcaption>
       </figure>
       <figure>
-        <blockquote>&ldquo;&hellip;great ability to develop reliable, complex software that get included in some of the best-selling applications available on Symbian OS platform.&rdquo;</blockquote>
+        <blockquote>&ldquo;&hellip;great ability to develop reliable, complex software&hellip;&rdquo;</blockquote>
         <figcaption>Gregory Zaoui &middot; Head of Israel Business Development, Symbian</figcaption>
       </figure>
       <figure>
@@ -579,19 +612,19 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     </div>
     <ul class="articles">
       <li>
-        <a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099">Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
-        <p>One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing &mdash; and what it taught me about managing an AI that keeps declaring &ldquo;done.&rdquo;</p>
+        <a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099" target="_blank" rel="noopener noreferrer">Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
+        <p>One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing &mdash; and what it taught me about managing an AI that keeps declaring &ldquo;done&rdquo;.</p>
       </li>
       <li>
-        <a href="https://medium.com/@DavidEGoldfarb/the-persistence-of-memory-2aca4c8cf603">The Persistence of Memory</a>
+        <a href="https://medium.com/@DavidEGoldfarb/the-persistence-of-memory-2aca4c8cf603" target="_blank" rel="noopener noreferrer">The Persistence of Memory</a>
         <p>Agent memory files are configuration, not notes &mdash; and for the first time, the configuration writes itself.</p>
       </li>
       <li>
-        <a href="https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1">The Slash Command That Knew Too Much</a>
+        <a href="https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1" target="_blank" rel="noopener noreferrer">The Slash Command That Knew Too Much</a>
         <p>My development workflows are now programs written in English, run by an LLM.</p>
       </li>
     </ul>
-    <p class="more-writing mono"><a href="https://medium.com/@DavidEGoldfarb">More on Medium &rarr;</a></p>
+    <p class="more-writing mono"><a href="https://medium.com/@DavidEGoldfarb" target="_blank" rel="me noopener noreferrer">More on Medium &rarr;</a></p>
   </div>
 </section>
 
@@ -615,13 +648,15 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="about-row">
       <img class="portrait" src="{{IMG:david.jpg}}" alt="David Goldfarb" width="214" height="253">
       <div class="facts">
-        <p>Degel Software is me &mdash; and, when a project needs it, the like-minded senior developers I&rsquo;ve worked with for years. I&rsquo;ve kept the company deliberately small since 1988 so that everything it ships meets one quality standard: mine. If you ask me to build something that seems wrong, I&rsquo;ll tell you before I build it. You get transparent schedules, complete issue tracking, and honest progress reports &mdash; and I work to understand your whole project, sometimes before you know exactly what you need. My goal is your project&rsquo;s success, not billable hours. Clients across the decades have ranged from AOL, Sun, and Intel to Israel Aircraft Industries and the National University of Singapore.</p>
+        <p>Degel Software is me &mdash; an independent software consultant in Beit Shemesh, Israel &mdash; and, when a project needs it, the like-minded senior developers I&rsquo;ve worked with for years. I&rsquo;ve kept the company deliberately small since 1988 so that everything it ships meets one quality standard: mine.</p>
+        <p>If you ask me to build something that seems wrong, I&rsquo;ll tell you before I build it. You get a shared issue tracker you can read any time, schedules I don&rsquo;t pad, and progress reports that tell you when something slipped. My goal is your project&rsquo;s success, not billable hours.</p>
+        <p>I&rsquo;ve been writing software since the late 1970s and I still like doing it &mdash; which is most of why the company never grew past the size where I could read every line. Clients across the decades have ranged from AOL, Sun, and Intel to Israel Aircraft Industries and the National University of Singapore.</p>
         <ul class="cred">
           <li>B.S. Computer Science, MIT, 1984</li>
           <li>Founded Degel Software Ltd., 1988</li>
           <li>Co-founded 2AM Inc., 1996</li>
-          <li>Co-founded Vringo (CTO) &mdash; IPO&rsquo;d as NYSE:VRNG</li>
-          <li>Named inventor on four US patents</li>
+          <li>Co-founded Vringo (CTO) &mdash; IPO&rsquo;d as NYSE:VRNG, 2010</li>
+          <li>Named inventor on four US patents (1999&ndash;2014)</li>
           <li>ACM member since 1982 &middot; IEEE member since 1988</li>
           <li>ACM Computing Reviews featured reviewer</li>
           <li>Beit Shemesh, Israel &middot; clients worldwide</li>
@@ -648,13 +683,15 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <h2>Tell me what you&rsquo;re building.</h2>
     <p class="big-mail"><a href="mailto:deg@degel.com">deg@degel.com</a></p>
     <div class="contact-meta">
-      <span>+972&nbsp;54&nbsp;723&#8209;0120</span>
-      <span>+1&nbsp;781&nbsp;923&#8209;0120</span>
-      <a href="https://www.linkedin.com/in/davidegoldfarb/">LinkedIn</a>
-      <a href="https://github.com/deg">GitHub</a>
+      <span>Israel: <a href="tel:+972547230120">+972&nbsp;54&nbsp;723&#8209;0120</a></span>
+      <span>US: <a href="tel:+17819230121">+1&nbsp;781&nbsp;923&#8209;0121</a></span>
+      <a href="https://www.linkedin.com/in/davidegoldfarb/" target="_blank" rel="me noopener noreferrer">LinkedIn</a>
+      <a href="https://github.com/deg" target="_blank" rel="me noopener noreferrer">GitHub</a>
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap foot-inner">
