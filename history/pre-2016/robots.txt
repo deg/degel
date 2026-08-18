@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /_private_/
+Disallow: /david/
+Disallow: /pics/
+Disallow: *.bak
+

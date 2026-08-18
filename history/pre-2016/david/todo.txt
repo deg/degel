@@ -1,0 +1,13 @@
+Notes:
+
+- Buttons are in Book Antiqua 15
+- Link colors:
+  leftsidebar: link="#0CB4F3" vlink="#FFB9DC" alink="#FFB9DC"
+  mainframe: link="#0000FF" vlink="#800080" alink="#000080"
+
+
+To do:
+- Slightly reduce space between ICQ and Sun on homepage
+- The Nov 16 external link from the left bar.
+- Take a look at the NetMechanic errors
+- Pull out include files
