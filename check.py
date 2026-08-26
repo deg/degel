@@ -1,0 +1,263 @@
+#!/usr/bin/env python3
+"""Post-build checks on the generated pages.  Run:  make check
+
+These exist because the bugs this site actually ships are not the ones a type
+checker would catch. Every check below is here because the thing it tests went
+wrong at least once:
+
+  * a shared partial silently stopped being included
+  * a <nav> inherited the site nav's sticky chrome from a bare element
+    selector, rendering a second nav bar mid-page
+  * two wave dividers ended up adjacent when the section between them moved
+  * a page linked to a URL that did not exist
+  * Medium's per-article tracking pixel would have gone out on every essay,
+    reporting readers back to Medium and breaking the offline property
+
+Anything requiring a browser (typography, spacing, contrast) is deliberately
+out of scope — look at the page for those. These are the invariants that can
+be checked from the HTML alone, and that a human reviewer will not notice.
+
+The path -> URL mapping is imported from build.py rather than re-derived here:
+two copies of it had already drifted apart, and check.py agreeing with its own
+bug is worse than having no check at all.
+
+Matching selectors are written to be attribute-order independent. An earlier
+version required `class` to come first, which meant a reordered attribute
+silently disabled the guard.
+
+No dependencies: stdlib only, matching build.py and the rest of the site.
+"""
+
+import glob
+import pathlib
+import re
+import sys
+
+from build import page_url
+
+root = pathlib.Path(__file__).resolve().parent
+failures = []
+
+# <link> relations that describe the page rather than load anything.
+NON_FETCHING_REL = {
+    "canonical",
+    "alternate",
+    "author",
+    "license",
+    "me",
+    "prev",
+    "next",
+    "bookmark",
+    "help",
+    "search",
+    "nofollow",
+}
+
+
+def check(ok, label, detail=""):
+    """Record one assertion. Detail is shown only on failure, so a passing
+    run stays skimmable."""
+    print(f"  {'ok  ' if ok else 'FAIL'}  {label}{'' if ok else '  — ' + detail}")
+    if not ok:
+        failures.append(label)
+
+
+def pages():
+    """Every built page, home first."""
+    return ["index.html"] + sorted(glob.glob("writing/**/index.html", recursive=True))
+
+
+def is_article(path):
+    """A page under writing/ that is not the index. Depth-independent: an
+    earlier version keyed on the number of slashes and silently skipped every
+    check on a nested article."""
+    return path.startswith("writing/") and path != "writing/index.html"
+
+
+def check_self_contained(path, html):
+    """A page that fetches anything at run time breaks the round-1 decision:
+    no framework, no CDN, no webfonts, works offline.
+
+    Only RESOURCE loads count. An <a href> to github.com is a link the reader
+    may follow, not a request the page makes; the articles legitimately carry
+    several. What must not appear is anything the browser fetches on its own:
+    src=, <link href=>, CSS url(), @import. An earlier version checked src=
+    alone, so an external stylesheet — a webfont, the case this docstring
+    names — went straight through.
+    """
+    offenders = re.findall(r'src="(https?://[^"]+)"', html)
+    for tag in re.findall(r"<link\b[^>]*>", html):
+        href = re.search(r'href="(https?://[^"]+)"', tag)
+        rel = re.search(r'rel="([^"]*)"', tag)
+        # A denylist, not an allowlist: a rel that merely DESCRIBES the page
+        # fetches nothing, and everything else is assumed to. A rel invented
+        # tomorrow then shows up as a loud false positive rather than a
+        # silent miss, which is the right way round for this property.
+        if href and not (rel and rel.group(1).lower() in NON_FETCHING_REL):
+            offenders.append(href.group(1))
+    offenders += re.findall(r"url\(\s*['\"]?(https?://[^)'\"]+)", html)
+    offenders += re.findall(r"@import\s+['\"]?(https?://[^;'\"]+)", html)
+    check(not offenders, f"{path}: no external resource loads", str(offenders[:2]))
+    check("medium.com/_/stat" not in html, f"{path}: no tracking pixel")
+
+
+def check_shared_chrome(path, html):
+    """Each page must carry the shared partials. A broken {{INCLUDE:}} would
+    otherwise ship a page with no navigation and no footer.
+
+    The site nav is asserted by check_one_nav, whose count of exactly one
+    covers presence too — two checks over the same element disagreed once,
+    one matching a literal string and the other a regex.
+    """
+    check("<footer>" in html, f"{path}: footer present")
+    check('id="contact"' in html, f"{path}: contact block present")
+
+
+def check_no_unresolved(path, html):
+    """Defence in depth only: build.py runs the same test on the same string
+    and exits first, so via `make check` this cannot fail. It earns its place
+    for a tree left behind by a failed build, or a page written by hand.
+    DOTALL so a multi-line block (an unparsed {{META ...}}) is caught too.
+    """
+    left = sorted(set(re.findall(r"\{\{.*?\}\}", html, re.S)))
+    check(not left, f"{path}: no unresolved directives", str(left)[:120])
+
+
+def check_links_resolve(path, html):
+    """Every root-relative href must correspond to a file that exists. Catches
+    a renamed slug that left a stale link behind.
+
+    The fragment is stripped, not used to reject the match: an earlier pattern
+    excluded '#' from the character class, so every href carrying one — which
+    is every link in the site nav — was skipped entirely.
+    """
+    for href in sorted(set(re.findall(r'href="(/[^"]*)"', html))):
+        target_path = href.split("#", 1)[0].split("?", 1)[0]
+        if target_path in ("", "/"):
+            target = root / "index.html"
+        elif target_path.endswith("/"):
+            target = root / target_path.lstrip("/") / "index.html"
+        else:
+            target = root / target_path.lstrip("/")
+        check(target.exists(), f"{path}: link {href} resolves")
+
+
+def elements(html, tag):
+    """Every opening `tag`, as (attribute string, position). Attribute order
+    is not assumed anywhere it is used."""
+    return [(m.group(1), m.start()) for m in re.finditer(rf"<{tag}\b([^>]*)>", html)]
+
+
+def check_one_nav(path, html):
+    """The site nav's chrome is scoped to nav[aria-label="Site"]. If a second
+    <nav> ever claims that label, both would render as sticky bars — and zero
+    means the page shipped without navigation."""
+    labels = [
+        m.group(1)
+        for attrs, _ in elements(html, "nav")
+        for m in [re.search(r'aria-label="([^"]*)"', attrs)]
+        if m
+    ]
+    check(labels.count("Site") == 1, f"{path}: exactly one site nav", str(labels))
+
+
+def check_waveband_alternation(html):
+    """The home page alternates section / waveband / section. Two adjacent
+    wavebands render as a doubled divider — which shipped once already.
+
+    Section ids may contain digits and hyphens; an earlier pattern allowed
+    only [a-z], so renaming a section to `case-studies` made it invisible and
+    faked an adjacency that was not there.
+    """
+    marks = []
+    for tag in ("div", "section"):
+        for attrs, pos in elements(html, tag):
+            if re.search(r'class="[^"]*\bwaveband\b', attrs):
+                marks.append((pos, "waveband"))
+            elif tag == "section":
+                m = re.search(r'id="([^"]+)"', attrs)
+                if m:
+                    marks.append((pos, m.group(1)))
+    seq = [name for _, name in sorted(marks)]
+    adjacent = [i for i in range(len(seq) - 1) if seq[i] == "waveband" == seq[i + 1]]
+    check(not adjacent, "index.html: no two wavebands adjacent", " -> ".join(seq))
+
+
+def check_canonical(path, html):
+    """A wrong canonical is invisible on the page and quietly costs the page
+    its own identity in search. og:url must agree with it."""
+    can = re.search(r'<link rel="canonical" href="([^"]+)">', html)
+    check(bool(can), f"{path}: has a canonical")
+    if not can:
+        return
+    expected = "https://degel.com" + page_url(path)
+    check(
+        can.group(1) == expected,
+        f"{path}: canonical is self-referential",
+        f"{can.group(1)} != {expected}",
+    )
+    og = re.search(r'<meta property="og:url" content="([^"]+)">', html)
+    check(og and og.group(1) == can.group(1), f"{path}: og:url matches canonical")
+
+
+def check_article_metadata(path, html):
+    """Article JSON-LD must carry the ORIGINAL publication date. Re-dating a
+    syndicated post to its republish date forfeits its history.
+
+    The Medium link is bounded, not required: build.py asks only for title,
+    date and blurb, and the going-forward workflow publishes here FIRST. An
+    earlier version demanded exactly one, which would have failed the deploy
+    on the first essay written for this site rather than syndicated to it.
+    """
+    # Whitespace-tolerant: JSON is not whitespace-significant, and matching a
+    # literal '": "' made these fail on a perfectly good page that happened to
+    # be written compactly.
+    check(
+        bool(re.search(r'"@type"\s*:\s*"Article"', html)),
+        f"{path}: Article JSON-LD",
+    )
+    check(
+        bool(re.search(r'"datePublished"\s*:\s*"\d{4}-\d{2}-\d{2}"', html)),
+        f"{path}: datePublished present",
+    )
+    medium = re.findall(r'href="https://medium\.com/@DavidEGoldfarb/[^"]+"', html)
+    check(len(medium) <= 1, f"{path}: at most one link to the Medium copy", str(medium))
+
+
+def check_sitemap():
+    """The sitemap is generated, so this guards the generator: every listed
+    URL must exist, and every built page must be listed."""
+    xml = (root / "sitemap.xml").read_text()
+    listed = set(re.findall(r"<loc>https://degel\.com(/[^<]*)</loc>", xml))
+    built = {page_url(p) for p in pages()}
+    check(
+        listed == built,
+        "sitemap lists exactly the built pages",
+        f"only in sitemap: {listed - built}; only built: {built - listed}",
+    )
+
+
+def main():
+    """Returns a shell exit code so `make check` — and therefore `make
+    deploy`, which depends on it — fails on a broken build."""
+    print("checking built pages\n")
+    for path in pages():
+        html = pathlib.Path(path).read_text()
+        check_self_contained(path, html)
+        check_shared_chrome(path, html)
+        check_no_unresolved(path, html)
+        check_links_resolve(path, html)
+        check_one_nav(path, html)
+        check_canonical(path, html)
+        if is_article(path):
+            check_article_metadata(path, html)
+    check_waveband_alternation(pathlib.Path("index.html").read_text())
+    check_sitemap()
+    print(
+        f"\n{'ALL CHECKS PASS' if not failures else str(len(failures)) + ' FAILURE(S)'}"
+    )
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

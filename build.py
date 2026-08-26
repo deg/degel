@@ -31,7 +31,12 @@ the same walk, so none of them can drift from what actually deploys.
 The list of generated paths is written to .build-outputs for `make deploy`.
 Run from the repo root:  python3 build.py
 """
-import base64, mimetypes, pathlib, re, sys
+
+import base64
+import mimetypes
+import pathlib
+import re
+import sys
 
 root = pathlib.Path(__file__).resolve().parent
 src_root = root / "src"
@@ -43,8 +48,10 @@ IMG_RE = re.compile(r"\{\{IMG:([^}]+)\}\}")
 VAR_RE = re.compile(r"\{\{([a-z_]+)\}\}")
 TEASER_RE = re.compile(r"\{\{ARTICLE_TEASER:(\d+)\}\}")
 MAX_INCLUDE_DEPTH = 10
-MONTHS = ("January February March April May June July August September "
-          "October November December").split()
+MONTHS = (
+    "January February March April May June July August September "
+    "October November December"
+).split()
 
 # META values are substituted verbatim into HTML text, attribute values and
 # JSON-LD alike, so they must be plain UTF-8 with no markup-significant
@@ -67,14 +74,17 @@ def parse_meta(text, page):
         k, v = k.strip(), v.strip()
         bad = [c for c in FORBIDDEN if c in v]
         if bad:
-            sys.exit(f"{page}: META '{k}' contains {bad} — write the real "
-                     f"character, not an entity, so the value is safe in HTML "
-                     f"text, attributes and JSON-LD alike")
+            sys.exit(
+                f"{page}: META '{k}' contains {bad} — write the real "
+                f"character, not an entity, so the value is safe in HTML "
+                f"text, attributes and JSON-LD alike"
+            )
         meta[k] = v
-    return meta, text[:m.start()] + text[m.end():]
+    return meta, text[: m.start()] + text[m.end() :]
 
 
 def human_date(iso, page):
+    """ "24 May 2026" — spelled out, since the date is read, not parsed."""
     try:
         y, mo, d = (int(x) for x in iso.split("-"))
         return f"{d} {MONTHS[mo - 1]} {y}"
@@ -85,8 +95,10 @@ def human_date(iso, page):
 def resolve_includes(text, page, stack):
     """Splice {{INCLUDE:}} directives, recursively, guarding against cycles."""
     if len(stack) > MAX_INCLUDE_DEPTH:
-        sys.exit(f"{page}: include nesting deeper than {MAX_INCLUDE_DEPTH}: "
-                 + " -> ".join(stack))
+        sys.exit(
+            f"{page}: include nesting deeper than {MAX_INCLUDE_DEPTH}: "
+            + " -> ".join(stack)
+        )
 
     def sub(m):
         name = m.group(1)
@@ -106,6 +118,8 @@ def resolve_includes(text, page, stack):
 
 
 def resolve_images(text, page):
+    """Inline each image as a data URI. Nothing may be fetched at run time."""
+
     def sub(m):
         name = m.group(1)
         for d in search_dirs:
@@ -120,52 +134,75 @@ def resolve_images(text, page):
 
 # ---------- generated blocks ----------
 
-def article_list(arts):
-    out = ['    <ul class="articles">']
-    for a in arts:
+
+def article_items(arts, limit=None, blurb=True):
+    """The <ul class="articles"> rendered by both /writing/ and the home page.
+
+    The home-page teaser is the same list with the blurb dropped and a limit
+    applied, so the two stay in step by construction rather than by care.
+    """
+    out = ['    <ul class="articles">' if blurb else '    <ul class="articles teaser">']
+    for a in arts[:limit]:
         out += [
             "      <li>",
             f'        <a href="{a["url"]}">{a["title"]}</a>',
             f'        <p class="eyebrow"><time datetime="{a["date"]}">{a["human_date"]}</time></p>',
-            f'        <p>{a["blurb"]}</p>',
-            "      </li>",
         ]
-    out.append("    </ul>")
-    return "\n".join(out)
-
-
-def article_teaser(arts, n):
-    out = ['    <ul class="articles teaser">']
-    for a in arts[:n]:
-        out += [
-            "      <li>",
-            f'        <a href="{a["url"]}">{a["title"]}</a>',
-            f'        <p class="eyebrow"><time datetime="{a["date"]}">{a["human_date"]}</time></p>',
-            "      </li>",
-        ]
+        if blurb:
+            out.append(f"        <p>{a['blurb']}</p>")
+        out.append("      </li>")
     out.append("    </ul>")
     return "\n".join(out)
 
 
 def article_nav(arts, i):
+    """Previous/next cards. The newest article has no Newer and the oldest no
+    Older, so each end renders a single card."""
     parts = []
     if i > 0:
         n = arts[i - 1]
-        parts.append(f'      <a class="prev" href="{n["url"]}">'
-                     f'<span class="dir">&larr; Newer</span>{n["title"]}</a>')
+        parts.append(
+            f'      <a class="prev" href="{n["url"]}">'
+            f'<span class="dir">&larr; Newer</span>{n["title"]}</a>'
+        )
     if i < len(arts) - 1:
         o = arts[i + 1]
-        parts.append(f'      <a class="next" href="{o["url"]}">'
-                     f'<span class="dir">Older &rarr;</span>{o["title"]}</a>')
-    return ('    <nav class="article-nav" aria-label="More essays">\n'
-            + "\n".join(parts) + "\n    </nav>")
+        parts.append(
+            f'      <a class="next" href="{o["url"]}">'
+            f'<span class="dir">Older &rarr;</span>{o["title"]}</a>'
+        )
+    return (
+        '    <nav class="article-nav" aria-label="More essays">\n'
+        + "\n".join(parts)
+        + "\n    </nav>"
+    )
 
 
 def article_jsonld(arts):
-    rows = [f'    {{"@type": "BlogPosting", "headline": "{a["title"]}", '
-            f'"datePublished": "{a["date"]}", '
-            f'"url": "https://degel.com{a["url"]}"}}' for a in arts]
+    """The blogPost array for the /writing/ Blog entity."""
+    rows = [
+        f'    {{"@type": "BlogPosting", "headline": "{a["title"]}", '
+        f'"datePublished": "{a["date"]}", '
+        f'"url": "https://degel.com{a["url"]}"}}'
+        for a in arts
+    ]
     return ",\n".join(rows)
+
+
+def page_url(rel):
+    """The URL a built page is served at, given its path relative to the root.
+
+    The single definition of this mapping. check.py imports it rather than
+    re-deriving it: three copies had already drifted apart once, and a wrong
+    URL here is invisible on the page itself.
+
+    A directory-per-page output (writing/<slug>/index.html) is served at its
+    directory; anything else is served at its own path.
+    """
+    rel = pathlib.Path(rel)
+    if rel.name == "index.html":
+        return "/" + "".join(f"{part}/" for part in rel.parts[:-1])
+    return "/" + str(rel)
 
 
 def write_sitemap(pages, arts):
@@ -173,80 +210,115 @@ def write_sitemap(pages, arts):
     dates = {a["url"]: a["date"] for a in arts}
     rows = []
     for rel in pages:
-        url = "/" + str(rel.parent).replace(".", "").lstrip("/")
-        url = "/" if url in ("/", "") else url.rstrip("/") + "/"
+        url = page_url(rel)
         lastmod = dates.get(url)
-        rows.append(f"  <url><loc>https://degel.com{url}</loc>"
-                    + (f"<lastmod>{lastmod}</lastmod>" if lastmod else "")
-                    + "</url>")
+        rows.append(
+            f"  <url><loc>https://degel.com{url}</loc>"
+            + (f"<lastmod>{lastmod}</lastmod>" if lastmod else "")
+            + "</url>"
+        )
     (root / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        + "\n".join(rows) + "\n</urlset>\n")
+        + "\n".join(rows)
+        + "\n</urlset>\n"
+    )
     return len(rows)
 
 
 # ---------- build ----------
 
-if not src_root.is_dir():
-    sys.exit("no src/ directory — run from the repo root")
 
-sources = [s for s in sorted(src_root.rglob("*.src.html"))
-           if not s.relative_to(src_root).name.startswith("_")]
-if not sources:
-    sys.exit("no pages found under src/")
+def main():
+    """Walk src/, expand every page, and write the outputs plus sitemap.xml.
 
-# Pass 1: read every source and pull its metadata.
-pages = []
-for s in sources:
-    rel = s.relative_to(src_root)
-    meta, body = parse_meta(s.read_text(), rel)
-    if meta:
-        meta.setdefault("slug", rel.parent.name)
-        for k in ("title", "date", "blurb"):
-            if k not in meta:
-                sys.exit(f"{rel}: META is missing '{k}'")
-        meta["url"] = "/" + str(rel.parent) + "/"
-        meta["human_date"] = human_date(meta["date"], rel)
-    pages.append({"rel": rel, "body": body, "meta": meta})
+    Guarded by __main__ so check.py can import page_url() without triggering
+    a build as an import side effect.
+    """
 
-# The article registry: every /writing/ page that carries metadata, newest
-# first. This one list drives the index, the teaser, prev/next and the
-# sitemap, so adding an article updates all of them.
-articles = sorted((p["meta"] for p in pages
-                   if p["meta"] and p["rel"].parts[0] == "writing"),
-                  key=lambda a: a["date"], reverse=True)
+    if not src_root.is_dir():
+        sys.exit("no src/ directory — run from the repo root")
 
-# Pass 2: expand and write.
-outputs = []
-for p in pages:
-    rel, meta = p["rel"], p["meta"]
-    t = resolve_includes(p["body"], rel, [])
-    t = t.replace("{{ARTICLE_LIST}}", article_list(articles))
-    t = t.replace("{{ARTICLE_JSONLD}}", article_jsonld(articles))
-    t = TEASER_RE.sub(lambda m: article_teaser(articles, int(m.group(1))), t)
-    if "{{ARTICLE_NAV}}" in t:
-        if meta not in articles:
-            sys.exit(f"{rel}: {{{{ARTICLE_NAV}}}} on a page that is not an article")
-        t = t.replace("{{ARTICLE_NAV}}", article_nav(articles, articles.index(meta)))
-    if meta:
-        def var(m):
-            k = m.group(1)
-            if k not in meta:
-                sys.exit(f"{rel}: no META value for {{{{{k}}}}}")
-            return meta[k]
-        t = VAR_RE.sub(var, t)
-    t = resolve_images(t, rel)
+    sources = [
+        s
+        for s in sorted(src_root.rglob("*.src.html"))
+        if not s.relative_to(src_root).name.startswith("_")
+    ]
+    if not sources:
+        sys.exit("no pages found under src/")
 
-    dest = root / rel.with_name(rel.name[: -len(".src.html")] + ".html")
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(t)
-    outputs.append(dest.relative_to(root))
-    left = len(re.findall(r"\{\{", t))
-    print(f"wrote {dest.relative_to(root)}: {len(t)} chars, {left} placeholders left")
+    # Pass 1: read every source and pull its metadata.
+    pages = []
+    for s in sources:
+        rel = s.relative_to(src_root)
+        meta, body = parse_meta(s.read_text(), rel)
+        if meta:
+            meta.setdefault("slug", rel.parent.name)
+            for k in ("title", "date", "blurb"):
+                if k not in meta:
+                    sys.exit(f"{rel}: META is missing '{k}'")
+            meta["url"] = "/" + str(rel.parent) + "/"
+            meta["human_date"] = human_date(meta["date"], rel)
+        pages.append({"rel": rel, "body": body, "meta": meta})
 
-n = write_sitemap(outputs, articles)
-outputs.append(pathlib.Path("sitemap.xml"))
-(root / ".build-outputs").write_text("".join(f"{p}\n" for p in outputs))
-print(f"{len(outputs)-1} page(s), {len(articles)} article(s); "
-      f"sitemap.xml: {n} URLs; manifest -> .build-outputs")
+    # The article registry: every /writing/ page that carries metadata, newest
+    # first. This one list drives the index, the teaser, prev/next and the
+    # sitemap, so adding an article updates all of them.
+    articles = sorted(
+        (p["meta"] for p in pages if p["meta"] and p["rel"].parts[0] == "writing"),
+        key=lambda a: a["date"],
+        reverse=True,
+    )
+
+    # Pass 2: expand and write.
+    outputs = []
+    for p in pages:
+        rel, meta = p["rel"], p["meta"]
+        t = resolve_includes(p["body"], rel, [])
+        t = t.replace("{{ARTICLE_LIST}}", article_items(articles))
+        t = t.replace("{{ARTICLE_JSONLD}}", article_jsonld(articles))
+        t = TEASER_RE.sub(
+            lambda m: article_items(articles, int(m.group(1)), blurb=False), t
+        )
+        if "{{ARTICLE_NAV}}" in t:
+            if meta not in articles:
+                sys.exit(f"{rel}: {{{{ARTICLE_NAV}}}} on a page that is not an article")
+            t = t.replace(
+                "{{ARTICLE_NAV}}", article_nav(articles, articles.index(meta))
+            )
+        if meta:
+
+            def var(m):
+                k = m.group(1)
+                if k not in meta:
+                    sys.exit(f"{rel}: no META value for {{{{{k}}}}}")
+                return meta[k]
+
+            t = VAR_RE.sub(var, t)
+        t = resolve_images(t, rel)
+
+        # Validate BEFORE writing: a page that fails here should not be left
+        # on disk with the directive still in it, and .build-outputs should
+        # not be left describing a build that did not finish. DOTALL so an
+        # unparsed multi-line {{META ...}} block is caught too.
+        left = sorted(set(re.findall(r"\{\{.*?\}\}", t, re.S)))
+        if left:
+            sys.exit(f"{rel}: unresolved directive(s): {', '.join(left)[:200]}")
+
+        dest = root / rel.with_name(rel.name[: -len(".src.html")] + ".html")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(t)
+        outputs.append(dest.relative_to(root))
+        print(f"wrote {dest.relative_to(root)}: {len(t)} chars")
+
+    n = write_sitemap(outputs, articles)
+    outputs.append(pathlib.Path("sitemap.xml"))
+    (root / ".build-outputs").write_text("".join(f"{p}\n" for p in outputs))
+    print(
+        f"{len(outputs) - 1} page(s), {len(articles)} article(s); "
+        f"sitemap.xml: {n} URLs; manifest -> .build-outputs"
+    )
+
+
+if __name__ == "__main__":
+    main()

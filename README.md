@@ -11,6 +11,9 @@ no webfonts, no external requests.
 | `src/` | THE sources. Every `src/**/*.src.html` is a page; `src/_*.html` are shared partials (nav, footer, CSS, script) |
 | `src/writing/<slug>/` | one essay per directory. A `{{META}}` block at the top of each supplies title/date/blurb; the `/writing/` list, the home-page teaser, previous/next and `sitemap.xml` are all generated from it, so **adding an essay is: create the directory, write the file** |
 | `build.py` | builds the pages (resolves `{{INCLUDE:}}`, then inlines images as data URIs) |
+| `check.py` | post-build invariants — `make check`, and `make deploy` runs it first so a failing build cannot publish |
+| `test_build.py` | `build.py`'s failure paths (bad `{{META}}`, include cycles, missing partials) against throwaway trees — `make test` |
+| `test_check.py` | mutation tests: breaks one invariant in the sources at a time and asserts `check.py` notices. A checker that only ever passes proves nothing |
 | `index.html` | built output — fully self-contained, this is what deploys |
 | `assets/` | logo/image sources for the build |
 | `og.png`, `robots.txt`, `CNAME` | deployable root artifacts |
@@ -25,6 +28,8 @@ no webfonts, no external requests.
 ```bash
 # edit a source under src/, then:
 make build                        # regenerate the pages
+make check                        # verify links, canonicals, self-containment
+make lint && make test            # ruff, then the build's failure paths
 make serve                        # preview at http://localhost:8000
 
 # commit the source change on this branch, then:
