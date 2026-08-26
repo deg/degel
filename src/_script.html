@@ -1,0 +1,25 @@
+<script>
+(function () {
+  var waves = document.querySelectorAll('.wave');
+  if (!('IntersectionObserver' in window)) {
+    waves.forEach(function (w) { w.classList.add('seen'); });
+    return;
+  }
+  var era = document.getElementById('era-span');
+  if (era) {
+    era.setAttribute('role', 'link');
+    era.setAttribute('tabindex', '0');
+    era.setAttribute('aria-label', 'Degel through the years');
+    era.title = 'Degel through the years';
+    var go = function () { window.location.href = '/history/'; };
+    era.addEventListener('click', go);
+    era.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.25 });
+  waves.forEach(function (w) { io.observe(w); });
+})();
+</script>
