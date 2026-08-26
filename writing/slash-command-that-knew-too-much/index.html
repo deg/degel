@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:site_name" content="Degel Software">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://degel.com/og.png">
+<meta property="og:image:alt" content="David Goldfarb — Software Consultant. Degel Software, every technology wave since 1980.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
+<title>The Slash Command That Knew Too Much &mdash; David Goldfarb</title>
+<meta name="description" content="My development workflows are now programs written in English, run by an LLM.">
+<meta property="og:title" content="The Slash Command That Knew Too Much">
+<meta property="og:description" content="My development workflows are now programs written in English, run by an LLM.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://degel.com/writing/slash-command-that-knew-too-much/">
+<link rel="canonical" href="https://degel.com/writing/slash-command-that-knew-too-much/">
+<style>
+/* ============ tokens ============ */
+:root {
+  --paper:      #daeae9;   /* Nirlat Zircon Ice 0664, softened ~18% toward white */
+  --card:       #ffffff;
+  --ink:        #17202d;
+  --muted:      #3f4b5d;
+  --faint:      #4f5d73;
+  --line:       #b7cdcc;
+  --accent:     #0038b8;   /* flag blue */
+  --accent-ink: #ffffff;
+  --accent-dim: #dce5f7;
+  --chip-bg:    transparent;
+  --shadow:     0 1px 2px rgba(23,32,45,.06), 0 8px 24px rgba(23,32,45,.07);
+  /* era spectrum: one color per technology wave, ending in flag blue */
+  --w1: #6d28d9;  /* Lisp & first AI */
+  --w2: #0c655c;  /* Windows/vision/translation */
+  --w3: #a8380a;  /* first internet boom */
+  --w4: #be185d;  /* mobile */
+  --w5: #0f6530;  /* modern web & NLP */
+  --w6: #0038b8;  /* AI now = flag blue */
+  --tint-a: color-mix(in srgb, var(--accent) 8%, var(--paper));
+  --deep:       #16242a;   /* dark bookend: nav, contact, footer */
+  --deep-ink:   #e8f0f0;
+  --deep-muted: #9db2b5;
+  --deep-accent:#8fb3ff;
+  --tint-b: color-mix(in srgb, #ffffff 45%, var(--paper));
+  --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:      #0e171a;
+    --card:       #152225;
+    --ink:        #e7ecf3;
+    --muted:      #a5b1c2;
+    --faint:      #7f8ca0;
+    --line:       #26383b;
+    --accent:     #6f98ff;
+    --accent-ink: #0c1220;
+    --accent-dim: #1d2a45;
+    --chip-bg:    #f2f4f7;
+    --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+    --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+    --deep: #0a1316;
+    --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
+  }
+}
+:root[data-theme="dark"] {
+  --paper:      #0e171a;
+  --card:       #152225;
+  --ink:        #e7ecf3;
+  --muted:      #a5b1c2;
+  --faint:      #7f8ca0;
+  --line:       #26383b;
+  --accent:     #6f98ff;
+  --accent-ink: #0c1220;
+  --accent-dim: #1d2a45;
+  --chip-bg:    #f2f4f7;
+  --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+  --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+  --deep: #0a1316;
+  --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
+}
+
+/* ============ base ============ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 450 1.15rem/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.serif { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; }
+.mono  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; font-weight: 600; line-height: 1.15; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+img { max-width: 100%; }
+.wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
+.eyebrow {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .8rem; font-weight: 500; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============ flag glyph ============ */
+.flag { display: inline-block; width: 1em; height: 1.35em; vertical-align: -0.22em; }
+.flag .pole { stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.flag .cloth { fill: var(--accent); }
+.flag.ghost .cloth { fill: none; stroke: currentColor; stroke-width: 1.4; }
+
+/* ============ nav ============ */
+nav[aria-label="Site"] {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--deep) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+nav[aria-label="Site"]::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
+.nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
+.brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
+.brand:hover { text-decoration: none; }
+.nav-links { display: flex; gap: 1.4rem; margin-left: auto; align-items: center; }
+.nav-links a { color: #c4d1d4; font-size: .94rem; font-weight: 500; }
+.nav-links a:hover { color: var(--deep-ink); text-decoration: none; }
+.nav-links a.cta {
+  color: #0d1726; background: var(--deep-accent);
+  padding: .45rem .95rem; border-radius: 999px; font-weight: 600;
+}
+.nav-links a.cta:hover { filter: brightness(1.08); }
+@media (max-width: 40rem) { .nav-links a:not(.cta) { display: none; } }
+
+/* ============ hero ============ */
+header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--tint-a), var(--paper)); }
+.waveband { line-height: 0; }
+.waveband svg { width: 100%; height: 110px; display: block; }
+.waveband.divider svg { height: 54px; }
+.waveband.flip svg { transform: scaleX(-1); }
+.on-tinta { background: var(--tint-a); }
+.on-paper { background: var(--paper); }
+.on-tintb { background: var(--tint-b); }
+.hero h1 {
+  font-size: clamp(2.7rem, 7vw, 4.6rem);
+  letter-spacing: -0.015em;
+  margin: 1.1rem 0 1.4rem;
+}
+.hero .lede { max-width: 38em; font-size: 1.22rem; color: var(--muted); }
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+.hero-ctas { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 2.1rem; }
+.btn {
+  display: inline-block; padding: .7rem 1.4rem; border-radius: 999px;
+  font-weight: 600; font-size: .98rem;
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); text-decoration: none; }
+.btn.quiet { border: 1px solid var(--line); color: var(--ink); background: var(--card); }
+.btn.quiet:hover { border-color: var(--faint); text-decoration: none; }
+.hero .kicker { margin-top: 3rem; font-size: .78rem; color: var(--faint); letter-spacing: .12em; }
+
+/* ============ sections ============ */
+section { padding: 5.5rem 0; }
+#services { background: var(--tint-a); }
+#work { background: var(--tint-a); }
+#writing { background: var(--tint-b); }
+#contact { background: var(--deep); }
+.section-head { margin-bottom: 2.6rem; max-width: 42em; }
+.section-head h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: .5rem 0 .9rem; }
+.section-head p { color: var(--muted); }
+.he { unicode-bidi: isolate; }
+
+/* ============ waves timeline ============ */
+.waves { position: relative; margin-left: .55rem; }
+.waves::before {
+  content: ""; position: absolute; left: 0; top: .4rem; bottom: .4rem;
+  width: 3px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
+}
+.wave.w1 { --wc: var(--w1); } .wave.w2 { --wc: var(--w2); } .wave.w3 { --wc: var(--w3); }
+.wave.w4 { --wc: var(--w4); } .wave.w5 { --wc: var(--w5); } .wave.w6 { --wc: var(--w6); }
+.wave .marker .cloth { fill: var(--wc, var(--accent)); stroke: none; }
+.wave .years { color: var(--wc, var(--muted)); font-weight: 600; }
+.wave { position: relative; padding: 0 0 3rem 2.4rem; }
+.wave:last-child { padding-bottom: .5rem; }
+.wave .marker {
+  position: absolute; left: -0.62rem; top: -0.1rem;
+  width: 1.35rem; height: 1.8rem; color: var(--faint);
+  background: var(--paper);
+}
+.wave .years { display: block; margin-bottom: .35rem; }
+.wave h3 { font-size: 1.35rem; margin-bottom: .55rem; }
+.wave p { color: var(--muted); max-width: 44em; }
+.wave .body p + p { margin-top: .6rem; }
+.wave .aside { display: block; margin-top: .5rem; font-size: .88rem; color: var(--faint); font-style: italic; }
+.wave.now .marker { color: var(--accent); }
+.wave.now h3 { color: var(--accent); }
+.wave.now p { color: var(--ink); }
+
+/* flag-plant animation */
+@media (prefers-reduced-motion: no-preference) {
+  .wave .marker, .wave .body { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
+  .wave .marker { transition-delay: .1s; transform: translateY(20px); }
+  .wave.seen .marker, .wave.seen .body { opacity: 1; transform: none; }
+}
+
+/* era artifacts */
+.artifacts { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.05rem; align-items: center; }
+.artifacts .chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--chip-bg); border-radius: 7px;
+  padding: .38rem .7rem; height: 2.5rem;
+  position: relative; transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.artifacts .chip:hover { transform: scale(1.9); z-index: 5; background: #fff; box-shadow: var(--shadow); }
+.artifacts img { max-height: 1.5rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
+.artifacts .chip:hover img { filter: none; opacity: 1; }
+.artifacts .chip.color-chip img { filter: none; opacity: 1; }
+.artifacts .label { font-size: .72rem; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-right: .3rem; }
+
+/* ============ services ============ */
+.svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.3rem; }
+.svc {
+  background: color-mix(in srgb, var(--sc, var(--accent)) 4%, var(--card));
+  border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
+}
+.svc.s1 { --sc: var(--w6); } .svc.s2 { --sc: var(--w2); }
+.svc.s3 { --sc: var(--w1); } .svc.s4 { --sc: var(--w4); }
+.mid-cta { margin-top: 2.6rem; }
+.svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--sc, var(--accent)); padding-top: .9rem; }
+.svc p { color: var(--muted); font-size: 1.02rem; }
+.svc .flag { width: 1.05rem; height: 1.45rem; color: var(--faint); }
+
+/* ============ work ============ */
+.work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.3rem; }
+.case {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  border-top: 4px solid var(--cc, var(--line));
+  padding: 1.5rem 1.5rem 1.4rem; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: .75rem;
+}
+.case[data-client="marketbuzzr"] { --cc: var(--w6); }
+.case[data-client="heidibrun"] { --cc: var(--w1); }
+.case[data-client="basis-technology"] { --cc: var(--w5); }
+.case[data-client="basistech"] { --cc: var(--w2); }
+.case .sector { color: var(--accent); }
+.case .client { display: flex; align-items: center; gap: .55rem; }
+.case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
+.case .client img.wide { height: 1.15rem; }
+.case .client a { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+.case p { color: var(--muted); font-size: 1rem; }
+
+/* ============ quotes ============ */
+.quotes-head { margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+.quotes-head .quotes-note { color: var(--muted); font-size: .95rem; margin-top: .4rem; }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 1.6rem; }
+.quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
+.quotes figure:nth-child(1) { --qc: var(--w4); }
+.quotes figure:nth-child(2) { --qc: var(--w2); }
+.quotes figure:nth-child(3) { --qc: var(--w3); }
+.quotes figure:nth-child(4) { --qc: var(--w5); }
+.quotes figure:nth-child(5) { --qc: var(--w1); }
+.quotes figure:nth-child(6) { --qc: var(--w6); }
+.quotes blockquote {
+  margin: 0 0 .8rem;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic; font-size: 1.06rem; line-height: 1.55; color: var(--ink);
+}
+.quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
+
+/* ============ writing lists ============ */
+/* Shared: the /writing/ index and the home page's generated teaser both
+   render <ul class="articles">. The teaser omits the blurb. */
+.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
+.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
+.articles li:nth-child(1) { --ac: var(--w6); }
+.articles li:nth-child(2) { --ac: var(--w1); }
+.articles li:nth-child(3) { --ac: var(--w5); }
+.articles li:nth-child(4) { --ac: var(--w3); }
+.articles a {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.18rem; font-weight: 600; color: var(--ink);
+}
+.articles a:hover { color: var(--accent); }
+.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
+.more-writing { margin-top: 1.8rem; font-size: .85rem; }
+.articles.teaser li { padding-bottom: .1rem; }
+.articles.teaser .eyebrow { margin-top: .25rem; }
+
+/* ============ about ============ */
+.about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
+.about-row .portrait {
+  width: 9.5rem; height: auto; border-radius: 12px; border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.about-row .facts { flex: 1; min-width: 16rem; }
+.about-row .facts p { color: var(--muted); max-width: 42em; margin-bottom: 1.3rem; }
+.cred { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.cred li {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .82rem;
+  color: var(--muted); display: flex; gap: .6rem; align-items: baseline;
+}
+.cred li::before { content: "—"; color: var(--accent); }
+
+/* ============ contact ============ */
+.contact { text-align: left; }
+.contact .eyebrow { color: var(--deep-muted); }
+.contact h2 { color: var(--deep-ink); }
+.contact .big-mail a { color: var(--deep-accent); }
+.contact h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin: .5rem 0 1rem; }
+.contact .big-mail {
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(1.3rem, 3.4vw, 2rem); font-weight: 600;
+}
+.contact-meta { margin-top: 1.6rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: .92rem; color: var(--deep-muted); }
+.contact-meta a { color: var(--deep-muted); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--deep-muted) 40%, transparent); text-underline-offset: 3px; }
+.contact-meta a:hover { color: var(--deep-ink); }
+
+/* ============ footer ============ */
+footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
+.foot-inner { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; font-size: .84rem; color: var(--faint); }
+#era-span[role="link"] { cursor: pointer; text-decoration: underline dotted transparent; text-underline-offset: 3px; transition: text-decoration-color .2s, color .2s; }
+#era-span[role="link"]:hover, #era-span[role="link"]:focus-visible { color: var(--accent); text-decoration-color: var(--accent); }
+</style>
+<style>
+/* ============ article pages ============
+   Included only by /writing/ pages, after _style.html. Purely additive:
+   every rule is scoped under .article or .article-head, so nothing here
+   can reach the home page or the service pages.
+
+   Tokens only — no new colors — so dark mode follows _style.html with no
+   @media or [data-theme] block of its own.                             */
+
+:root { --col: 41.4rem; }   /* 36em at the body's 1.15rem */
+.article-head { max-width: var(--col); margin: 0 auto 2.4rem; }
+.article-head h1 {
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
+  margin: .5rem 0 .9rem;
+}
+.article-head .standfirst {
+  font-size: 1.22rem; color: var(--muted); max-width: 34em;
+}
+.article-meta {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.1rem;
+  margin-top: 1.5rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+}
+
+/* ---- prose ----
+   The base resets p/h* margins to 0 and every section supplies its own
+   spacing, so an article body has nothing to inherit. Restore it here.
+   Measure: 36em, a shade under .lede's 38em. At the body's own 1.15rem
+   that is roughly 70 characters per line — inside the 45-75 range that
+   long-form prose reads best at, where 38em sits right at its edge.
+   Head, body, prev/next and foot all share it so the column has ONE left
+   edge — via --col rather than a repeated `36em`, because `em` resolves
+   against each element's OWN font-size: the foot sets .92rem, so `36em`
+   there is 530px, not 662px, and the line indented past the cards.
+
+   CENTERED, unlike .lede and .section-head. Those sit left because the
+   home page's grids fill the rest of the 68rem .wrap; an article page
+   has only the one narrow column, so left-aligning it strands half the
+   viewport and reads as unfinished.                                    */
+.article { margin-inline: auto; max-width: var(--col); font-size: 1.15rem; line-height: 1.75; }
+.article > p { margin: 0 0 1.15em; }
+.article > p:last-child { margin-bottom: 0; }
+
+.article h2 {
+  font-size: clamp(1.35rem, 2.6vw, 1.62rem);
+  margin: 2.5em 0 .55em;
+}
+.article h2:first-child { margin-top: 0; }
+
+/* Prose links carry a color-only distinction otherwise: the base rule is
+   text-decoration: none site-wide, which is right for nav and CTAs but
+   not for a paragraph with ten inline links. */
+.article a {
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+.article a:hover { text-decoration-color: var(--accent); }
+
+.article strong { font-weight: 650; }
+.article em { font-style: italic; }
+
+.article blockquote {
+  margin: 1.6em 0; padding-left: 1.1rem;
+  border-left: 3px solid var(--accent);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic; color: var(--ink);
+}
+.article blockquote p { margin: 0 0 .6em; }
+.article blockquote p:last-child { margin-bottom: 0; }
+
+.article ul, .article ol { margin: 0 0 1.15em; padding-left: 1.4em; }
+.article li { margin-bottom: .4em; }
+
+/* ---- code ----
+   No pre/code rules exist in _style.html at all. overflow-x is required,
+   not cosmetic: the Scheme REPL transcript prints a 78-digit result, and
+   without it the whole page scrolls sideways on a phone. */
+.article pre {
+  margin: 1.5em 0; padding: 1.05rem 1.15rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .84rem; line-height: 1.55; color: var(--ink);
+  tab-size: 2;
+}
+.article code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .88em;
+  background: var(--tint-a); border-radius: 4px; padding: .1em .34em;
+}
+.article pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ---- foot: previous/next, then the two standing links ---- */
+.article-nav {
+  margin: 3rem auto 0; max-width: var(--col); padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+}
+.article-nav a {
+  display: block; padding: .9rem 1.1rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.02rem; font-weight: 600; color: var(--ink);
+  transition: border-color .15s ease;
+}
+.article-nav a:hover { border-color: var(--accent); color: var(--accent); }
+.article-nav .dir {
+  display: block; margin-bottom: .3rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .72rem; font-weight: 500; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--faint);
+}
+.article-nav .next { text-align: right; }
+/* One article at each end has only a neighbour on one side; keep the other
+   one in its column rather than letting it slide across. */
+.article-nav .next:only-child { grid-column: 2; }
+@media (max-width: 34rem) {
+  .article-nav { grid-template-columns: 1fr; }
+  .article-nav .next, .article-nav .next:only-child { text-align: left; grid-column: 1; }
+}
+
+.article-foot {
+  margin: 1.6rem auto 0; max-width: var(--col);
+  font-size: .92rem; color: var(--muted);
+}
+.article-foot a {
+  color: var(--muted); text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--muted) 40%, transparent);
+  text-underline-offset: 3px;
+}
+.article-foot a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.article-foot .sep { margin: 0 .6rem; color: var(--line); }
+
+/* ---- the shared contact block, scaled for an article page ----
+   _contact.html closes the home page, where a 2.7rem headline is the point.
+   At the foot of an essay it shouts over the article it follows. */
+.contact-compact section { padding: 3.4rem 0; }
+.contact-compact .contact h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); }
+.contact-compact .contact .big-mail { font-size: clamp(1.1rem, 2vw, 1.3rem); }
+.contact-compact .contact-meta { margin-top: 1.2rem; font-size: .86rem; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Slash Command That Knew Too Much",
+  "description": "My development workflows are now programs written in English, run by an LLM.",
+  "datePublished": "2026-03-30",
+  "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
+  "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/slash-command-that-knew-too-much/"},
+  "isPartOf": {"@type": "Blog", "name": "Essays", "@id": "https://degel.com/writing/"}
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="Site">
+  <div class="nav-inner">
+    <a class="brand" href="/#top" aria-label="Degel Software home">Degel Software</a>
+    <div class="nav-links">
+      <a href="/#services">What I do</a>
+      <a href="/#waves">Track record</a>
+      <a href="/#work">Recent work</a>
+      <a href="/writing/">Essays</a>
+      <a href="/#about">About</a>
+      <a class="cta" href="mailto:deg@degel.com">Email David</a>
+    </div>
+  </div>
+</nav>
+
+<main id="content">
+
+<section>
+  <div class="wrap">
+    <header class="article-head">
+      <h1>The Slash Command That Knew Too Much</h1>
+      <p class="standfirst">My development workflows are now programs written in English, run by an LLM.</p>
+      <div class="article-meta eyebrow">
+        <time datetime="2026-03-30">30 March 2026</time>
+        <span>David Goldfarb</span>
+      </div>
+    </header>
+
+    <div class="article">
+      <p>Most of my programming these days happens in conversation with an AI. Specifically, with Claude Code — Anthropic’s command-line tool that lets Claude read your codebase, edit files, run tests, and generally act as a collaborator who never sleeps and never forgets the lint step. If you’ve used Copilot or Cursor, Claude Code is in that family, but it lives in the terminal and works at the level of whole tasks rather than single completions.</p>
+      <p>What caught my interest today isn’t the code generation. It’s the customizability. You can shape how Claude works with you — what it checks, what it asks about, even what it refuses to do without permission.</p>
+      <p>I love workflows. I’ve been building them since my first defsystem on a Lisp machine in the early 1980s — a build tool that, in true Lisp fashion, was itself a program you could extend in every direction — little machines that encode the steps I’d otherwise forget. The best ones disappear into the background and just do the right thing.</p>
+      <p>Claude Code lets you write workflows as slash commands. You put a markdown file in .claude/commands/ and it becomes a /command you can type anytime. The markdown is just instructions in plain English — what to check, what order to do things in, and when to stop and ask. Claude reads them and follows along.</p>
+      <p>I have two that I use constantly. /start-task is my ritual for beginning work: load context from my issue tracker, ask me what I’m trying to accomplish, read the relevant source files, propose a plan — and then STOP. It does not touch code until I say “go ahead.” This rule has saved me more than once.</p>
+      <p>/finalizeis the closing ritual. Refactor what I just wrote. Add tests. Lint. Run the full test suite. Iterate until everything is clean. Commit. Close the issue. It’s a checklist I would never follow 100% reliably on my own, and now I don’t have to.</p>
+      <p>These two commands evolved in my main project, a startup MVP with a FastAPI backend and a React frontend. They grew organically over the course of weeks, accumulating the little details that make a workflow actually useful. /start-task has a routing table: read this documentation guide when you’re touching the pipeline; that one for frontend work; a different one for database migrations. /finalize learned to regenerate TypeScript types from the backend’s OpenAPI spec — a step that’s easy to forget and annoying to debug when you do.</p>
+      <p>The problem became obvious when I wanted to apply these to a second project.</p>
+      <p>I work across many codebases. A home automation monitor. An HVAC monitoring system for a client’s office. An intellectual property tracker for my wife’s company. A prototype for a parenting startup. Various smaller tools. Each one would benefit from /start-task and /finalize, but neither command made sense outside the project where they’d grown up. Half the steps were universal, half were specific to one codebase. I couldn’t share them without sharing the junk too.</p>
+      <p>Simple cut-and-paste was out of the question. I have no interest in maintaining a hydra’s head of multiple almost identical files.</p>
+      <p>My first instinct was to split each command into two files. A general ~/.claude/commands/finalize.md, available in every project, containing the universal steps. And a project-specific finalize-project.md in each project’s .claude/commands, containing the local details. The general version would include a step: “Now run /finalize-project.” Ditto, for .claude/commands/start-task.md.</p>
+      <p>It worked. But when I looked at Claude’s new list of slash commands, there were /finalize-project and /start-task-project, staring back at me. Two commands that existed only to be called by other commands. Nobody should ever type them directly — they’d produce confusing results out of context. Yet there they sat, right alongside the real commands.</p>
+      <p>This nagged at me. A tool’s interface should show you what you can do, not how it works internally. These helper commands were implementation details leaking into the UI.</p>
+      <p>Once I saw the problem, the fix was simple. Claude Code discovers slash commands by scanning specific directories. It scans ~/.claude/commands/ and &lt;project&gt;/.claude/commands/. It does not scan arbitrary directories.</p>
+      <p>So I created a directory: &lt;project&gt;/.claude/skills-extension/</p>
+      <p>I moved the project-specific files there and changed the general commands to say:</p><pre>## 3. Project-Specific Steps
+If `.claude/skill-extensions/finalize.md` exists in the project,
+read it and follow its instructions. If it does not exist, skip this step.</pre><p>That’s the whole mechanism. Claude reads a file if it’s there, skips the step if it isn’t. No plugin system, no configuration. Just a Markdown file in a directory that wasn&#39;t magical until I made it so.</p>
+      <p>Now my projects look like this. The general commands live in my home directory and work everywhere:</p><pre>~/.claude/commands/
+ start-task.md
+ finalize.md</pre><p>My main project has extensions for both:</p><pre>startup-mvp/.claude/skill-extensions/
+       start-task.md # Documentation guide routing table
+       finalize.md # API type regeneration, doc update checklist</pre><p>The parenting prototype has just one extension. The HVAC monitor and the home automation project have none at all — the general commands work there unmodified, with the extension steps quietly skipped.</p>
+      <p>I’m pleased with the naming convention. The files in skill-extensions/ match the filenames of the commands they augment. If you see skill-extensions/finalize.md, you know instantly what it’s for.</p>
+      <p>These files are programs, by the way. I didn’t quite realize it until I looked at what I’d built. The finalize command has a loop — iterate until lint and tests both pass. The extension mechanism is a conditional include — load this module if it exists. I’ve written these same structures in so many programming and scripting languages over the years. Now I’m writing them in English, and an LLM runs them. The programming concepts haven’t changed at all. The programming language has changed completely.</p>
+      <p>There’s a principle here that I keep rediscovering across decades of building tools: not everything that participates in a workflow should be visible in the interface. Some files are commands — things a person types. Others are context — things a command reads. The distinction matters, and it’s worth encoding in your directory structure rather than leaving it to chance.</p>
+      <p>Using this in a new project is automatic. It takes zero time. Adding customizations to a project takes just moments: Create the directory, write a markdown file describing what’s specific to that codebase, and the general commands pick it up on the next invocation. Projects that need no customization need no setup.</p>
+      <p>Many projects, two shared workflow commands, zero duplication, and a clean slash command list. Fifteen minutes well spent. Frankly, it took longer to write this article than it did to refine the idea.</p>
+    </div>
+
+    <nav class="article-nav" aria-label="More essays">
+      <a class="prev" href="/writing/persistence-of-memory/"><span class="dir">&larr; Newer</span>The Persistence of Memory</a>
+      <a class="next" href="/writing/joy-of-rediscovery/"><span class="dir">Older &rarr;</span>The Joy of Rediscovery</a>
+    </nav>
+    <p class="article-foot">
+      Also on <a href="https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
+    </p>
+  </div>
+</section>
+
+<div class="contact-compact">
+<section id="contact" class="contact">
+  <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h2>Tell me what you&rsquo;re building.</h2>
+    <p class="big-mail"><a href="mailto:deg@degel.com">deg@degel.com</a></p>
+    <div class="contact-meta">
+      <span>Israel: <a href="tel:+972547230120">+972&nbsp;54&nbsp;723&#8209;0120</a></span>
+      <span>US: <a href="tel:+17819230121">+1&nbsp;781&nbsp;923&#8209;0121</a></span>
+      <a href="https://www.linkedin.com/in/davidegoldfarb/" target="_blank" rel="me noopener noreferrer">LinkedIn</a>
+      <a href="https://github.com/deg" target="_blank" rel="me noopener noreferrer">GitHub</a>
+      <a href="https://medium.com/@DavidEGoldfarb" target="_blank" rel="me noopener noreferrer">Medium</a>
+    </div>
+  </div>
+</section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>&copy; <span id="era-span">1988&ndash;2026</span> Degel Software Ltd.</span>
+  </div>
+</footer>
+<script>
+(function () {
+  var waves = document.querySelectorAll('.wave');
+  if (!('IntersectionObserver' in window)) {
+    waves.forEach(function (w) { w.classList.add('seen'); });
+    return;
+  }
+  var era = document.getElementById('era-span');
+  if (era) {
+    era.setAttribute('role', 'link');
+    era.setAttribute('tabindex', '0');
+    era.setAttribute('aria-label', 'Degel through the years');
+    era.title = 'Degel through the years';
+    var go = function () { window.location.href = '/history/'; };
+    era.addEventListener('click', go);
+    era.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.25 });
+  waves.forEach(function (w) { io.observe(w); });
+})();
+</script>
+</body>
+</html>
