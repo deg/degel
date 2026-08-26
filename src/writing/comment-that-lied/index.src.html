@@ -1,0 +1,102 @@
+{{META
+title: The Comment That Lied
+date: 2026-08-27
+blurb: Four of sixteen agent memories had gone stale — invalidated by the fixes we'd just shipped. Institutional memory rots, and progress is what rots it.
+standfirst: I told Claude to remember. It told me its memories were wrong.
+}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{INCLUDE:_meta.html}}
+<title>{{title}} &mdash; David Goldfarb</title>
+<meta name="description" content="{{blurb}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{blurb}}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://degel.com{{url}}">
+<link rel="canonical" href="https://degel.com{{url}}">
+{{INCLUDE:_style.html}}
+{{INCLUDE:_style-article.html}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{title}}",
+  "description": "{{blurb}}",
+  "datePublished": "{{date}}",
+  "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
+  "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com{{url}}"},
+  "isPartOf": {"@type": "Blog", "name": "Essays", "@id": "https://degel.com/writing/"}
+}
+</script>
+</head>
+<body>
+
+{{INCLUDE:_nav.html}}
+
+<main id="content">
+
+<section>
+  <div class="wrap">
+    <header class="article-head">
+      <h1>{{title}}</h1>
+      <p class="standfirst">{{standfirst}}</p>
+      <div class="article-meta eyebrow">
+        <time datetime="{{date}}">{{human_date}}</time>
+        <span>David Goldfarb</span>
+      </div>
+    </header>
+
+    <div class="article">
+      <p>This morning I closed a session with Claude on Sparkenta — a personal tool I’m building to organize over a thousand saved links and half-formed ideas for future projects. (The full Sparkenta story is more interesting than that, but that’s for another article). The session had run long, we’d fixed real bugs and completed real tasks, but Claude’s context window was filling up. So I gave Claude one final prompt:</p>
+      <blockquote>
+      <p>I’m going to end this session now (your context is getting full). Anything we need to preserve for future sessions, besides what is already in beads?</p>
+      </blockquote>
+      <p>This is something that I’ve started doing at the end of each session, for reasons that I’ll explain in a moment. But I’ve not yet formalized this, nor locked down a precise wording for my prompt. This time, the wording that I happened to choose provoked a new reaction from Claude. What came back was not what I expected.</p>
+      <h2>Sessions end, and the agent forgets everything</h2>
+      <p>An LLM coding session has a hard ceiling. The model has a limited context — it can only remember a certain number of tokens or words, and quality starts to sag even sooner than you’d expect from the hard token limit. Sooner or later, we have to abandon each session, even if our work is not done. We have to create a new session, and it is born knowing nothing except what we tell it.</p>
+      <p>For me, “what we tell it” mostly means Beads, which I’ve written about before in <a href="/writing/scheme-in-a-weekend/"><em>Scheme in a Weekend, or, LLM: The Ultimate Intern</em></a> — <a href="https://github.com/gastownhall/beads" target="_blank" rel="noopener noreferrer">an issue tracker</a> designed to be shared between a human and an agent, backed by a local database that lives alongside the repository. Beads also stores free-form <em>memories</em>: durable notes, each with a name, loaded into the agent’s context at the start of every session. Sparkenta had sixteen that morning, with names like <code>store-backfill-pattern</code> and <code>test-env-gotchas</code> — the accumulated hazards of a codebase, found during development cycles and written down so the next agent doesn’t step on them.</p>
+      <p>It should be no surprise that each session learns more than what it records in these memories. Along the way the agent and I learn <em>local</em> things: this test looked green but couldn’t actually fail; that verification step was worthless because it reused the same broken code path. Most of it is throwaway. Some generalizes. The only moment to capture these is before we close the current session. Once the session exits, this local knowledge is lost. That might be ok if each new session tackled a new task. But, with limited contexts, I often need to continue an epic across multiple Claude sessions. In many ways, this is like a human developer who goes home and needs to continue the next day. I’ve always worked with a pad of paper or an open file, to record the ephemeral tasks that I need to remember when I next sit down. Turns out that AI agents need the same thing.</p>
+      <p>So I started asking, at the end of every session, for the agent to update whatever ought to outlive it — an issue, a memory, or a page of project documentation.</p>
+      <h2>What came back</h2>
+      <p>Getting back to our story, that’s what I did today. I expected a short list of new lessons to be added.</p>
+      <p>Claude’s first move, before writing anything, was to read the memories that were <em>already</em> there. The clause that did the work was the last one, <em>besides what is already in beads</em>: it sent the agent to look at what it had before deciding what to add. Then it told me:</p>
+      <blockquote>
+      <p>Four existing memories are now <strong>wrong or stale</strong> — that matters more than adding new ones.</p>
+      </blockquote>
+      <p>One memory had been telling every session for weeks that a certain review tool “does not exist in this harness”. We had used the tool multiple times today. Another named a required environment variable. That variable appears nowhere in the current code. The other two memories were no better, also warning about problems that no longer existed. Claude rewrote three of them. The fourth it deleted outright, because a newer memory already covered that ground correctly, and explained why:</p>
+      <blockquote>
+      <p>two memories on one topic where one is false is worse than either alone</p>
+      </blockquote>
+      <p>That is four of the sixteen. I’d been treating the memory store as an accumulator: you learn something, you write it down, the pile gets more useful. All of them proved otherwise, and three we had invalidated ourselves. One had told every session to work around an API key leaking out of a config file; we had closed that leak the same afternoon, which turned the advice into a trap. Another described a hazard in scripts that reach the live data store; we had spent the morning making that impossible, which turned the warning into noise. The better the project gets, the more of its institutional memory quietly rots, and it rots silently, because nobody re-reads memories until they are triggered and cause trouble.</p>
+      <p>There was one genuinely new lesson that Claude recorded today — a testing gap that had quietly hidden three separate bugs — and it is exactly what I had wanted the ritual to produce. But it was one new entry against four corrections, and that ratio is what caught my attention.</p>
+      <h2>The missing verb</h2>
+      <p>All this reveals a weakness in the Beads architecture, or at least in the way I use it. beads themselves are tasks, and are scoped like tasks in any other tracking system — they can be created, opened, updated, and finally closed. That is, they are artifacts with lifetime. But Beads implements memories differently. They cut across multiple issues — often they even cover the entire project — and don’t have life cycles.</p>
+      <p>That isn’t only a conceptual complaint; it shows up in the Beads command set. For issues, <code>bd</code> will create, update, claim, close, defer, supersede, and even list the ones that have gone quiet — there is a <code>bd stale</code> that reports issues nobody has touched in a month. For memories there is <code>remember</code>, <code>recall</code>, <code>memories</code>, and <code>forget</code>. Store, read, delete. You can rewrite a memory in place, but nothing will ever tell you that one deserves a second look, and there is no <code>bd stale</code> for memories at all. The tracker has an opinion about when a <em>task</em> has been sitting too long, and no opinion whatsoever about when a <em>fact</em> has.</p>
+      <p>This morning’s fourth memory is the case in point. What it needed was precisely <code>bd supersede</code>, which marks an issue as replaced by a newer one and closes it with a pointer to its replacement. That verb exists for issues and not for memories.</p>
+      <p>That gap also finishes an argument I started in <a href="/writing/persistence-of-memory/"><em>The Persistence of Memory</em></a>, where I claimed that memories are configuration rather than notes — you correct the agent once, and the correction applies by itself thereafter. I still believe that. What I’d missed is that this particular configuration describes the code, and the code is the thing I spend all day changing. My <code>.emacs.d</code> does not go stale because I got better at Emacs.</p>
+      <p>What I realized today is that I can use the end of each session as a moment to review the open memories; to challenge, if you will, their longevity.</p>
+      <h2>Closing shop</h2>
+      <p><code>/finalize</code> runs nine steps, from self-review through lint and tests to closing the issue, and not one of them is “tell me what you learned”. So I type that question by hand, every time, and only remember to type it because I have been burned by not typing it. It does not need to stay manual: <code>/start-task</code> interviews me before it will touch a line of code, which is about as unmechanical as a command gets, and it works fine.</p>
+      <p>So the thing to build is a new slash command, a global one sitting alongside the <code>/start-task</code> and <code>/finalize</code> I described in <a href="/writing/slash-command-that-knew-too-much/"><em>The Slash Command That Knew Too Much</em></a>: <code>/close-shop</code>. Not a finalizer — <code>/finalize</code> already closes out a <em>task</em> — but a closer for the <em>session</em>. Read every standing memory. Check each against what the code does now, rather than what it did when the note was written. Correct what’s wrong, delete what’s been overtaken, and fold duplicates together rather than leaving a true note and a false one side by side. Only then add whatever this session learned that’s worth carrying forward.</p>
+      <p>Kernighan and Plauger were already telling programmers to make sure comments and code agree in 1974, and the reason has not changed in half a century: a comment that lies is worse than no comment at all, precisely because you believe it. The defense we settled on was adjacency: keep the comment next to the code it describes, so that changing one shoves the other in your face. A memory has no adjacency. It sits off in a database describing the whole project, and nothing I edit will ever brush against it. Which leaves the end of the session, and someone remembering to ask.</p>
+    </div>
+
+{{ARTICLE_NAV}}
+    <p class="article-foot">
+      <a href="/writing/">All essays</a>
+    </p>
+  </div>
+</section>
+
+<div class="contact-compact">
+{{INCLUDE:_contact.html}}
+</div>
+
+</main>
+
+{{INCLUDE:_footer.html}}
+{{INCLUDE:_script.html}}
+</body>
+</html>

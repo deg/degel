@@ -412,7 +412,10 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 .article code {
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: .88em;
-  background: var(--tint-a); border-radius: 4px; padding: .1em .34em;
+  background: var(--tint-a); border-radius: 4px;
+  /* .22em, not .34em: the box's right padding reads as a word space when a
+     code span is followed by a comma or a period. */
+  padding: .1em .22em;
 }
 .article pre code { background: none; padding: 0; font-size: inherit; }
 
@@ -475,6 +478,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   "url": "https://degel.com/writing/",
   "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
   "blogPost": [
+    {"@type": "BlogPosting", "headline": "The Comment That Lied", "datePublished": "2026-08-27", "url": "https://degel.com/writing/comment-that-lied/"},
     {"@type": "BlogPosting", "headline": "Scheme in a Weekend, or, LLM: The Ultimate Intern", "datePublished": "2026-05-24", "url": "https://degel.com/writing/scheme-in-a-weekend/"},
     {"@type": "BlogPosting", "headline": "The Persistence of Memory", "datePublished": "2026-05-13", "url": "https://degel.com/writing/persistence-of-memory/"},
     {"@type": "BlogPosting", "headline": "The Slash Command That Knew Too Much", "datePublished": "2026-03-30", "url": "https://degel.com/writing/slash-command-that-knew-too-much/"},
@@ -509,6 +513,11 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     </div>
 
     <ul class="articles">
+      <li>
+        <a href="/writing/comment-that-lied/">The Comment That Lied</a>
+        <p class="eyebrow"><time datetime="2026-08-27">27 August 2026</time></p>
+        <p>Four of sixteen agent memories had gone stale — invalidated by the fixes we'd just shipped. Institutional memory rots, and progress is what rots it.</p>
+      </li>
       <li>
         <a href="/writing/scheme-in-a-weekend/">Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
         <p class="eyebrow"><time datetime="2026-05-24">24 May 2026</time></p>
