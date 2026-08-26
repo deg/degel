@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:site_name" content="Degel Software">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://degel.com/og.png">
+<meta property="og:image:alt" content="David Goldfarb — Software Consultant. Degel Software, every technology wave since 1980.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
+<title>The Joy of Rediscovery &mdash; David Goldfarb</title>
+<meta name="description" content="I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.">
+<meta property="og:title" content="The Joy of Rediscovery">
+<meta property="og:description" content="I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://degel.com/writing/joy-of-rediscovery/">
+<link rel="canonical" href="https://degel.com/writing/joy-of-rediscovery/">
+<style>
+/* ============ tokens ============ */
+:root {
+  --paper:      #daeae9;   /* Nirlat Zircon Ice 0664, softened ~18% toward white */
+  --card:       #ffffff;
+  --ink:        #17202d;
+  --muted:      #3f4b5d;
+  --faint:      #4f5d73;
+  --line:       #b7cdcc;
+  --accent:     #0038b8;   /* flag blue */
+  --accent-ink: #ffffff;
+  --accent-dim: #dce5f7;
+  --chip-bg:    transparent;
+  --shadow:     0 1px 2px rgba(23,32,45,.06), 0 8px 24px rgba(23,32,45,.07);
+  /* era spectrum: one color per technology wave, ending in flag blue */
+  --w1: #6d28d9;  /* Lisp & first AI */
+  --w2: #0c655c;  /* Windows/vision/translation */
+  --w3: #a8380a;  /* first internet boom */
+  --w4: #be185d;  /* mobile */
+  --w5: #0f6530;  /* modern web & NLP */
+  --w6: #0038b8;  /* AI now = flag blue */
+  --tint-a: color-mix(in srgb, var(--accent) 8%, var(--paper));
+  --deep:       #16242a;   /* dark bookend: nav, contact, footer */
+  --deep-ink:   #e8f0f0;
+  --deep-muted: #9db2b5;
+  --deep-accent:#8fb3ff;
+  --tint-b: color-mix(in srgb, #ffffff 45%, var(--paper));
+  --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:      #0e171a;
+    --card:       #152225;
+    --ink:        #e7ecf3;
+    --muted:      #a5b1c2;
+    --faint:      #7f8ca0;
+    --line:       #26383b;
+    --accent:     #6f98ff;
+    --accent-ink: #0c1220;
+    --accent-dim: #1d2a45;
+    --chip-bg:    #f2f4f7;
+    --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+    --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+    --deep: #0a1316;
+    --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
+  }
+}
+:root[data-theme="dark"] {
+  --paper:      #0e171a;
+  --card:       #152225;
+  --ink:        #e7ecf3;
+  --muted:      #a5b1c2;
+  --faint:      #7f8ca0;
+  --line:       #26383b;
+  --accent:     #6f98ff;
+  --accent-ink: #0c1220;
+  --accent-dim: #1d2a45;
+  --chip-bg:    #f2f4f7;
+  --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+  --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+  --deep: #0a1316;
+  --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
+}
+
+/* ============ base ============ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 450 1.15rem/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.serif { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; }
+.mono  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+h1, h2, h3 { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif; font-weight: 600; line-height: 1.15; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+img { max-width: 100%; }
+.wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
+.eyebrow {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .8rem; font-weight: 500; letter-spacing: .11em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============ flag glyph ============ */
+.flag { display: inline-block; width: 1em; height: 1.35em; vertical-align: -0.22em; }
+.flag .pole { stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.flag .cloth { fill: var(--accent); }
+.flag.ghost .cloth { fill: none; stroke: currentColor; stroke-width: 1.4; }
+
+/* ============ nav ============ */
+nav {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--deep) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+nav::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
+.nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
+.brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
+.brand:hover { text-decoration: none; }
+.nav-links { display: flex; gap: 1.4rem; margin-left: auto; align-items: center; }
+.nav-links a { color: #c4d1d4; font-size: .94rem; font-weight: 500; }
+.nav-links a:hover { color: var(--deep-ink); text-decoration: none; }
+.nav-links a.cta {
+  color: #0d1726; background: var(--deep-accent);
+  padding: .45rem .95rem; border-radius: 999px; font-weight: 600;
+}
+.nav-links a.cta:hover { filter: brightness(1.08); }
+@media (max-width: 40rem) { .nav-links a:not(.cta) { display: none; } }
+
+/* ============ hero ============ */
+header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--tint-a), var(--paper)); }
+.waveband { line-height: 0; }
+.waveband svg { width: 100%; height: 110px; display: block; }
+.waveband.divider svg { height: 54px; }
+.waveband.flip svg { transform: scaleX(-1); }
+.on-tinta { background: var(--tint-a); }
+.on-paper { background: var(--paper); }
+.on-tintb { background: var(--tint-b); }
+.hero h1 {
+  font-size: clamp(2.7rem, 7vw, 4.6rem);
+  letter-spacing: -0.015em;
+  margin: 1.1rem 0 1.4rem;
+}
+.hero .lede { max-width: 38em; font-size: 1.22rem; color: var(--muted); }
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+.hero-ctas { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 2.1rem; }
+.btn {
+  display: inline-block; padding: .7rem 1.4rem; border-radius: 999px;
+  font-weight: 600; font-size: .98rem;
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); text-decoration: none; }
+.btn.quiet { border: 1px solid var(--line); color: var(--ink); background: var(--card); }
+.btn.quiet:hover { border-color: var(--faint); text-decoration: none; }
+.hero .kicker { margin-top: 3rem; font-size: .78rem; color: var(--faint); letter-spacing: .12em; }
+
+/* ============ sections ============ */
+section { padding: 5.5rem 0; }
+#services { background: var(--tint-a); }
+#work { background: var(--tint-a); }
+#writing { background: var(--tint-b); }
+#contact { background: var(--deep); }
+.section-head { margin-bottom: 2.6rem; max-width: 42em; }
+.section-head h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: .5rem 0 .9rem; }
+.section-head p { color: var(--muted); }
+.he { unicode-bidi: isolate; }
+
+/* ============ waves timeline ============ */
+.waves { position: relative; margin-left: .55rem; }
+.waves::before {
+  content: ""; position: absolute; left: 0; top: .4rem; bottom: .4rem;
+  width: 3px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
+}
+.wave.w1 { --wc: var(--w1); } .wave.w2 { --wc: var(--w2); } .wave.w3 { --wc: var(--w3); }
+.wave.w4 { --wc: var(--w4); } .wave.w5 { --wc: var(--w5); } .wave.w6 { --wc: var(--w6); }
+.wave .marker .cloth { fill: var(--wc, var(--accent)); stroke: none; }
+.wave .years { color: var(--wc, var(--muted)); font-weight: 600; }
+.wave { position: relative; padding: 0 0 3rem 2.4rem; }
+.wave:last-child { padding-bottom: .5rem; }
+.wave .marker {
+  position: absolute; left: -0.62rem; top: -0.1rem;
+  width: 1.35rem; height: 1.8rem; color: var(--faint);
+  background: var(--paper);
+}
+.wave .years { display: block; margin-bottom: .35rem; }
+.wave h3 { font-size: 1.35rem; margin-bottom: .55rem; }
+.wave p { color: var(--muted); max-width: 44em; }
+.wave .body p + p { margin-top: .6rem; }
+.wave .aside { display: block; margin-top: .5rem; font-size: .88rem; color: var(--faint); font-style: italic; }
+.wave.now .marker { color: var(--accent); }
+.wave.now h3 { color: var(--accent); }
+.wave.now p { color: var(--ink); }
+
+/* flag-plant animation */
+@media (prefers-reduced-motion: no-preference) {
+  .wave .marker, .wave .body { opacity: 0; transform: translateY(14px); transition: opacity .55s ease, transform .55s ease; }
+  .wave .marker { transition-delay: .1s; transform: translateY(20px); }
+  .wave.seen .marker, .wave.seen .body { opacity: 1; transform: none; }
+}
+
+/* era artifacts */
+.artifacts { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.05rem; align-items: center; }
+.artifacts .chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--chip-bg); border-radius: 7px;
+  padding: .38rem .7rem; height: 2.5rem;
+  position: relative; transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.artifacts .chip:hover { transform: scale(1.9); z-index: 5; background: #fff; box-shadow: var(--shadow); }
+.artifacts img { max-height: 1.5rem; width: auto; filter: grayscale(1) contrast(.92); opacity: .85; transition: filter .25s ease, opacity .25s ease; }
+.artifacts .chip:hover img { filter: none; opacity: 1; }
+.artifacts .chip.color-chip img { filter: none; opacity: 1; }
+.artifacts .label { font-size: .72rem; color: var(--faint); letter-spacing: .1em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-right: .3rem; }
+
+/* ============ services ============ */
+.svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.3rem; }
+.svc {
+  background: color-mix(in srgb, var(--sc, var(--accent)) 4%, var(--card));
+  border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
+}
+.svc.s1 { --sc: var(--w6); } .svc.s2 { --sc: var(--w2); }
+.svc.s3 { --sc: var(--w1); } .svc.s4 { --sc: var(--w4); }
+.mid-cta { margin-top: 2.6rem; }
+.svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--sc, var(--accent)); padding-top: .9rem; }
+.svc p { color: var(--muted); font-size: 1.02rem; }
+.svc .flag { width: 1.05rem; height: 1.45rem; color: var(--faint); }
+
+/* ============ work ============ */
+.work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.3rem; }
+.case {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  border-top: 4px solid var(--cc, var(--line));
+  padding: 1.5rem 1.5rem 1.4rem; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: .75rem;
+}
+.case[data-client="marketbuzzr"] { --cc: var(--w6); }
+.case[data-client="heidibrun"] { --cc: var(--w1); }
+.case[data-client="basis-technology"] { --cc: var(--w5); }
+.case[data-client="basistech"] { --cc: var(--w2); }
+.case .sector { color: var(--accent); }
+.case .client { display: flex; align-items: center; gap: .55rem; }
+.case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
+.case .client img.wide { height: 1.15rem; }
+.case .client a { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+.case p { color: var(--muted); font-size: 1rem; }
+
+/* ============ quotes ============ */
+.quotes-head { margin-top: 3.2rem; padding-top: 2.4rem; border-top: 1px solid var(--line); }
+.quotes-head .quotes-note { color: var(--muted); font-size: .95rem; margin-top: .4rem; }
+.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 1.6rem; }
+.quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
+.quotes figure:nth-child(1) { --qc: var(--w4); }
+.quotes figure:nth-child(2) { --qc: var(--w2); }
+.quotes figure:nth-child(3) { --qc: var(--w3); }
+.quotes figure:nth-child(4) { --qc: var(--w5); }
+.quotes figure:nth-child(5) { --qc: var(--w1); }
+.quotes figure:nth-child(6) { --qc: var(--w6); }
+.quotes blockquote {
+  margin: 0 0 .8rem;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic; font-size: 1.06rem; line-height: 1.55; color: var(--ink);
+}
+.quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
+
+/* ============ writing ============ */
+.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
+.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
+.articles li:nth-child(1) { --ac: var(--w6); }
+.articles li:nth-child(2) { --ac: var(--w1); }
+.articles li:nth-child(3) { --ac: var(--w5); }
+.articles a {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.18rem; font-weight: 600; color: var(--ink);
+}
+.articles a:hover { color: var(--accent); }
+.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
+.more-writing { margin-top: 1.8rem; font-size: .85rem; }
+
+/* ============ about ============ */
+.about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
+.about-row .portrait {
+  width: 9.5rem; height: auto; border-radius: 12px; border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.about-row .facts { flex: 1; min-width: 16rem; }
+.about-row .facts p { color: var(--muted); max-width: 42em; margin-bottom: 1.3rem; }
+.cred { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.cred li {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .82rem;
+  color: var(--muted); display: flex; gap: .6rem; align-items: baseline;
+}
+.cred li::before { content: "—"; color: var(--accent); }
+
+/* ============ contact ============ */
+.contact { text-align: left; }
+.contact .eyebrow { color: var(--deep-muted); }
+.contact h2 { color: var(--deep-ink); }
+.contact .big-mail a { color: var(--deep-accent); }
+.contact h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin: .5rem 0 1rem; }
+.contact .big-mail {
+  font-family: "Iowan Old Style", Palatino, Georgia, serif;
+  font-size: clamp(1.3rem, 3.4vw, 2rem); font-weight: 600;
+}
+.contact-meta { margin-top: 1.6rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: .92rem; color: var(--deep-muted); }
+.contact-meta a { color: var(--deep-muted); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--deep-muted) 40%, transparent); text-underline-offset: 3px; }
+.contact-meta a:hover { color: var(--deep-ink); }
+
+/* ============ footer ============ */
+footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
+.foot-inner { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; font-size: .84rem; color: var(--faint); }
+#era-span[role="link"] { cursor: pointer; text-decoration: underline dotted transparent; text-underline-offset: 3px; transition: text-decoration-color .2s, color .2s; }
+#era-span[role="link"]:hover, #era-span[role="link"]:focus-visible { color: var(--accent); text-decoration-color: var(--accent); }
+</style>
+<style>
+/* ============ article pages ============
+   Included only by /writing/ pages, after _style.html. Purely additive:
+   every rule is scoped under .article or .article-head, so nothing here
+   can reach the home page or the service pages.
+
+   Tokens only — no new colors — so dark mode follows _style.html with no
+   @media or [data-theme] block of its own.                             */
+
+.article-head { max-width: 38em; margin-bottom: 2.4rem; }
+.article-head h1 {
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
+  margin: .5rem 0 .9rem;
+}
+.article-head .standfirst {
+  font-size: 1.22rem; color: var(--muted); max-width: 34em;
+}
+.article-meta {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.1rem;
+  margin-top: 1.5rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+}
+
+/* ---- prose ----
+   The base resets p/h* margins to 0 and every section supplies its own
+   spacing, so an article body has nothing to inherit. Restore it here.
+   Measure: the header keeps .lede's 38em, but the body drops to 36em.
+   At the body's own 1.15rem that is roughly 70 characters per line —
+   inside the 45-75 range long-form prose reads best at, where 38em sits
+   right at its edge. Left-aligned in .wrap to match .lede and
+   .section-head rather than centered.                                  */
+.article { max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
+.article > p { margin: 0 0 1.15em; }
+.article > p:last-child { margin-bottom: 0; }
+
+.article h2 {
+  font-size: clamp(1.35rem, 2.6vw, 1.62rem);
+  margin: 2.5em 0 .55em;
+}
+.article h2:first-child { margin-top: 0; }
+
+/* Prose links carry a color-only distinction otherwise: the base rule is
+   text-decoration: none site-wide, which is right for nav and CTAs but
+   not for a paragraph with ten inline links. */
+.article a {
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+.article a:hover { text-decoration-color: var(--accent); }
+
+.article strong { font-weight: 650; }
+.article em { font-style: italic; }
+
+.article blockquote {
+  margin: 1.6em 0; padding-left: 1.1rem;
+  border-left: 3px solid var(--accent);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic; color: var(--ink);
+}
+.article blockquote p { margin: 0 0 .6em; }
+.article blockquote p:last-child { margin-bottom: 0; }
+
+.article ul, .article ol { margin: 0 0 1.15em; padding-left: 1.4em; }
+.article li { margin-bottom: .4em; }
+
+/* ---- code ----
+   No pre/code rules exist in _style.html at all. overflow-x is required,
+   not cosmetic: the Scheme REPL transcript prints a 78-digit result, and
+   without it the whole page scrolls sideways on a phone. */
+.article pre {
+  margin: 1.5em 0; padding: 1.05rem 1.15rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .84rem; line-height: 1.55; color: var(--ink);
+  tab-size: 2;
+}
+.article code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .88em;
+  background: var(--tint-a); border-radius: 4px; padding: .1em .34em;
+}
+.article pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ---- foot ---- */
+.article-foot {
+  max-width: 36em; margin-top: 3rem; padding-top: 1.3rem;
+  border-top: 1px solid var(--line);
+  font-size: .92rem; color: var(--muted);
+}
+.article-foot a { color: var(--accent); }
+
+/* ---- /writing/ index ----
+   Reuses the home page's .articles list. That list colors its first three
+   entries from the era spectrum; the index carries four. */
+.articles li:nth-child(4) { --ac: var(--w3); }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Joy of Rediscovery",
+  "description": "I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.",
+  "datePublished": "2023-09-19",
+  "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
+  "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/joy-of-rediscovery/"},
+  "isPartOf": {"@type": "Blog", "name": "Field notes", "@id": "https://degel.com/writing/"}
+}
+</script>
+</head>
+<body>
+
+<nav aria-label="Site">
+  <div class="nav-inner">
+    <a class="brand" href="/#top" aria-label="Degel Software home">Degel Software</a>
+    <div class="nav-links">
+      <a href="/#services">What I do</a>
+      <a href="/#waves">Track record</a>
+      <a href="/#work">Recent work</a>
+      <a href="/#writing">Writing</a>
+      <a href="/#about">About</a>
+      <a class="cta" href="mailto:deg@degel.com">Email David</a>
+    </div>
+  </div>
+</nav>
+
+<main id="content">
+
+<section>
+  <div class="wrap">
+    <header class="article-head">
+      <p class="eyebrow"><a href="/writing/">Field notes</a></p>
+      <h1>The Joy of Rediscovery</h1>
+      <p class="standfirst">I love tools that unearth the forgotten past &mdash; and then a new one arrived that could read the whole library back to me.</p>
+      <div class="article-meta eyebrow">
+        <time datetime="2023-09-19">19 September 2023</time>
+        <span>David Goldfarb</span>
+      </div>
+    </header>
+
+    <div class="article">
+      <p>I love all tools. Some tools create, while others unearth the forgotten past. I’m especially attracted to tools that help me explore old content. There is huge pleasure in exploring murky library stacks and pulling out a book that’s sat unnoticed for years.</p>
+      <p>It’s not just books. All old media — all old knowledge — is ripe for exploration. Stumbling upon a 1911 Encyclopedia Britannica in a used-book store, watching a 1920s film on YouTube, or discovering a 1949 EDSAC programming manual — each gives me that thrill.</p>
+      <p>I’m a programmer, always invigorated by new tools. My first encounter with ChatGPT last year was one of those thrilling moments. In this series of essays, I’ll explore the power of ChatGPT, best practices, and pitfalls.</p>
+      <p>First, allow me a brief detour to reminisce. Over the years, our tech industry has had many incredible shifts. Only a handful of them gave me a visceral “this will change my world” moment. Let’s look at some of those earlier moments before we dive into ChatGPT.</p>
+      <h2>Printing: first you crawl…</h2>
+      <p>I interned at NYU’s Courant Institute during my senior year of high school. One of the job’s perks was the nearby student computing facility, a large room of terminals connected to a timesharing system. Before starting each day’s work, I would indulge my lust for documentation by starting a print session on a clunky DECwriter. I’d return at the end of the day to pick up the dozens of pages that had managed to print (at 30 characters per second!) during those hours.</p>
+      <p>A year later, in 1980, I started at MIT and landed a job programming on a Xerox Alto. During my interview, the amazing new machine entranced me, and I eagerly asked to learn more. Professor Clark, my boss, agreed, pressed a few buttons, and led me to the elevator. We stepped through the 9th-floor machine room doors, and there it was: a real book, an inch-thick pile of published pages that had magically appeared during our brief ride. It was sitting on an output bin of the Xerox Dover, a giant cutting-edge printer.</p>
+      <p>This was my first sight of a laser printer. Its speed and quality blew my mind.</p>
+      <h2>Browsing: the dawn of the Web</h2>
+      <p>A few years later, long after I had left MIT and moved to Israel, I fished the Internet using the cutting-edge tools of the time: FTP, Archie, and Gopher.</p>
+      <p>One day, a friend in Boston showed me the latest toy, the Mosaic Web Browser. There wasn’t much content yet, just a few hundred web pages scattered worldwide. But the graphic interface was stunning. It was immediately obvious that the Web would be a game-changer for access to media and information.</p>
+      <h2>Wandering: a world without limits</h2>
+      <p>I’ve had GPSs since the early 1990s. Back then, these gadgets plugged into my notebook computer while I was driving. Despite needing preloaded maps and an awkward cable, they were amazing. Vacations and business trips through the ’90s and ’00s would have been much harder without a GPS. But none of them could be carried on a casual walk.</p>
+      <p>Then, in 2007, I arrived early for a committee meeting in a small Swedish town. I spent the first evening strolling quaint winding streets. This had always been a cautious pleasure of each trip — I love to explore but never wanted to be too lost in a foreign location.</p>
+      <p>But this time, I had a GPS built into my handheld Symbian phone. I was invincible. I could wander anywhere with no fear of losing my hotel. The feeling of liberation was incredible.</p>
+      <h2>Enter ChatGPT</h2>
+      <p>I’ve had many “first encounters” with new tools and technologies: my first emails in 1977, the mouse-driven Xero Alto, and ever-increasing computing power, to name just a few.</p>
+      <p>But very few had a sudden dramatic impact on me, where technology opened a new connection, flooded new content to me, and made old activities dramatically easier. My initial session with ChatGPT was the first such moment I’ve had in a long time, maybe even since my first encounters with search engines.</p>
+      <p>Like everyone else, I’d become an expert at Google searches and viscerally knew exactly how to search. My first session with ChatGPT proved that these skills are about to become obsolete, no less than keyword-driven librarian search tools had two decades earlier.</p>
+      <p>ChatGPT will not remain unrivaled for long. Just like Lycos and AltaVista were replaced by Google, ChatGPT will soon be surpassed. But it already offers a new way to think about search and knowledge acquisition. It’s already changed my daily routines.</p>
+      <p>In this series of articles, we’ll take a deep dive into ChatGPT as I show you why I find its powers so compelling and explore its strengths and weaknesses.</p>
+    </div>
+
+    <div class="article-foot">
+      <p>Also on Medium &rarr; <a href="https://medium.com/@DavidEGoldfarb/chatgpt-essay-1-the-joy-of-rediscovery-1748b140c746" target="_blank" rel="noopener noreferrer">The Joy of Rediscovery</a></p>
+      <p class="foot-back"><a href="/writing/">All writing</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h2>Tell me what you&rsquo;re building.</h2>
+    <p class="big-mail"><a href="mailto:deg@degel.com">deg@degel.com</a></p>
+    <div class="contact-meta">
+      <span>Israel: <a href="tel:+972547230120">+972&nbsp;54&nbsp;723&#8209;0120</a></span>
+      <span>US: <a href="tel:+17819230121">+1&nbsp;781&nbsp;923&#8209;0121</a></span>
+      <a href="https://www.linkedin.com/in/davidegoldfarb/" target="_blank" rel="me noopener noreferrer">LinkedIn</a>
+      <a href="https://github.com/deg" target="_blank" rel="me noopener noreferrer">GitHub</a>
+      <a href="https://medium.com/@DavidEGoldfarb" target="_blank" rel="me noopener noreferrer">Medium</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>&copy; <span id="era-span">1988&ndash;2026</span> Degel Software Ltd.</span>
+  </div>
+</footer>
+<script>
+(function () {
+  var waves = document.querySelectorAll('.wave');
+  if (!('IntersectionObserver' in window)) {
+    waves.forEach(function (w) { w.classList.add('seen'); });
+    return;
+  }
+  var era = document.getElementById('era-span');
+  if (era) {
+    era.setAttribute('role', 'link');
+    era.setAttribute('tabindex', '0');
+    era.setAttribute('aria-label', 'Degel through the years');
+    era.title = 'Degel through the years';
+    var go = function () { window.location.href = '/history/'; };
+    era.addEventListener('click', go);
+    era.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.25 });
+  waves.forEach(function (w) { io.observe(w); });
+})();
+</script>
+</body>
+</html>

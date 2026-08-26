@@ -1,0 +1,98 @@
+<style>
+/* ============ article pages ============
+   Included only by /writing/ pages, after _style.html. Purely additive:
+   every rule is scoped under .article or .article-head, so nothing here
+   can reach the home page or the service pages.
+
+   Tokens only — no new colors — so dark mode follows _style.html with no
+   @media or [data-theme] block of its own.                             */
+
+.article-head { max-width: 38em; margin-bottom: 2.4rem; }
+.article-head h1 {
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
+  margin: .5rem 0 .9rem;
+}
+.article-head .standfirst {
+  font-size: 1.22rem; color: var(--muted); max-width: 34em;
+}
+.article-meta {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.1rem;
+  margin-top: 1.5rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+}
+
+/* ---- prose ----
+   The base resets p/h* margins to 0 and every section supplies its own
+   spacing, so an article body has nothing to inherit. Restore it here.
+   Measure: the header keeps .lede's 38em, but the body drops to 36em.
+   At the body's own 1.15rem that is roughly 70 characters per line —
+   inside the 45-75 range long-form prose reads best at, where 38em sits
+   right at its edge. Left-aligned in .wrap to match .lede and
+   .section-head rather than centered.                                  */
+.article { max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
+.article > p { margin: 0 0 1.15em; }
+.article > p:last-child { margin-bottom: 0; }
+
+.article h2 {
+  font-size: clamp(1.35rem, 2.6vw, 1.62rem);
+  margin: 2.5em 0 .55em;
+}
+.article h2:first-child { margin-top: 0; }
+
+/* Prose links carry a color-only distinction otherwise: the base rule is
+   text-decoration: none site-wide, which is right for nav and CTAs but
+   not for a paragraph with ten inline links. */
+.article a {
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+.article a:hover { text-decoration-color: var(--accent); }
+
+.article strong { font-weight: 650; }
+.article em { font-style: italic; }
+
+.article blockquote {
+  margin: 1.6em 0; padding-left: 1.1rem;
+  border-left: 3px solid var(--accent);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-style: italic; color: var(--ink);
+}
+.article blockquote p { margin: 0 0 .6em; }
+.article blockquote p:last-child { margin-bottom: 0; }
+
+.article ul, .article ol { margin: 0 0 1.15em; padding-left: 1.4em; }
+.article li { margin-bottom: .4em; }
+
+/* ---- code ----
+   No pre/code rules exist in _style.html at all. overflow-x is required,
+   not cosmetic: the Scheme REPL transcript prints a 78-digit result, and
+   without it the whole page scrolls sideways on a phone. */
+.article pre {
+  margin: 1.5em 0; padding: 1.05rem 1.15rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .84rem; line-height: 1.55; color: var(--ink);
+  tab-size: 2;
+}
+.article code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .88em;
+  background: var(--tint-a); border-radius: 4px; padding: .1em .34em;
+}
+.article pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ---- foot ---- */
+.article-foot {
+  max-width: 36em; margin-top: 3rem; padding-top: 1.3rem;
+  border-top: 1px solid var(--line);
+  font-size: .92rem; color: var(--muted);
+}
+.article-foot a { color: var(--accent); }
+
+/* ---- /writing/ index ----
+   Reuses the home page's .articles list. That list colors its first three
+   entries from the era spectrum; the index carries four. */
+.articles li:nth-child(4) { --ac: var(--w3); }
+</style>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{INCLUDE:_meta.html}}
+<title>The Slash Command That Knew Too Much &mdash; David Goldfarb</title>
+<meta name="description" content="My development workflows are now programs written in English, run by an LLM.">
+<meta property="og:title" content="The Slash Command That Knew Too Much">
+<meta property="og:description" content="My development workflows are now programs written in English, run by an LLM.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://degel.com/writing/slash-command-that-knew-too-much/">
+<link rel="canonical" href="https://degel.com/writing/slash-command-that-knew-too-much/">
+{{INCLUDE:_style.html}}
+{{INCLUDE:_style-article.html}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Slash Command That Knew Too Much",
+  "description": "My development workflows are now programs written in English, run by an LLM.",
+  "datePublished": "2026-03-30",
+  "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
+  "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/slash-command-that-knew-too-much/"},
+  "isPartOf": {"@type": "Blog", "name": "Field notes", "@id": "https://degel.com/writing/"}
+}
+</script>
+</head>
+<body>
+
+{{INCLUDE:_nav.html}}
+
+<main id="content">
+
+<section>
+  <div class="wrap">
+    <header class="article-head">
+      <p class="eyebrow"><a href="/writing/">Field notes</a></p>
+      <h1>The Slash Command That Knew Too Much</h1>
+      <p class="standfirst">My development workflows are now programs written in English, run by an LLM.</p>
+      <div class="article-meta eyebrow">
+        <time datetime="2026-03-30">30 March 2026</time>
+        <span>David Goldfarb</span>
+      </div>
+    </header>
+
+    <div class="article">
+      <p>Most of my programming these days happens in conversation with an AI. Specifically, with Claude Code — Anthropic’s command-line tool that lets Claude read your codebase, edit files, run tests, and generally act as a collaborator who never sleeps and never forgets the lint step. If you’ve used Copilot or Cursor, Claude Code is in that family, but it lives in the terminal and works at the level of whole tasks rather than single completions.</p>
+      <p>What caught my interest today isn’t the code generation. It’s the customizability. You can shape how Claude works with you — what it checks, what it asks about, even what it refuses to do without permission.</p>
+      <p>I love workflows. I’ve been building them since my first defsystem on a Lisp machine in the early 1980s — a build tool that, in true Lisp fashion, was itself a program you could extend in every direction — little machines that encode the steps I’d otherwise forget. The best ones disappear into the background and just do the right thing.</p>
+      <p>Claude Code lets you write workflows as slash commands. You put a markdown file in .claude/commands/ and it becomes a /command you can type anytime. The markdown is just instructions in plain English — what to check, what order to do things in, and when to stop and ask. Claude reads them and follows along.</p>
+      <p>I have two that I use constantly. /start-task is my ritual for beginning work: load context from my issue tracker, ask me what I’m trying to accomplish, read the relevant source files, propose a plan — and then STOP. It does not touch code until I say “go ahead.” This rule has saved me more than once.</p>
+      <p>/finalizeis the closing ritual. Refactor what I just wrote. Add tests. Lint. Run the full test suite. Iterate until everything is clean. Commit. Close the issue. It’s a checklist I would never follow 100% reliably on my own, and now I don’t have to.</p>
+      <p>These two commands evolved in my main project, a startup MVP with a FastAPI backend and a React frontend. They grew organically over the course of weeks, accumulating the little details that make a workflow actually useful. /start-task has a routing table: read this documentation guide when you’re touching the pipeline; that one for frontend work; a different one for database migrations. /finalize learned to regenerate TypeScript types from the backend’s OpenAPI spec — a step that’s easy to forget and annoying to debug when you do.</p>
+      <p>The problem became obvious when I wanted to apply these to a second project.</p>
+      <p>I work across many codebases. A home automation monitor. An HVAC monitoring system for a client’s office. An intellectual property tracker for my wife’s company. A prototype for a parenting startup. Various smaller tools. Each one would benefit from /start-task and /finalize, but neither command made sense outside the project where they’d grown up. Half the steps were universal, half were specific to one codebase. I couldn’t share them without sharing the junk too.</p>
+      <p>Simple cut-and-paste was out of the question. I have no interest in maintaining a hydra’s head of multiple almost identical files.</p>
+      <p>My first instinct was to split each command into two files. A general ~/.claude/commands/finalize.md, available in every project, containing the universal steps. And a project-specific finalize-project.md in each project’s .claude/commands, containing the local details. The general version would include a step: “Now run /finalize-project.” Ditto, for .claude/commands/start-task.md.</p>
+      <p>It worked. But when I looked at Claude’s new list of slash commands, there were /finalize-project and /start-task-project, staring back at me. Two commands that existed only to be called by other commands. Nobody should ever type them directly — they’d produce confusing results out of context. Yet there they sat, right alongside the real commands.</p>
+      <p>This nagged at me. A tool’s interface should show you what you can do, not how it works internally. These helper commands were implementation details leaking into the UI.</p>
+      <p>Once I saw the problem, the fix was simple. Claude Code discovers slash commands by scanning specific directories. It scans ~/.claude/commands/ and &lt;project&gt;/.claude/commands/. It does not scan arbitrary directories.</p>
+      <p>So I created a directory: &lt;project&gt;/.claude/skills-extension/</p>
+      <p>I moved the project-specific files there and changed the general commands to say:</p><pre>## 3. Project-Specific Steps
+      If `.claude/skill-extensions/finalize.md` exists in the project,
+      read it and follow its instructions. If it does not exist, skip this step.</pre><p>That’s the whole mechanism. Claude reads a file if it’s there, skips the step if it isn’t. No plugin system, no configuration. Just a Markdown file in a directory that wasn&#39;t magical until I made it so.</p>
+      <p>Now my projects look like this. The general commands live in my home directory and work everywhere:</p><pre>~/.claude/commands/
+       start-task.md
+       finalize.md</pre><p>My main project has extensions for both:</p><pre>startup-mvp/.claude/skill-extensions/
+       start-task.md # Documentation guide routing table
+       finalize.md # API type regeneration, doc update checklist</pre><p>The parenting prototype has just one extension. The HVAC monitor and the home automation project have none at all — the general commands work there unmodified, with the extension steps quietly skipped.</p>
+      <p>I’m pleased with the naming convention. The files in skill-extensions/ match the filenames of the commands they augment. If you see skill-extensions/finalize.md, you know instantly what it’s for.</p>
+      <p>These files are programs, by the way. I didn’t quite realize it until I looked at what I’d built. The finalize command has a loop — iterate until lint and tests both pass. The extension mechanism is a conditional include — load this module if it exists. I’ve written these same structures in so many programming and scripting languages over the years. Now I’m writing them in English, and an LLM runs them. The programming concepts haven’t changed at all. The programming language has changed completely.</p>
+      <p>There’s a principle here that I keep rediscovering across decades of building tools: not everything that participates in a workflow should be visible in the interface. Some files are commands — things a person types. Others are context — things a command reads. The distinction matters, and it’s worth encoding in your directory structure rather than leaving it to chance.</p>
+      <p>Using this in a new project is automatic. It takes zero time. Adding customizations to a project takes just moments: Create the directory, write a markdown file describing what’s specific to that codebase, and the general commands pick it up on the next invocation. Projects that need no customization need no setup.</p>
+      <p>Many projects, two shared workflow commands, zero duplication, and a clean slash command list. Fifteen minutes well spent. Frankly, it took longer to write this article than it did to refine the idea.</p>
+    </div>
+
+    <div class="article-foot">
+      <p>Also on Medium &rarr; <a href="https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1" target="_blank" rel="noopener noreferrer">The Slash Command That Knew Too Much</a></p>
+      <p class="foot-back"><a href="/writing/">All writing</a></p>
+    </div>
+  </div>
+</section>
+
+{{INCLUDE:_contact.html}}
+
+</main>
+
+{{INCLUDE:_footer.html}}
+{{INCLUDE:_script.html}}
+</body>
+</html>

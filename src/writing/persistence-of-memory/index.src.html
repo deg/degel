@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{INCLUDE:_meta.html}}
+<title>The Persistence of Memory &mdash; David Goldfarb</title>
+<meta name="description" content="Agent memory files are configuration, not notes — and for the first time, the configuration writes itself.">
+<meta property="og:title" content="The Persistence of Memory">
+<meta property="og:description" content="Agent memory files are configuration, not notes — and for the first time, the configuration writes itself.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://degel.com/writing/persistence-of-memory/">
+<link rel="canonical" href="https://degel.com/writing/persistence-of-memory/">
+{{INCLUDE:_style.html}}
+{{INCLUDE:_style-article.html}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Persistence of Memory",
+  "description": "Agent memory files are configuration, not notes — and for the first time, the configuration writes itself.",
+  "datePublished": "2026-05-13",
+  "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
+  "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/persistence-of-memory/"},
+  "isPartOf": {"@type": "Blog", "name": "Field notes", "@id": "https://degel.com/writing/"}
+}
+</script>
+</head>
+<body>
+
+{{INCLUDE:_nav.html}}
+
+<main id="content">
+
+<section>
+  <div class="wrap">
+    <header class="article-head">
+      <p class="eyebrow"><a href="/writing/">Field notes</a></p>
+      <h1>The Persistence of Memory</h1>
+      <p class="standfirst">Agent memory files are configuration, not notes &mdash; and for the first time, the configuration writes itself.</p>
+      <div class="article-meta eyebrow">
+        <time datetime="2026-05-13">13 May 2026</time>
+        <span>David Goldfarb</span>
+      </div>
+    </header>
+
+    <div class="article">
+      <p>I was working on a startup MVP I’m building with Claude, and we had drifted into a steady rhythm: Claude proposed a numbered backlog, I picked a task, and we worked through it. Halfway through, I typed “F14 — let’s generalize.” In my head, this was an invitation: which one next, and tell me how you’d approach it. Claude, with its usual eagerness, took it as a green light and started coding.</p>
+      <p>I interrupted, mildly annoyed. In the same chat, for a different feature, I had written “F3b — show me the current uses again before you start.” Claude had handled F3b correctly: surveyed the call sites, showed me the result, waited. For F14, it had jumped straight to code. Two requests, structurally the same intent — pause, produce non-code output, wait for me to say go — but only one of the two phrasings was explicit enough for Claude to catch it. It had understood “Let’s X” as “go.” What I had been pushing for all that week was a more deliberate sequence — state the choice, ask for the approach, wait for the go-ahead. Claude had pattern-matched the wrong way.</p>
+      <p>After the correction, Claude wrote a memory file — one of the small markdown files that Claude Code keeps in a per-project directory — titled <em>“‘Let’s X’ is a direction, not a go-signal.”</em> The body explained the rule, the reasoning, and the kinds of phrases that <em>are</em> go-signals — “do it”, “proceed”, “go ahead”. I had never asked it to do this. The next time I typed “let’s”, Claude paused and asked, and the rule has held for months.</p>
+      <p>It took me a moment to register how strange this was. I had been working with LLMs the way we always worked with compilers, and not much better than folks used to work with punch cards: issue an instruction, watch the output, retype if it came out wrong. The corrections were a per-turn cost, paid every time. I had seen Claude’s memory files before, but had taken them for the agent’s own housekeeping — not appreciated, until this moment, that they were where my corrections were being quietly preserved, with surprising leverage.</p>
+      <p>Claude Code’s memory works in the plainest possible way. As you work, the agent writes markdown files — one for each useful thing it has learned: something about you (your role, what you find irritating), something about the project (which test command to use, which packages live where), or, most importantly, a correction you handed it earlier and would prefer not to hand it again. Each file has a name, a one-line description, and a few paragraphs of prose. They persist across sessions, loading themselves into the agent’s context the next time you start a session.</p>
+      <p>The natural reaction, when you first notice these files, is to read them as notes — the agent’s journal of what it learned that day. That’s not wrong, but it misses what these files really are. They are configuration, not notes. When you correct the agent once, and the correction is quietly written to memory, it becomes a standing rule that applies on its own the next time around. It’s more like writing a config file than chatting with the agent.</p>
+      <p>The F14 correction was a particularly successful example. The rule eventually graduated: it became one line in my project’s <em>CLAUDE.md</em>, and from there into my <em>/start-task</em> slash command — the one I described in <a href="/writing/slash-command-that-knew-too-much/">The Slash Command That Knew Too Much</a>. What started as a midstream correction became part of the standing protocol for every new session.</p>
+      <p>Few rules graduate that far; most are smaller, and over time, the memory directory becomes a roadmap to where I’ve been sloppy in my instructions to the LLM.</p>
+      <p>Looking through one project’s memory directory, here is a sampling. One file came from the day I watched the agent run <em>make lint</em> five times in a debugging loop, and captures the rule: redirect the lint output to a file once, then grep the file. Another, <em>“Don’t patch the environment to work around dependency issues</em>,” was written after I caught the agent typing <em>“uv pip install babel”</em> to recover from a failed import. (“What are you doing? Why are you installing new tooling?” was my line that ended that approach.) A third is just a one-liner: the backend auto-restarts on file changes, so the agent should not restart it manually.</p>
+      <p>Not every correction belongs in a memory. The test I’ve settled on, after some misfires, is whether I would want the rule to apply in future sessions, in different code on a different day — if yes, it is configuration; if not, it belongs in the conversation and nowhere else.</p>
+      <p>There’s one failure mode worth flagging. The agent writes most of these files unbidden, which is most of the magic — but also a small risk. One time, the agent slipped in a constraint I had never actually requested into a planning document: a defensive-sounding bit of privacy posturing that <em>looked</em> like my policy, but that Claude had invented while drafting. I caught the constraint before it steered any real decision, but only just barely.</p>
+      <p>The memory file is yours. The agent helps you write it, but every once in a while, you should read it like a config file you actually own.</p>
+      <p>Configuration itself is not a novel idea. Over the years, I’ve written many thousands of lines of configuration files: dotfiles, batch files, yaml manifests, Makefiles, JSON configs, and a dozen other formats that I’ve since forgotten. A few of them have gotten complicated enough that I’ve even started using LLM tools to clear out the detritus, but that’s a story for another post. The habit underneath is the same one every programmer learns early: you notice you’re typing the same mini-task every morning. So, you write it once into the appropriate config file, and never think about it again — a small, lasting joy. Carpenters measure twice and cut once. Programmers type twice and configure once.</p>
+      <p>There is one thing here that is truly new and worth emphasizing. My shell never decided, on its own, to add an alias because it noticed I kept typing one. My editor never wrote a new keybinding into its init file because I’d had to reach for the same command three times that morning. Claude does. The configuration target — the agent — is also the one writing the configuration, in response to me, while I work. I’m not yet certain of all the implications of what this means in the long run. But it’s clear that the analogies to older tools only reach so far.</p>
+      <p>What I have now, written in plain English in a simple markdown file, is a quiet but real shift in what configuration means for programmers. The instinct is old. The partner is new.</p>
+    </div>
+
+    <div class="article-foot">
+      <p>Also on Medium &rarr; <a href="https://medium.com/@DavidEGoldfarb/the-persistence-of-memory-2aca4c8cf603" target="_blank" rel="noopener noreferrer">The Persistence of Memory</a></p>
+      <p class="foot-back"><a href="/writing/">All writing</a></p>
+    </div>
+  </div>
+</section>
+
+{{INCLUDE:_contact.html}}
+
+</main>
+
+{{INCLUDE:_footer.html}}
+{{INCLUDE:_script.html}}
+</body>
+</html>
