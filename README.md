@@ -1,6 +1,8 @@
 # degel.com — source
 
-The 2026 single-page site for Degel Software Ltd. Launched 2026-08-18.
+The 2026 site for Degel Software Ltd. Launched 2026-08-18. Every page is
+built from `src/` and ships fully self-contained — no framework, no CDN,
+no webfonts, no external requests.
 
 ## Layout
 

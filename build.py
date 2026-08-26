@@ -16,6 +16,11 @@ Two directives, resolved in this order:
 
 Includes run first, so a partial can carry its own images.
 
+_meta.html holds only the <head> lines that are constant across every page.
+Per-page title, description, og:title, og:description, og:type, og:url and
+canonical are written literally in each source — they differ on every page,
+so a variable layer would cost more than it saves.
+
 The list of generated paths is written to .build-outputs for `make deploy`.
 Run from the repo root:  python3 build.py
 """
