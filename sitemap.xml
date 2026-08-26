@@ -2,8 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://degel.com/</loc></url>
   <url><loc>https://degel.com/writing/</loc></url>
-  <url><loc>https://degel.com/writing/scheme-in-a-weekend/</loc><lastmod>2026-05-24</lastmod></url>
-  <url><loc>https://degel.com/writing/persistence-of-memory/</loc><lastmod>2026-05-13</lastmod></url>
-  <url><loc>https://degel.com/writing/slash-command-that-knew-too-much/</loc><lastmod>2026-03-30</lastmod></url>
   <url><loc>https://degel.com/writing/joy-of-rediscovery/</loc><lastmod>2023-09-19</lastmod></url>
+  <url><loc>https://degel.com/writing/persistence-of-memory/</loc><lastmod>2026-05-13</lastmod></url>
+  <url><loc>https://degel.com/writing/scheme-in-a-weekend/</loc><lastmod>2026-05-24</lastmod></url>
+  <url><loc>https://degel.com/writing/slash-command-that-knew-too-much/</loc><lastmod>2026-03-30</lastmod></url>
 </urlset>

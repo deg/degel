@@ -1,26 +1,33 @@
+{{META
+title: The Joy of Rediscovery
+date: 2023-09-19
+blurb: An earlier piece, from the first months of ChatGPT: I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.
+medium: https://medium.com/@DavidEGoldfarb/chatgpt-essay-1-the-joy-of-rediscovery-1748b140c746
+standfirst: I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.
+}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 {{INCLUDE:_meta.html}}
-<title>The Joy of Rediscovery &mdash; David Goldfarb</title>
+<title>{{title}} &mdash; David Goldfarb</title>
 <meta name="description" content="I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.">
-<meta property="og:title" content="The Joy of Rediscovery">
+<meta property="og:title" content="{{title}}">
 <meta property="og:description" content="I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://degel.com/writing/joy-of-rediscovery/">
-<link rel="canonical" href="https://degel.com/writing/joy-of-rediscovery/">
+<meta property="og:url" content="https://degel.com{{url}}">
+<link rel="canonical" href="https://degel.com{{url}}">
 {{INCLUDE:_style.html}}
 {{INCLUDE:_style-article.html}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "The Joy of Rediscovery",
+  "headline": "{{title}}",
   "description": "I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.",
-  "datePublished": "2023-09-19",
+  "datePublished": "{{date}}",
   "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
   "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/joy-of-rediscovery/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com{{url}}"},
   "isPartOf": {"@type": "Blog", "name": "Essays", "@id": "https://degel.com/writing/"}
 }
 </script>
@@ -34,10 +41,10 @@
 <section>
   <div class="wrap">
     <header class="article-head">
-      <h1>The Joy of Rediscovery</h1>
-      <p class="standfirst">I love tools that unearth the forgotten past &mdash; and then a new one arrived that could read the whole library back to me.</p>
+      <h1>{{title}}</h1>
+      <p class="standfirst">{{standfirst}}</p>
       <div class="article-meta eyebrow">
-        <time datetime="2023-09-19">19 September 2023</time>
+        <time datetime="{{date}}">{{human_date}}</time>
         <span>David Goldfarb</span>
       </div>
     </header>
@@ -66,11 +73,9 @@
       <p>In this series of articles, we’ll take a deep dive into ChatGPT as I show you why I find its powers so compelling and explore its strengths and weaknesses.</p>
     </div>
 
-    <nav class="article-nav" aria-label="More essays">
-      <a class="prev" href="/writing/slash-command-that-knew-too-much/"><span class="dir">&larr; Newer</span>The Slash Command That Knew Too Much</a>
-    </nav>
+{{ARTICLE_NAV}}
     <p class="article-foot">
-      Also on <a href="https://medium.com/@DavidEGoldfarb/chatgpt-essay-1-the-joy-of-rediscovery-1748b140c746" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
+      Also on <a href="{{medium}}" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
     </p>
   </div>
 </section>

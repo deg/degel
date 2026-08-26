@@ -1,26 +1,32 @@
+{{META
+title: The Slash Command That Knew Too Much
+date: 2026-03-30
+blurb: My development workflows are now programs written in English, run by an LLM.
+medium: https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1
+}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 {{INCLUDE:_meta.html}}
-<title>The Slash Command That Knew Too Much &mdash; David Goldfarb</title>
-<meta name="description" content="My development workflows are now programs written in English, run by an LLM.">
-<meta property="og:title" content="The Slash Command That Knew Too Much">
-<meta property="og:description" content="My development workflows are now programs written in English, run by an LLM.">
+<title>{{title}} &mdash; David Goldfarb</title>
+<meta name="description" content="{{blurb}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{blurb}}">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://degel.com/writing/slash-command-that-knew-too-much/">
-<link rel="canonical" href="https://degel.com/writing/slash-command-that-knew-too-much/">
+<meta property="og:url" content="https://degel.com{{url}}">
+<link rel="canonical" href="https://degel.com{{url}}">
 {{INCLUDE:_style.html}}
 {{INCLUDE:_style-article.html}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "The Slash Command That Knew Too Much",
-  "description": "My development workflows are now programs written in English, run by an LLM.",
-  "datePublished": "2026-03-30",
+  "headline": "{{title}}",
+  "description": "{{blurb}}",
+  "datePublished": "{{date}}",
   "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
   "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/slash-command-that-knew-too-much/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com{{url}}"},
   "isPartOf": {"@type": "Blog", "name": "Essays", "@id": "https://degel.com/writing/"}
 }
 </script>
@@ -34,10 +40,10 @@
 <section>
   <div class="wrap">
     <header class="article-head">
-      <h1>The Slash Command That Knew Too Much</h1>
-      <p class="standfirst">My development workflows are now programs written in English, run by an LLM.</p>
+      <h1>{{title}}</h1>
+      <p class="standfirst">{{blurb}}</p>
       <div class="article-meta eyebrow">
-        <time datetime="2026-03-30">30 March 2026</time>
+        <time datetime="{{date}}">{{human_date}}</time>
         <span>David Goldfarb</span>
       </div>
     </header>
@@ -73,12 +79,9 @@ read it and follow its instructions. If it does not exist, skip this step.</pre>
       <p>Many projects, two shared workflow commands, zero duplication, and a clean slash command list. Fifteen minutes well spent. Frankly, it took longer to write this article than it did to refine the idea.</p>
     </div>
 
-    <nav class="article-nav" aria-label="More essays">
-      <a class="prev" href="/writing/persistence-of-memory/"><span class="dir">&larr; Newer</span>The Persistence of Memory</a>
-      <a class="next" href="/writing/joy-of-rediscovery/"><span class="dir">Older &rarr;</span>The Joy of Rediscovery</a>
-    </nav>
+{{ARTICLE_NAV}}
     <p class="article-foot">
-      Also on <a href="https://medium.com/@DavidEGoldfarb/the-slash-command-that-knew-too-much-561038162eb1" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
+      Also on <a href="{{medium}}" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
     </p>
   </div>
 </section>

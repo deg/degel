@@ -9,10 +9,12 @@ no webfonts, no external requests.
 | Path | What |
 |---|---|
 | `src/` | THE sources. Every `src/**/*.src.html` is a page; `src/_*.html` are shared partials (nav, footer, CSS, script) |
+| `src/writing/<slug>/` | one essay per directory. A `{{META}}` block at the top of each supplies title/date/blurb; the `/writing/` list, the home-page teaser, previous/next and `sitemap.xml` are all generated from it, so **adding an essay is: create the directory, write the file** |
 | `build.py` | builds the pages (resolves `{{INCLUDE:}}`, then inlines images as data URIs) |
 | `index.html` | built output — fully self-contained, this is what deploys |
 | `assets/` | logo/image sources for the build |
-| `og.png`, `robots.txt`, `sitemap.xml`, `CNAME` | deployable root artifacts |
+| `og.png`, `robots.txt`, `CNAME` | deployable root artifacts |
+| `sitemap.xml` | **generated** by `build.py` from the same walk that emits the pages — never hand-edit |
 | `history/pre-2026/` | the retired pre-2026 site, exactly as archived on the live domain (noindexed) |
 | `DECISIONS.md` | symlink into the PRIVATE `../website-internal-assets` repo (this repo is public — client-sensitive notes never live here) |
 
@@ -32,8 +34,9 @@ make check-live                   # verify degel.com serves this exact build
 
 Deploy never switches your checkout: it opens `gh-pages` in a temporary
 worktree (`.deploy-tmp/`, gitignored), copies the built artifacts
-(every page listed in `.build-outputs`, plus `og.png`, `robots.txt`,
-`sitemap.xml`, `history/`), commits, pushes, and cleans up. It refuses to run with uncommitted
+(every page listed in `.build-outputs`, which includes the generated
+`sitemap.xml`, plus `og.png`, `robots.txt`, `history/`), commits, pushes,
+and cleans up. It refuses to run with uncommitted
 source changes.
 
 `gh-pages` on `github.com/deg/degel` (public) serves degel.com via GitHub

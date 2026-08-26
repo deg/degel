@@ -1,26 +1,32 @@
+{{META
+title: Scheme in a Weekend, or, LLM: The Ultimate Intern
+date: 2026-05-24
+blurb: One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.
+medium: https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099
+}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 {{INCLUDE:_meta.html}}
-<title>Scheme in a Weekend, or, LLM: The Ultimate Intern &mdash; David Goldfarb</title>
-<meta name="description" content="One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.">
-<meta property="og:title" content="Scheme in a Weekend, or, LLM: The Ultimate Intern">
-<meta property="og:description" content="One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.">
+<title>{{title}} &mdash; David Goldfarb</title>
+<meta name="description" content="{{blurb}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{blurb}}">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://degel.com/writing/scheme-in-a-weekend/">
-<link rel="canonical" href="https://degel.com/writing/scheme-in-a-weekend/">
+<meta property="og:url" content="https://degel.com{{url}}">
+<link rel="canonical" href="https://degel.com{{url}}">
 {{INCLUDE:_style.html}}
 {{INCLUDE:_style-article.html}}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Scheme in a Weekend, or, LLM: The Ultimate Intern",
-  "description": "One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.",
-  "datePublished": "2026-05-24",
+  "headline": "{{title}}",
+  "description": "{{blurb}}",
+  "datePublished": "{{date}}",
   "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
   "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/scheme-in-a-weekend/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com{{url}}"},
   "isPartOf": {"@type": "Blog", "name": "Essays", "@id": "https://degel.com/writing/"}
 }
 </script>
@@ -34,10 +40,10 @@
 <section>
   <div class="wrap">
     <header class="article-head">
-      <h1>Scheme in a Weekend, or, LLM: The Ultimate Intern</h1>
+      <h1>{{title}}</h1>
       <p class="standfirst">One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring &ldquo;done&rdquo;.</p>
       <div class="article-meta eyebrow">
-        <time datetime="2026-05-24">24 May 2026</time>
+        <time datetime="{{date}}">{{human_date}}</time>
         <span>David Goldfarb</span>
       </div>
     </header>
@@ -148,11 +154,9 @@ bd history &lt;bead-id&gt;    # all revisions of one bead
 bd vc log               # commit log of the bead database itself</pre><p><em>It’s a more useful record of the project’s actual evolution than even the git log — the order things were thought of in, what was deferred and why, what turned out to be wrong, which dependencies between beads only became visible mid-project. Since this was all done by Claude, it’s a great way to see what the AI was “thinking”.</em></p>
     </div>
 
-    <nav class="article-nav" aria-label="More essays">
-      <a class="next" href="/writing/persistence-of-memory/"><span class="dir">Older &rarr;</span>The Persistence of Memory</a>
-    </nav>
+{{ARTICLE_NAV}}
     <p class="article-foot">
-      Also on <a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
+      Also on <a href="{{medium}}" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
     </p>
   </div>
 </section>

@@ -269,6 +269,25 @@ section { padding: 5.5rem 0; }
 }
 .quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
 
+/* ============ writing lists ============ */
+/* Shared: the /writing/ index and the home page's generated teaser both
+   render <ul class="articles">. The teaser omits the blurb. */
+.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
+.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
+.articles li:nth-child(1) { --ac: var(--w6); }
+.articles li:nth-child(2) { --ac: var(--w1); }
+.articles li:nth-child(3) { --ac: var(--w5); }
+.articles li:nth-child(4) { --ac: var(--w3); }
+.articles a {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.18rem; font-weight: 600; color: var(--ink);
+}
+.articles a:hover { color: var(--accent); }
+.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
+.more-writing { margin-top: 1.8rem; font-size: .85rem; }
+.articles.teaser li { padding-bottom: .1rem; }
+.articles.teaser .eyebrow { margin-top: .25rem; }
+
 /* ============ about ============ */
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
 .about-row .portrait {
@@ -445,27 +464,6 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 .contact-compact .contact h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); }
 .contact-compact .contact .big-mail { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .contact-compact .contact-meta { margin-top: 1.2rem; font-size: .86rem; }
-
-/* ---- /writing/ index ----
-   These rules lived in _style.html while the home page had a #writing
-   section. That section is gone, so they moved here: only this page uses
-   them now, and leaving them in the shared sheet made every other page
-   carry dead CSS. A relocation, not a restructuring — the rules are
-   unchanged apart from the added fourth accent color. */
-.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
-.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
-.articles li:nth-child(1) { --ac: var(--w6); }
-.articles li:nth-child(2) { --ac: var(--w1); }
-.articles li:nth-child(3) { --ac: var(--w5); }
-.articles li:nth-child(4) { --ac: var(--w3); }
-.articles a {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  font-size: 1.18rem; font-weight: 600; color: var(--ink);
-}
-.articles a:hover { color: var(--accent); }
-.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
-.more-writing { margin-top: 1.8rem; font-size: .85rem; }
-
 </style>
 <script type="application/ld+json">
 {
@@ -514,12 +512,12 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <li>
         <a href="/writing/scheme-in-a-weekend/">Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
         <p class="eyebrow"><time datetime="2026-05-24">24 May 2026</time></p>
-        <p>One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing &mdash; and what it taught me about managing an AI that keeps declaring &ldquo;done&rdquo;.</p>
+        <p>One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.</p>
       </li>
       <li>
         <a href="/writing/persistence-of-memory/">The Persistence of Memory</a>
         <p class="eyebrow"><time datetime="2026-05-13">13 May 2026</time></p>
-        <p>Agent memory files are configuration, not notes &mdash; and for the first time, the configuration writes itself.</p>
+        <p>Agent memory files are configuration, not notes — and for the first time, the configuration writes itself.</p>
       </li>
       <li>
         <a href="/writing/slash-command-that-knew-too-much/">The Slash Command That Knew Too Much</a>
@@ -529,7 +527,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <li>
         <a href="/writing/joy-of-rediscovery/">The Joy of Rediscovery</a>
         <p class="eyebrow"><time datetime="2023-09-19">19 September 2023</time></p>
-        <p>An earlier piece, from the first months of ChatGPT: I love tools that unearth the forgotten past &mdash; and then a new one arrived that could read the whole library back to me.</p>
+        <p>An earlier piece, from the first months of ChatGPT: I love tools that unearth the forgotten past — and then a new one arrived that could read the whole library back to me.</p>
       </li>
     </ul>
 
