@@ -327,7 +327,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
    Tokens only — no new colors — so dark mode follows _style.html with no
    @media or [data-theme] block of its own.                             */
 
-.article-head { max-width: 38em; margin-bottom: 2.4rem; }
+.article-head { max-width: 36em; margin: 0 auto 2.4rem; }
 .article-head h1 {
   font-size: clamp(2rem, 4.4vw, 2.9rem);
   margin: .5rem 0 .9rem;
@@ -343,12 +343,16 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 /* ---- prose ----
    The base resets p/h* margins to 0 and every section supplies its own
    spacing, so an article body has nothing to inherit. Restore it here.
-   Measure: the header keeps .lede's 38em, but the body drops to 36em.
-   At the body's own 1.15rem that is roughly 70 characters per line —
-   inside the 45-75 range long-form prose reads best at, where 38em sits
-   right at its edge. Left-aligned in .wrap to match .lede and
-   .section-head rather than centered.                                  */
-.article { max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
+   Measure: 36em, a shade under .lede's 38em. At the body's own 1.15rem
+   that is roughly 70 characters per line — inside the 45-75 range that
+   long-form prose reads best at, where 38em sits right at its edge.
+   Head, body and foot all share it so the column has ONE left edge.
+
+   CENTERED, unlike .lede and .section-head. Those sit left because the
+   home page's grids fill the rest of the 68rem .wrap; an article page
+   has only the one narrow column, so left-aligning it strands half the
+   viewport and reads as unfinished.                                    */
+.article { margin-inline: auto; max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
 .article > p { margin: 0 0 1.15em; }
 .article > p:last-child { margin-bottom: 0; }
 
@@ -405,6 +409,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 
 /* ---- foot ---- */
 .article-foot {
+  margin-inline: auto;
   max-width: 36em; margin-top: 3rem; padding-top: 1.3rem;
   border-top: 1px solid var(--line);
   font-size: .92rem; color: var(--muted);
@@ -477,11 +482,11 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <p>Once I saw the problem, the fix was simple. Claude Code discovers slash commands by scanning specific directories. It scans ~/.claude/commands/ and &lt;project&gt;/.claude/commands/. It does not scan arbitrary directories.</p>
       <p>So I created a directory: &lt;project&gt;/.claude/skills-extension/</p>
       <p>I moved the project-specific files there and changed the general commands to say:</p><pre>## 3. Project-Specific Steps
-      If `.claude/skill-extensions/finalize.md` exists in the project,
-      read it and follow its instructions. If it does not exist, skip this step.</pre><p>That’s the whole mechanism. Claude reads a file if it’s there, skips the step if it isn’t. No plugin system, no configuration. Just a Markdown file in a directory that wasn&#39;t magical until I made it so.</p>
+If `.claude/skill-extensions/finalize.md` exists in the project,
+read it and follow its instructions. If it does not exist, skip this step.</pre><p>That’s the whole mechanism. Claude reads a file if it’s there, skips the step if it isn’t. No plugin system, no configuration. Just a Markdown file in a directory that wasn&#39;t magical until I made it so.</p>
       <p>Now my projects look like this. The general commands live in my home directory and work everywhere:</p><pre>~/.claude/commands/
-       start-task.md
-       finalize.md</pre><p>My main project has extensions for both:</p><pre>startup-mvp/.claude/skill-extensions/
+ start-task.md
+ finalize.md</pre><p>My main project has extensions for both:</p><pre>startup-mvp/.claude/skill-extensions/
        start-task.md # Documentation guide routing table
        finalize.md # API type regeneration, doc update checklist</pre><p>The parenting prototype has just one extension. The HVAC monitor and the home automation project have none at all — the general commands work there unmodified, with the extension steps quietly skipped.</p>
       <p>I’m pleased with the naming convention. The files in skill-extensions/ match the filenames of the commands they augment. If you see skill-extensions/finalize.md, you know instantly what it’s for.</p>

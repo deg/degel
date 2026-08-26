@@ -327,7 +327,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
    Tokens only — no new colors — so dark mode follows _style.html with no
    @media or [data-theme] block of its own.                             */
 
-.article-head { max-width: 38em; margin-bottom: 2.4rem; }
+.article-head { max-width: 36em; margin: 0 auto 2.4rem; }
 .article-head h1 {
   font-size: clamp(2rem, 4.4vw, 2.9rem);
   margin: .5rem 0 .9rem;
@@ -343,12 +343,16 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 /* ---- prose ----
    The base resets p/h* margins to 0 and every section supplies its own
    spacing, so an article body has nothing to inherit. Restore it here.
-   Measure: the header keeps .lede's 38em, but the body drops to 36em.
-   At the body's own 1.15rem that is roughly 70 characters per line —
-   inside the 45-75 range long-form prose reads best at, where 38em sits
-   right at its edge. Left-aligned in .wrap to match .lede and
-   .section-head rather than centered.                                  */
-.article { max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
+   Measure: 36em, a shade under .lede's 38em. At the body's own 1.15rem
+   that is roughly 70 characters per line — inside the 45-75 range that
+   long-form prose reads best at, where 38em sits right at its edge.
+   Head, body and foot all share it so the column has ONE left edge.
+
+   CENTERED, unlike .lede and .section-head. Those sit left because the
+   home page's grids fill the rest of the 68rem .wrap; an article page
+   has only the one narrow column, so left-aligning it strands half the
+   viewport and reads as unfinished.                                    */
+.article { margin-inline: auto; max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
 .article > p { margin: 0 0 1.15em; }
 .article > p:last-child { margin-bottom: 0; }
 
@@ -405,6 +409,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 
 /* ---- foot ---- */
 .article-foot {
+  margin-inline: auto;
   max-width: 36em; margin-top: 3rem; padding-top: 1.3rem;
   border-top: 1px solid var(--line);
   font-size: .92rem; color: var(--muted);
@@ -487,39 +492,39 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <p>Three hours later, Claude had created a Rust project containing a lexer, a parser, an evaluator, every Scheme R7RS special form ( let, lambda, if, delay, and all the rest), a full numeric tower (fixnum, bignum, rational, float), hygienic syntax-rules macros with ellipsis matching, tail recursion, first-class continuations, and exception handling.</p>
       <p>Some of these concepts are non-trivial and very difficult to retrofit into existing interpreters. Tail recursion and continuations require fine control of the stack. Exception handling is even more sensitive. Claude correctly foresaw these issues. It handled them so effectively that it implemented continuations in only twenty-four lines of code. Claude’s initiative was to build the evaluator around an explicit state machine loop. It “realized” up-front that this was a very clean way to implement proper tail calls and call/cc. They would fall out of the architecture naturally, rather than fight against it.</p>
       <p>This first burst of work left things in a good state. 482 Chibi tests already passed. I had stopped for the weekend long before Claude reached this point. Claude, too, decided to stop at this stage. It deserved some rest; it had already created an interpreter that could run:</p><pre>$ target/release/nscheme
-      nscheme 0.1.0 - R7RS-small interpreter. Type (exit) or press Ctrl-D to quit.
-      
-      &gt; (define (fact n)
-         (if (= n 0)
-             1
-             (* n (fact (- n 1)))))
-      
-      &gt; (fact 5)
-      120
-      
-      &gt; (fact 100)
-      93326215443944152681699238856266700490715968264381621468592963895217599993
-      22991560894146397615651828625369792082722375825118521091686400000000000000
-      0000000000
-      
-      &gt; (+ 8/3 4/3)
-      4
-      
-      &gt; (define (tail-loop n)
-          (if (= n 0)
-          &quot;Loop done&quot;
-          (tail-loop (- n 1))))
-      
-      &gt; (tail-loop 10)
-      &quot;Loop done&quot;
-      
-      &gt; (tail-loop 10000000)
-      &quot;Loop done&quot;
-      
-      &gt; (/ 3 0)
-      error: unhandled raise: #&lt;error: division by zero&gt;
-      
-      &gt; (exit)</pre><p>This was the part of the experiment that worked exactly as I’d hoped. I’d given the agent the spec, the test suite, and a few ground rules. I walked away for some family time, while the agent built a working language. I’d glanced at the first commits to see what was happening, but mostly just stayed out of the way.</p>
+nscheme 0.1.0 - R7RS-small interpreter. Type (exit) or press Ctrl-D to quit.
+
+&gt; (define (fact n)
+   (if (= n 0)
+       1
+       (* n (fact (- n 1)))))
+
+&gt; (fact 5)
+120
+
+&gt; (fact 100)
+93326215443944152681699238856266700490715968264381621468592963895217599993
+22991560894146397615651828625369792082722375825118521091686400000000000000
+0000000000
+
+&gt; (+ 8/3 4/3)
+4
+
+&gt; (define (tail-loop n)
+    (if (= n 0)
+    &quot;Loop done&quot;
+    (tail-loop (- n 1))))
+
+&gt; (tail-loop 10)
+&quot;Loop done&quot;
+
+&gt; (tail-loop 10000000)
+&quot;Loop done&quot;
+
+&gt; (/ 3 0)
+error: unhandled raise: #&lt;error: division by zero&gt;
+
+&gt; (exit)</pre><p>This was the part of the experiment that worked exactly as I’d hoped. I’d given the agent the spec, the test suite, and a few ground rules. I walked away for some family time, while the agent built a working language. I’d glanced at the first commits to see what was happening, but mostly just stayed out of the way.</p>
       <p>The interesting part hadn’t started yet.</p>
       <h2>Saturday and Sunday</h2>
       <p>When I came back to this project late Saturday night, what remained were R7RS corners: macro hygiene edge cases, exact-complex arithmetic, dynamic-wind firing on call/cc jumps, and fiddly reader syntax. More work was still needed, and frankly, I was surprised that Claude stopped.</p>
@@ -560,10 +565,10 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <p>— — —</p>
       <p><em>A note on transparency into Claude’s flow of thought:</em></p>
       <p><em>The project’s issue tracker — </em><a href="https://github.com/gastownhall/beads" target="_blank" rel="noopener noreferrer"><em>Beads</em></a><em> — stores its full per-issue history in a </em><a href="https://www.dolthub.com/" target="_blank" rel="noopener noreferrer"><em>Dolt</em></a><em> database, with git-style version control, and keeps it on a hidden branch in our Git repository. To dive into the details, see the Beads and Dolt documentation, or try these formulae:</em></p><pre>bd dolt pull            # fetch the latest remote state
-      bd list — status=closed # see what got closed
-      bd show &lt;bead-id&gt;       # full text of a single bead
-      bd history &lt;bead-id&gt;    # all revisions of one bead
-      bd vc log               # commit log of the bead database itself</pre><p><em>It’s a more useful record of the project’s actual evolution than even the git log — the order things were thought of in, what was deferred and why, what turned out to be wrong, which dependencies between beads only became visible mid-project. Since this was all done by Claude, it’s a great way to see what the AI was “thinking”.</em></p>
+bd list — status=closed # see what got closed
+bd show &lt;bead-id&gt;       # full text of a single bead
+bd history &lt;bead-id&gt;    # all revisions of one bead
+bd vc log               # commit log of the bead database itself</pre><p><em>It’s a more useful record of the project’s actual evolution than even the git log — the order things were thought of in, what was deferred and why, what turned out to be wrong, which dependencies between beads only became visible mid-project. Since this was all done by Claude, it’s a great way to see what the AI was “thinking”.</em></p>
     </div>
 
     <div class="article-foot">

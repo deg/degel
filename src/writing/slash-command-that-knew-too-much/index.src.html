@@ -60,11 +60,11 @@
       <p>Once I saw the problem, the fix was simple. Claude Code discovers slash commands by scanning specific directories. It scans ~/.claude/commands/ and &lt;project&gt;/.claude/commands/. It does not scan arbitrary directories.</p>
       <p>So I created a directory: &lt;project&gt;/.claude/skills-extension/</p>
       <p>I moved the project-specific files there and changed the general commands to say:</p><pre>## 3. Project-Specific Steps
-      If `.claude/skill-extensions/finalize.md` exists in the project,
-      read it and follow its instructions. If it does not exist, skip this step.</pre><p>That’s the whole mechanism. Claude reads a file if it’s there, skips the step if it isn’t. No plugin system, no configuration. Just a Markdown file in a directory that wasn&#39;t magical until I made it so.</p>
+If `.claude/skill-extensions/finalize.md` exists in the project,
+read it and follow its instructions. If it does not exist, skip this step.</pre><p>That’s the whole mechanism. Claude reads a file if it’s there, skips the step if it isn’t. No plugin system, no configuration. Just a Markdown file in a directory that wasn&#39;t magical until I made it so.</p>
       <p>Now my projects look like this. The general commands live in my home directory and work everywhere:</p><pre>~/.claude/commands/
-       start-task.md
-       finalize.md</pre><p>My main project has extensions for both:</p><pre>startup-mvp/.claude/skill-extensions/
+ start-task.md
+ finalize.md</pre><p>My main project has extensions for both:</p><pre>startup-mvp/.claude/skill-extensions/
        start-task.md # Documentation guide routing table
        finalize.md # API type regeneration, doc update checklist</pre><p>The parenting prototype has just one extension. The HVAC monitor and the home automation project have none at all — the general commands work there unmodified, with the extension steps quietly skipped.</p>
       <p>I’m pleased with the naming convention. The files in skill-extensions/ match the filenames of the commands they augment. If you see skill-extensions/finalize.md, you know instantly what it’s for.</p>
