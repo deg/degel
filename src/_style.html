@@ -95,12 +95,12 @@ img { max-width: 100%; }
 .flag.ghost .cloth { fill: none; stroke: currentColor; stroke-width: 1.4; }
 
 /* ============ nav ============ */
-nav {
+nav[aria-label="Site"] {
   position: sticky; top: 0; z-index: 10;
   background: color-mix(in srgb, var(--deep) 92%, transparent);
   backdrop-filter: blur(10px);
 }
-nav::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
+nav[aria-label="Site"]::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
 .nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
 .brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
@@ -250,20 +250,6 @@ section { padding: 5.5rem 0; }
   font-style: italic; font-size: 1.06rem; line-height: 1.55; color: var(--ink);
 }
 .quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
-
-/* ============ writing ============ */
-.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
-.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
-.articles li:nth-child(1) { --ac: var(--w6); }
-.articles li:nth-child(2) { --ac: var(--w1); }
-.articles li:nth-child(3) { --ac: var(--w5); }
-.articles a {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  font-size: 1.18rem; font-weight: 600; color: var(--ink);
-}
-.articles a:hover { color: var(--accent); }
-.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
-.more-writing { margin-top: 1.8rem; font-size: .85rem; }
 
 /* ============ about ============ */
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }

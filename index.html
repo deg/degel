@@ -113,12 +113,12 @@ img { max-width: 100%; }
 .flag.ghost .cloth { fill: none; stroke: currentColor; stroke-width: 1.4; }
 
 /* ============ nav ============ */
-nav {
+nav[aria-label="Site"] {
   position: sticky; top: 0; z-index: 10;
   background: color-mix(in srgb, var(--deep) 92%, transparent);
   backdrop-filter: blur(10px);
 }
-nav::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
+nav[aria-label="Site"]::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
 .nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
 .brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
@@ -269,20 +269,6 @@ section { padding: 5.5rem 0; }
 }
 .quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
 
-/* ============ writing ============ */
-.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
-.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
-.articles li:nth-child(1) { --ac: var(--w6); }
-.articles li:nth-child(2) { --ac: var(--w1); }
-.articles li:nth-child(3) { --ac: var(--w5); }
-.articles a {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  font-size: 1.18rem; font-weight: 600; color: var(--ink);
-}
-.articles a:hover { color: var(--accent); }
-.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
-.more-writing { margin-top: 1.8rem; font-size: .85rem; }
-
 /* ============ about ============ */
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
 .about-row .portrait {
@@ -344,7 +330,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <a href="/#services">What I do</a>
       <a href="/#waves">Track record</a>
       <a href="/#work">Recent work</a>
-      <a href="/#writing">Writing</a>
+      <a href="/writing/">Essays</a>
       <a href="/#about">About</a>
       <a class="cta" href="mailto:deg@degel.com">Email David</a>
     </div>
@@ -615,30 +601,6 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   </svg>
 </div>
 
-<section id="writing">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Field notes</p>
-      <h2>Writing from inside the AI wave</h2>
-      <p>I write about working with AI agents as they actually behave, not as advertised.</p>
-    </div>
-    <ul class="articles">
-      <li>
-        <a href="/writing/scheme-in-a-weekend/">Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
-        <p>One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing &mdash; and what it taught me about managing an AI that keeps declaring &ldquo;done&rdquo;.</p>
-      </li>
-      <li>
-        <a href="/writing/persistence-of-memory/">The Persistence of Memory</a>
-        <p>Agent memory files are configuration, not notes &mdash; and for the first time, the configuration writes itself.</p>
-      </li>
-      <li>
-        <a href="/writing/slash-command-that-knew-too-much/">The Slash Command That Knew Too Much</a>
-        <p>My development workflows are now programs written in English, run by an LLM.</p>
-      </li>
-    </ul>
-    <p class="more-writing mono"><a href="/writing/">All writing &rarr;</a></p>
-  </div>
-</section>
 
 <div class="waveband divider on-tintb" aria-hidden="true">
   <svg viewBox="0 0 1440 150" preserveAspectRatio="none">

@@ -9,10 +9,10 @@
 <meta property="og:image:alt" content="David Goldfarb — Software Consultant. Degel Software, every technology wave since 1980.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
-<title>Writing &mdash; David Goldfarb</title>
-<meta name="description" content="Field notes from inside the AI wave: essays by David Goldfarb on working with AI agents as they actually behave, not as advertised.">
-<meta property="og:title" content="Writing &mdash; David Goldfarb">
-<meta property="og:description" content="Field notes from inside the AI wave — essays on working with AI agents as they actually behave, not as advertised.">
+<title>Essays &mdash; David Goldfarb</title>
+<meta name="description" content="Essays by David Goldfarb on working with AI agents as they actually behave, not as advertised — written from inside the AI wave.">
+<meta property="og:title" content="Essays &mdash; David Goldfarb">
+<meta property="og:description" content="Essays on working with AI agents as they actually behave, not as advertised.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://degel.com/writing/">
 <link rel="canonical" href="https://degel.com/writing/">
@@ -113,12 +113,12 @@ img { max-width: 100%; }
 .flag.ghost .cloth { fill: none; stroke: currentColor; stroke-width: 1.4; }
 
 /* ============ nav ============ */
-nav {
+nav[aria-label="Site"] {
   position: sticky; top: 0; z-index: 10;
   background: color-mix(in srgb, var(--deep) 92%, transparent);
   backdrop-filter: blur(10px);
 }
-nav::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
+nav[aria-label="Site"]::after { content: ""; display: block; height: 3px; background: var(--spectrum); }
 .nav-inner { display: flex; align-items: center; gap: 1.5rem; padding: .8rem 1.5rem; max-width: 68rem; margin: 0 auto; }
 .brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
@@ -269,20 +269,6 @@ section { padding: 5.5rem 0; }
 }
 .quotes figcaption { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .72rem; letter-spacing: .06em; color: var(--faint); }
 
-/* ============ writing ============ */
-.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
-.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
-.articles li:nth-child(1) { --ac: var(--w6); }
-.articles li:nth-child(2) { --ac: var(--w1); }
-.articles li:nth-child(3) { --ac: var(--w5); }
-.articles a {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  font-size: 1.18rem; font-weight: 600; color: var(--ink);
-}
-.articles a:hover { color: var(--accent); }
-.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
-.more-writing { margin-top: 1.8rem; font-size: .85rem; }
-
 /* ============ about ============ */
 .about-row { display: flex; gap: 2.5rem; align-items: flex-start; flex-wrap: wrap; }
 .about-row .portrait {
@@ -327,7 +313,8 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
    Tokens only — no new colors — so dark mode follows _style.html with no
    @media or [data-theme] block of its own.                             */
 
-.article-head { max-width: 36em; margin: 0 auto 2.4rem; }
+:root { --col: 41.4rem; }   /* 36em at the body's 1.15rem */
+.article-head { max-width: var(--col); margin: 0 auto 2.4rem; }
 .article-head h1 {
   font-size: clamp(2rem, 4.4vw, 2.9rem);
   margin: .5rem 0 .9rem;
@@ -346,13 +333,16 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
    Measure: 36em, a shade under .lede's 38em. At the body's own 1.15rem
    that is roughly 70 characters per line — inside the 45-75 range that
    long-form prose reads best at, where 38em sits right at its edge.
-   Head, body and foot all share it so the column has ONE left edge.
+   Head, body, prev/next and foot all share it so the column has ONE left
+   edge — via --col rather than a repeated `36em`, because `em` resolves
+   against each element's OWN font-size: the foot sets .92rem, so `36em`
+   there is 530px, not 662px, and the line indented past the cards.
 
    CENTERED, unlike .lede and .section-head. Those sit left because the
    home page's grids fill the rest of the 68rem .wrap; an article page
    has only the one narrow column, so left-aligning it strands half the
    viewport and reads as unfinished.                                    */
-.article { margin-inline: auto; max-width: 36em; font-size: 1.15rem; line-height: 1.75; }
+.article { margin-inline: auto; max-width: var(--col); font-size: 1.15rem; line-height: 1.75; }
 .article > p { margin: 0 0 1.15em; }
 .article > p:last-child { margin-bottom: 0; }
 
@@ -407,26 +397,82 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 }
 .article pre code { background: none; padding: 0; font-size: inherit; }
 
-/* ---- foot ---- */
-.article-foot {
-  margin-inline: auto;
-  max-width: 36em; margin-top: 3rem; padding-top: 1.3rem;
+/* ---- foot: previous/next, then the two standing links ---- */
+.article-nav {
+  margin: 3rem auto 0; max-width: var(--col); padding-top: 1.4rem;
   border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+}
+.article-nav a {
+  display: block; padding: .9rem 1.1rem;
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.02rem; font-weight: 600; color: var(--ink);
+  transition: border-color .15s ease;
+}
+.article-nav a:hover { border-color: var(--accent); color: var(--accent); }
+.article-nav .dir {
+  display: block; margin-bottom: .3rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .72rem; font-weight: 500; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--faint);
+}
+.article-nav .next { text-align: right; }
+/* One article at each end has only a neighbour on one side; keep the other
+   one in its column rather than letting it slide across. */
+.article-nav .next:only-child { grid-column: 2; }
+@media (max-width: 34rem) {
+  .article-nav { grid-template-columns: 1fr; }
+  .article-nav .next, .article-nav .next:only-child { text-align: left; grid-column: 1; }
+}
+
+.article-foot {
+  margin: 1.6rem auto 0; max-width: var(--col);
   font-size: .92rem; color: var(--muted);
 }
-.article-foot a { color: var(--accent); }
+.article-foot a {
+  color: var(--muted); text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--muted) 40%, transparent);
+  text-underline-offset: 3px;
+}
+.article-foot a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.article-foot .sep { margin: 0 .6rem; color: var(--line); }
+
+/* ---- the shared contact block, scaled for an article page ----
+   _contact.html closes the home page, where a 2.7rem headline is the point.
+   At the foot of an essay it shouts over the article it follows. */
+.contact-compact section { padding: 3.4rem 0; }
+.contact-compact .contact h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); }
+.contact-compact .contact .big-mail { font-size: clamp(1.1rem, 2vw, 1.3rem); }
+.contact-compact .contact-meta { margin-top: 1.2rem; font-size: .86rem; }
 
 /* ---- /writing/ index ----
-   Reuses the home page's .articles list. That list colors its first three
-   entries from the era spectrum; the index carries four. */
+   These rules lived in _style.html while the home page had a #writing
+   section. That section is gone, so they moved here: only this page uses
+   them now, and leaving them in the shared sheet made every other page
+   carry dead CSS. A relocation, not a restructuring — the rules are
+   unchanged apart from the added fourth accent color. */
+.articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
+.articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
+.articles li:nth-child(1) { --ac: var(--w6); }
+.articles li:nth-child(2) { --ac: var(--w1); }
+.articles li:nth-child(3) { --ac: var(--w5); }
 .articles li:nth-child(4) { --ac: var(--w3); }
+.articles a {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.18rem; font-weight: 600; color: var(--ink);
+}
+.articles a:hover { color: var(--accent); }
+.articles p { color: var(--muted); font-size: .98rem; margin-top: .3rem; }
+.more-writing { margin-top: 1.8rem; font-size: .85rem; }
+
 </style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Blog",
   "@id": "https://degel.com/writing/",
-  "name": "Field notes",
+  "name": "Essays",
   "description": "Essays on working with AI agents as they actually behave, not as advertised.",
   "url": "https://degel.com/writing/",
   "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
@@ -448,7 +494,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <a href="/#services">What I do</a>
       <a href="/#waves">Track record</a>
       <a href="/#work">Recent work</a>
-      <a href="/#writing">Writing</a>
+      <a href="/writing/">Essays</a>
       <a href="/#about">About</a>
       <a class="cta" href="mailto:deg@degel.com">Email David</a>
     </div>
@@ -460,7 +506,6 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <section>
   <div class="wrap">
     <div class="section-head">
-      <p class="eyebrow">Field notes</p>
       <h2>Writing from inside the AI&nbsp;wave</h2>
       <p>I write about working with AI agents as they actually behave, not as advertised. Newest first.</p>
     </div>
@@ -492,6 +537,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   </div>
 </section>
 
+<div class="contact-compact">
 <section id="contact" class="contact">
   <div class="wrap">
     <p class="eyebrow">Contact</p>
@@ -506,6 +552,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     </div>
   </div>
 </section>
+</div>
 
 </main>
 
