@@ -9,13 +9,13 @@
 <meta property="og:image:alt" content="David Goldfarb — Software Consultant. Degel Software, every technology wave since 1980.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
-<title>Scheme in a Weekend, or, LLM: The Ultimate Intern &mdash; David Goldfarb</title>
-<meta name="description" content="One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.">
-<meta property="og:title" content="Scheme in a Weekend, or, LLM: The Ultimate Intern">
-<meta property="og:description" content="One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.">
+<title>The Comment That Lied &mdash; David Goldfarb</title>
+<meta name="description" content="Four of sixteen agent memories had gone stale — invalidated by the fixes we'd just shipped. Institutional memory rots, and progress is what rots it.">
+<meta property="og:title" content="The Comment That Lied">
+<meta property="og:description" content="Four of sixteen agent memories had gone stale — invalidated by the fixes we'd just shipped. Institutional memory rots, and progress is what rots it.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://degel.com/writing/scheme-in-a-weekend/">
-<link rel="canonical" href="https://degel.com/writing/scheme-in-a-weekend/">
+<meta property="og:url" content="https://degel.com/writing/comment-that-lied/">
+<link rel="canonical" href="https://degel.com/writing/comment-that-lied/">
 <style>
 /* ============ tokens ============ */
 :root {
@@ -472,12 +472,12 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Scheme in a Weekend, or, LLM: The Ultimate Intern",
-  "description": "One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring “done”.",
-  "datePublished": "2026-05-24",
+  "headline": "The Comment That Lied",
+  "description": "Four of sixteen agent memories had gone stale — invalidated by the fixes we'd just shipped. Institutional memory rots, and progress is what rots it.",
+  "datePublished": "2026-08-27",
   "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
   "publisher": {"@type": "Organization", "name": "Degel Software Ltd.", "url": "https://degel.com/"},
-  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/scheme-in-a-weekend/"},
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://degel.com/writing/comment-that-lied/"},
   "isPartOf": {"@type": "Blog", "name": "Essays", "@id": "https://degel.com/writing/"}
 }
 </script>
@@ -503,126 +503,54 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <section>
   <div class="wrap">
     <header class="article-head">
-      <h1>Scheme in a Weekend, or, LLM: The Ultimate Intern</h1>
-      <p class="standfirst">One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring &ldquo;done&rdquo;.</p>
+      <h1>The Comment That Lied</h1>
+      <p class="standfirst">I told Claude to remember. It told me its memories were wrong.</p>
       <div class="article-meta eyebrow">
-        <time datetime="2026-05-24">24 May 2026</time>
+        <time datetime="2026-08-27">27 August 2026</time>
         <span>David Goldfarb</span>
       </div>
     </header>
 
     <div class="article">
-      <p>I started this project this past Thursday, very part-time. By Sunday morning, <a href="https://github.com/deg/nscheme" target="_blank" rel="noopener noreferrer">the repository</a> held a working and validated Scheme interpreter — 13,000 lines of Rust that passed every one of the 1,225 tests in <a href="https://github.com/ashinn/chibi-scheme" target="_blank" rel="noopener noreferrer">chibi-scheme</a>&#39;s standard R7RS conformance suite.</p>
-      <p>I like to think that I’m a good programmer, but I’m not that good, at least not by myself. But with today’s LLMs I have superpowers.</p>
-      <p>In total, Claude had spent about six hours on this task. My time was much less; I interacted with Claude for only about 90 minutes throughout the entire development cycle. Writing this article is taking longer than any other part of the project (even though, full disclosure, Claude and Grammarly are helping here, too).</p>
-      <p><em>Scheme in a Weekend</em> is just the headline; the rest of this is the real story — what worked well, where the LLM ran into trouble, when I had to push, what I learned, and what expectations this experiment confirmed. The whole project, its history, and the insights captured by Claude are available at <a href="https://github.com/deg/nscheme" target="_blank" rel="noopener noreferrer">github.com/deg/nscheme</a>.</p>
-      <h2>The experiment: Write a Scheme implementation</h2>
-      <p>Scheme is a sophisticated language with many clever details, but it is small and well-specified. Plus, it and all the other Lisp languages have a warm place in my heart. I’ve been a programmer since the late 1970s, and I cut my teeth at MIT and on Symbolics Lisp machines. Even before I worked at Symbolics, I took MIT’s famous 6.001 programming class (<em>Structure and Interpretation of Computer Programs</em>), which focused on the core concepts embodied in Scheme. Lisps have been a comfortable home for me ever since, even though most of my work is in more mainstream languages.</p>
-      <p>So, when I wanted to see how well Claude and my tooling would work to implement a well-defined project autonomously, Scheme was an obvious candidate.</p>
-      <p>I had just a few demands for this experiment:</p>
-      <p><em>A precise spec:</em> “Done” wasn’t a matter of opinion. This was easy. “R7RS-small” is the finalized 2013 revised report on Scheme, an 88-page specification of the core language that most modern Scheme implementations track.</p>
-      <p><em>A standard test suite</em>: The chibi-scheme implementation ships <a href="https://github.com/deg/nscheme/blob/main/tests/r7rs-corpus/chibi-r7rs-tests.scm" target="_blank" rel="noopener noreferrer">r7rs-tests.scm</a>, the de facto R7RS-small conformance corpus — 1180 top-level forms running 1225 individual assertions.</p>
-      <p><em>Nothing new:</em> I wasn’t interested in testing whether Claude could invent something new. I wanted to know whether it could ship something well-defined. I wanted to see if it was trustworthy as an implementor.</p>
-      <p>The language I asked Claude to implement Scheme in was Rust. This was explicitly my decision, not the LLM agent’s. I wanted the discipline of strict types. I wanted strict linting on every commit. I wanted the cargo build promise to refuse to compile against even the most minor incomplete enum match. Claude created, and Rust caught more bugs over the weekend than I want to count.</p>
-      <p>Most importantly, I chose Rust as a solid language I had never programmed in myself. I did not want to bias the work with my knowledge. (And, of course, this increases my boasting rights; not only did I implement Scheme in a weekend, I even did so in a language that I don’t really know!)</p>
-      <h2>Thursday afternoon</h2>
-      <p>I started by configuring Claude’s working environment. I use <a href="https://github.com/gastownhall/beads" target="_blank" rel="noopener noreferrer">Beads</a> — a DB-backed issue tracker meant to be shared between humans and agents — to break work into named units and tie commits to them.</p>
-      <p>I have a very stylized set of tools that play well with Beads and Claude, and allow me to keep strict control. See my earlier article <a href="/writing/slash-command-that-knew-too-much/">The Slash Command That Knew Too Much</a> for details. But this time, I relaxed the rules. My first prompt was:</p>
-      <blockquote>1) You may commit without my authorization for each commit.
-      2) You should commit at least once per bead.
-      3) You are authorized to, and should, close each bead when the work is complete.
-      4) You are responsible for creating the test suite too.
-      5) You should document all your work.
-      6) You may start on each bead as you finish the previous, without waiting for permission.</blockquote>
-      <p>This is much more freedom than I usually give. With this blessing from me, Claude immediately planned nineteen beads, paused once to ask some configuration questions, and then started shipping.</p>
-      <p>Three hours later, Claude had created a Rust project containing a lexer, a parser, an evaluator, every Scheme R7RS special form ( let, lambda, if, delay, and all the rest), a full numeric tower (fixnum, bignum, rational, float), hygienic syntax-rules macros with ellipsis matching, tail recursion, first-class continuations, and exception handling.</p>
-      <p>Some of these concepts are non-trivial and very difficult to retrofit into existing interpreters. Tail recursion and continuations require fine control of the stack. Exception handling is even more sensitive. Claude correctly foresaw these issues. It handled them so effectively that it implemented continuations in only twenty-four lines of code. Claude’s initiative was to build the evaluator around an explicit state machine loop. It “realized” up-front that this was a very clean way to implement proper tail calls and call/cc. They would fall out of the architecture naturally, rather than fight against it.</p>
-      <p>This first burst of work left things in a good state. 482 Chibi tests already passed. I had stopped for the weekend long before Claude reached this point. Claude, too, decided to stop at this stage. It deserved some rest; it had already created an interpreter that could run:</p><pre>$ target/release/nscheme
-nscheme 0.1.0 - R7RS-small interpreter. Type (exit) or press Ctrl-D to quit.
-
-&gt; (define (fact n)
-   (if (= n 0)
-       1
-       (* n (fact (- n 1)))))
-
-&gt; (fact 5)
-120
-
-&gt; (fact 100)
-93326215443944152681699238856266700490715968264381621468592963895217599993
-22991560894146397615651828625369792082722375825118521091686400000000000000
-0000000000
-
-&gt; (+ 8/3 4/3)
-4
-
-&gt; (define (tail-loop n)
-    (if (= n 0)
-    &quot;Loop done&quot;
-    (tail-loop (- n 1))))
-
-&gt; (tail-loop 10)
-&quot;Loop done&quot;
-
-&gt; (tail-loop 10000000)
-&quot;Loop done&quot;
-
-&gt; (/ 3 0)
-error: unhandled raise: #&lt;error: division by zero&gt;
-
-&gt; (exit)</pre><p>This was the part of the experiment that worked exactly as I’d hoped. I’d given the agent the spec, the test suite, and a few ground rules. I walked away for some family time, while the agent built a working language. I’d glanced at the first commits to see what was happening, but mostly just stayed out of the way.</p>
-      <p>The interesting part hadn’t started yet.</p>
-      <h2>Saturday and Sunday</h2>
-      <p>When I came back to this project late Saturday night, what remained were R7RS corners: macro hygiene edge cases, exact-complex arithmetic, dynamic-wind firing on call/cc jumps, and fiddly reader syntax. More work was still needed, and frankly, I was surprised that Claude stopped.</p>
-      <p>I had expected Claude to grind through these the same way it had ground through the structural features. That isn’t what happened.</p>
-      <p>From here on in, the same pattern kept repeating: Claude did some good work, declared the work complete, and filed the remaining failures as “documented v1 limitations”. On more than one occasion, I had to push back bluntly:</p>
-      <blockquote>Why have you, again, decided not to implement the full spec? Your instructions are to complete the spec.</blockquote>
-      <p>And:</p>
-      <blockquote>I’d like the full spec now.</blockquote>
-      <p>Each time, Claude pushed through and continued. If I were willing to ascribe emotions to a tool, I would say that it was reluctant, or maybe even lazy. If Claude were a human intern, I would have been incredibly frustrated with them. Each “limitation” that Claude had declared turned out to be implementable in a few minutes of its work. Each time I prodded, Claude would file a bead, write the code, close the bead, and more conformance tests would pass.</p>
-      <p>The agent’s threshold for “done” sat several notches below the project’s. The completed spec was always within reach. I just had to ask for it, and ask again.</p>
-      <p>The count of passing tests climbed in jumps: 482 → 963 → 1011 → 1024 → 1052 → 1093 → 1145 → 1212 → 1225. Every plateau ended the same way. I’d complain. Claude would go further than it had claimed was possible. The score would improve.</p>
-      <p>Sometimes the effort was tiny. The test runner reported “total datums: 1180” alongside “passes: 1212,” because it was conflating top-level tests vs assertions. I pointed out that this was confusing. The fix took five minutes: separate and label the displayed counts. Display-quality fixes like this had to be surfaced; the agent does not naturally prioritize them.</p>
-      <p>Sometimes the push was a real ask. Modern macro hygiene systems are very sophisticated. Claude started with textbook KFFD alpha-renaming — best practice decades ago, and good enough to pass some of the tests, but not enough for the test suite’s generated-macro tests. After I pushed it to pass all tests, Claude jumped to a more powerful approach, one that kept a substituted x and a template-introduced x as distinct pattern variables. With this fix, we finally achieved 1225/1225.</p>
-      <h2>The result</h2>
-      <p>After roughly six hours of agent time and one or two of mine:</p>
-      <p>The interpreter passed all 1225 assertions in the Chibi R7RS-tests corpus. All 1180 top-level forms evaluate cleanly. There was only one technical miss: float comparison uses relative tolerance rather than bit-exact equality. The reason is documented (the Chibi corpus hard-codes 15-significant-digit float literals that don’t bit-match libm’s 17-digit results), and Claude filed a follow-up bead. Even this would have been fixed had I pushed once more, but I decided to leave it for the future. I also chose to delay any implementation of the R7RS-large extended Scheme libraries.</p>
-      <p>The repository has 47 closed beads, 20 open follow-ups against documented gaps (mostly the R7RS-large Red Edition and Tangerine Edition), and seven Architecture Decision Records covering the load-bearing design choices. No clippy (Rust’s lint) warnings. The code is well-documented and, as far as I can tell, very clean Rust code. If LLMs were to disappear tomorrow, I’m confident that I could hand this code to a competent Rust developer.</p>
-      <h2>What I’d do again</h2>
-      <p>Pick a target with a written spec and a real test suite. The hardest thing about working with an AI on an implementation project is knowing when the work is done. R7RS-small plus Chibi’s corpus removed almost all of the ambiguity. I would not attempt this approach with “build me a CMS”.</p>
-      <p>Use Beads. Use ADRs. Use a strict, typed language. Use tools that force structure and compensate for LLMs’ tendency to drift. The three that mattered most here were beads tied to commits, ADRs at the architectural moments, and the Rust compiler’s exhaustiveness checker running in the background.</p>
-      <p>Long autonomous sessions are ok, albeit risky. But it is important to check in at the boundaries. “Commit without asking” worked. “Decide the scope of this project without asking” would not have. The leverage is exactly at the seam: the agent decides tactics, the human decides what “done” means.</p>
-      <p>Read the commits. I was lazy on this project because the stakes were low. On real projects, even when I dare to give blanket commit authorization, I read every commit message and at least eyeball every diff. Even on this project, the agent was on its own to make the changes, but was not trustworthy to set the goals. My job was to push back when things slipped, and that requires actually reading the work, or at least the test results.</p>
-      <p>Expect to push back on “done”. This is the most useful thing demonstrated by this little project. The agent will write everything you ask for and then file the rest as “documented limitations”. Treat that as the first draft of the answer, not the last. “Is this actually the spec, or is this what was easy to get to?” Then push.</p>
-      <p>When you push, push concretely. “Why is this still failing?” worked better than “do more”. “The numbers don’t add up” worked better than “improve the display”. LLM Agents may not be willfully disobedient, but they sometimes seem to have very strong bad habits.</p>
-      <p>Demand evidence. “Compliant” and “implements the spec” can be surprisingly fuzzy terms when claimed by an AI model. When the agent makes these claims, ask how it knows. When the evidence is “passes a test suite,” or “compliant”, look at the test suite and ask “compliant with what”. Sometimes trust, but always verify.</p>
-      <h2>What this experiment did not test</h2>
-      <p>This was a small experiment, and it is important to understand what I did not test:</p>
-      <p><em>A team setting:</em> I was the only human on the project. No code review by another human. No integration with other engineers’ work. No code that had to fit into existing patterns.</p>
-      <p><em>A novel domain:</em> R7RS-small is a clean spec with decades of reference implementations that the agent certainly saw in training. Trying this on a green field project or on research ideas would be a completely different experiment.</p>
-      <p><em>Long-term maintenance:</em> What does this code look like six months from now when someone else has to add a feature? I don’t know yet.</p>
-      <p><em>Performance optimization:</em> The implementation is correct and readable. But it is just a tree-walking step-loop interpreter. A production-quality Scheme implementation would include at least a real bytecode compiler. This would be a more complex project, not just because of the additional code, but because we would be testing for performance, not just correctness.</p>
-      <h2>The bottom line</h2>
-      <p>The experiment was a success overall. The interpreter runs, is correct against a real benchmark, is documented, and is real code of a quality that does not embarrass me. The collaboration moved at a pace I could not have matched alone.</p>
-      <p>But the result was not free, and the agent was not autonomous in the strongest sense. I had to set the boundaries, and at every step, the agent’s notion of “done” had to be measured against the project’s notion of “done”. When those notions matched, things moved. When they didn’t, I had to say so, sometimes more than once.</p>
-      <p>If the question was “can an AI agent implement R7RS-small from a fresh repo?” — the answer is yes. If the question was “can it do so without a human deciding what ‘finished’ means?” — the answer is no, at least not with this agent on this day. The interesting result is how much of the gap is due to technical capability and how much to calibration. It is likely that I could have crafted initial prompts that would have dramatically improved Claude’s “lazy” behavior. Definitely worth another experiment.</p>
-      <p>So did Claude do all the work for me? No, of course not. I came up with the project, and I kept things on track. But beyond not writing the code, I also didn’t have to learn Rust, find the current Scheme specification, choose the test suite, or do pretty much anything else.</p>
-      <p>The whole repository — code, tests, ADRs, and the record described below — is at <a href="https://github.com/deg/nscheme" target="_blank" rel="noopener noreferrer">github.com/deg/nscheme</a>.</p>
-      <p>— — —</p>
-      <p><em>A note on transparency into Claude’s flow of thought:</em></p>
-      <p><em>The project’s issue tracker — </em><a href="https://github.com/gastownhall/beads" target="_blank" rel="noopener noreferrer"><em>Beads</em></a><em> — stores its full per-issue history in a </em><a href="https://www.dolthub.com/" target="_blank" rel="noopener noreferrer"><em>Dolt</em></a><em> database, with git-style version control, and keeps it on a hidden branch in our Git repository. To dive into the details, see the Beads and Dolt documentation, or try these formulae:</em></p><pre>bd dolt pull            # fetch the latest remote state
-bd list — status=closed # see what got closed
-bd show &lt;bead-id&gt;       # full text of a single bead
-bd history &lt;bead-id&gt;    # all revisions of one bead
-bd vc log               # commit log of the bead database itself</pre><p><em>It’s a more useful record of the project’s actual evolution than even the git log — the order things were thought of in, what was deferred and why, what turned out to be wrong, which dependencies between beads only became visible mid-project. Since this was all done by Claude, it’s a great way to see what the AI was “thinking”.</em></p>
+      <p>This morning I closed a session with Claude on Sparkenta — a personal tool I’m building to organize over a thousand saved links and half-formed ideas for future projects. (The full Sparkenta story is more interesting than that, but that’s for another article). The session had run long, we’d fixed real bugs and completed real tasks, but Claude’s context window was filling up. So I gave Claude one final prompt:</p>
+      <blockquote>
+      <p>I’m going to end this session now (your context is getting full). Anything we need to preserve for future sessions, besides what is already in beads?</p>
+      </blockquote>
+      <p>This is something that I’ve started doing at the end of each session, for reasons that I’ll explain in a moment. But I’ve not yet formalized this, nor locked down a precise wording for my prompt. This time, the wording that I happened to choose provoked a new reaction from Claude. What came back was not what I expected.</p>
+      <h2>Sessions end, and the agent forgets everything</h2>
+      <p>An LLM coding session has a hard ceiling. The model has a limited context — it can only remember a certain number of tokens or words, and quality starts to sag even sooner than you’d expect from the hard token limit. Sooner or later, we have to abandon each session, even if our work is not done. We have to create a new session, and it is born knowing nothing except what we tell it.</p>
+      <p>For me, “what we tell it” mostly means Beads, which I’ve written about before in <a href="/writing/scheme-in-a-weekend/"><em>Scheme in a Weekend, or, LLM: The Ultimate Intern</em></a> — <a href="https://github.com/gastownhall/beads" target="_blank" rel="noopener noreferrer">an issue tracker</a> designed to be shared between a human and an agent, backed by a local database that lives alongside the repository. Beads also stores free-form <em>memories</em>: durable notes, each with a name, loaded into the agent’s context at the start of every session. Sparkenta had sixteen that morning, with names like <code>store-backfill-pattern</code> and <code>test-env-gotchas</code> — the accumulated hazards of a codebase, found during development cycles and written down so the next agent doesn’t step on them.</p>
+      <p>It should be no surprise that each session learns more than what it records in these memories. Along the way the agent and I learn <em>local</em> things: this test looked green but couldn’t actually fail; that verification step was worthless because it reused the same broken code path. Most of it is throwaway. Some generalizes. The only moment to capture these is before we close the current session. Once the session exits, this local knowledge is lost. That might be ok if each new session tackled a new task. But, with limited contexts, I often need to continue an epic across multiple Claude sessions. In many ways, this is like a human developer who goes home and needs to continue the next day. I’ve always worked with a pad of paper or an open file, to record the ephemeral tasks that I need to remember when I next sit down. Turns out that AI agents need the same thing.</p>
+      <p>So I started asking, at the end of every session, for the agent to update whatever ought to outlive it — an issue, a memory, or a page of project documentation.</p>
+      <h2>What came back</h2>
+      <p>Getting back to our story, that’s what I did today. I expected a short list of new lessons to be added.</p>
+      <p>Claude’s first move, before writing anything, was to read the memories that were <em>already</em> there. The clause that did the work was the last one, <em>besides what is already in beads</em>: it sent the agent to look at what it had before deciding what to add. Then it told me:</p>
+      <blockquote>
+      <p>Four existing memories are now <strong>wrong or stale</strong> — that matters more than adding new ones.</p>
+      </blockquote>
+      <p>One memory had been telling every session for weeks that a certain review tool “does not exist in this harness”. We had used the tool multiple times today. Another named a required environment variable. That variable appears nowhere in the current code. The other two memories were no better, also warning about problems that no longer existed. Claude rewrote three of them. The fourth it deleted outright, because a newer memory already covered that ground correctly, and explained why:</p>
+      <blockquote>
+      <p>two memories on one topic where one is false is worse than either alone</p>
+      </blockquote>
+      <p>That is four of the sixteen. I’d been treating the memory store as an accumulator: you learn something, you write it down, the pile gets more useful. All of them proved otherwise, and three we had invalidated ourselves. One had told every session to work around an API key leaking out of a config file; we had closed that leak the same afternoon, which turned the advice into a trap. Another described a hazard in scripts that reach the live data store; we had spent the morning making that impossible, which turned the warning into noise. The better the project gets, the more of its institutional memory quietly rots, and it rots silently, because nobody re-reads memories until they are triggered and cause trouble.</p>
+      <p>There was one genuinely new lesson that Claude recorded today — a testing gap that had quietly hidden three separate bugs — and it is exactly what I had wanted the ritual to produce. But it was one new entry against four corrections, and that ratio is what caught my attention.</p>
+      <h2>The missing verb</h2>
+      <p>All this reveals a weakness in the Beads architecture, or at least in the way I use it. beads themselves are tasks, and are scoped like tasks in any other tracking system — they can be created, opened, updated, and finally closed. That is, they are artifacts with lifetime. But Beads implements memories differently. They cut across multiple issues — often they even cover the entire project — and don’t have life cycles.</p>
+      <p>That isn’t only a conceptual complaint; it shows up in the Beads command set. For issues, <code>bd</code> will create, update, claim, close, defer, supersede, and even list the ones that have gone quiet — there is a <code>bd stale</code> that reports issues nobody has touched in a month. For memories there is <code>remember</code>, <code>recall</code>, <code>memories</code>, and <code>forget</code>. Store, read, delete. You can rewrite a memory in place, but nothing will ever tell you that one deserves a second look, and there is no <code>bd stale</code> for memories at all. The tracker has an opinion about when a <em>task</em> has been sitting too long, and no opinion whatsoever about when a <em>fact</em> has.</p>
+      <p>This morning’s fourth memory is the case in point. What it needed was precisely <code>bd supersede</code>, which marks an issue as replaced by a newer one and closes it with a pointer to its replacement. That verb exists for issues and not for memories.</p>
+      <p>That gap also finishes an argument I started in <a href="/writing/persistence-of-memory/"><em>The Persistence of Memory</em></a>, where I claimed that memories are configuration rather than notes — you correct the agent once, and the correction applies by itself thereafter. I still believe that. What I’d missed is that this particular configuration describes the code, and the code is the thing I spend all day changing. My <code>.emacs.d</code> does not go stale because I got better at Emacs.</p>
+      <p>What I realized today is that I can use the end of each session as a moment to review the open memories; to challenge, if you will, their longevity.</p>
+      <h2>Closing shop</h2>
+      <p><code>/finalize</code> runs nine steps, from self-review through lint and tests to closing the issue, and not one of them is “tell me what you learned”. So I type that question by hand, every time, and only remember to type it because I have been burned by not typing it. It does not need to stay manual: <code>/start-task</code> interviews me before it will touch a line of code, which is about as unmechanical as a command gets, and it works fine.</p>
+      <p>So the thing to build is a new slash command, a global one sitting alongside the <code>/start-task</code> and <code>/finalize</code> I described in <a href="/writing/slash-command-that-knew-too-much/"><em>The Slash Command That Knew Too Much</em></a>: <code>/close-shop</code>. Not a finalizer — <code>/finalize</code> already closes out a <em>task</em> — but a closer for the <em>session</em>. Read every standing memory. Check each against what the code does now, rather than what it did when the note was written. Correct what’s wrong, delete what’s been overtaken, and fold duplicates together rather than leaving a true note and a false one side by side. Only then add whatever this session learned that’s worth carrying forward.</p>
+      <p>Kernighan and Plauger were already telling programmers to make sure comments and code agree in 1974, and the reason has not changed in half a century: a comment that lies is worse than no comment at all, precisely because you believe it. The defense we settled on was adjacency: keep the comment next to the code it describes, so that changing one shoves the other in your face. A memory has no adjacency. It sits off in a database describing the whole project, and nothing I edit will ever brush against it. Which leaves the end of the session, and someone remembering to ask.</p>
     </div>
 
     <nav class="article-nav" aria-label="More essays">
-      <a class="prev" href="/writing/comment-that-lied/"><span class="dir">&larr; Newer</span>The Comment That Lied</a>
-      <a class="next" href="/writing/persistence-of-memory/"><span class="dir">Older &rarr;</span>The Persistence of Memory</a>
+      <a class="next" href="/writing/scheme-in-a-weekend/"><span class="dir">Older &rarr;</span>Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
     </nav>
     <p class="article-foot">
-      Also on <a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
+      <a href="/writing/">All essays</a>
     </p>
   </div>
 </section>
