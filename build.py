@@ -15,6 +15,9 @@ Directives, resolved in this order:
   {{ARTICLE_LIST}}       generated: the full /writing/ index list
   {{ARTICLE_TEASER:n}}   generated: the newest n articles, titles only
   {{ARTICLE_NAV}}        generated: previous/next cards for THIS article
+  {{ARTICLE_BACK}}       generated: the way back, above the title
+  {{ARTICLE_FOOT}}       generated: the links below the essay. The Medium link
+                         appears only when this page's META carries `medium:`
   {{ARTICLE_JSONLD}}     generated: the Blog blogPost array
   {{title}} {{blurb}}    this page's own metadata, plus {{date}},
                          {{human_date}}, {{medium}}, {{slug}}, {{url}}

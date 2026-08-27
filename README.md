@@ -9,7 +9,7 @@ no webfonts, no external requests.
 | Path | What |
 |---|---|
 | `src/` | THE sources. Every `src/**/*.src.html` is a page; `src/_*.html` are shared partials (nav, footer, CSS, script) |
-| `src/writing/<slug>/` | one essay per directory. A `{{META}}` block at the top of each supplies title/date/blurb; the `/writing/` list, the home-page teaser, previous/next and `sitemap.xml` are all generated from it, so **adding an essay is: create the directory, write the file** |
+| `src/writing/<slug>/` | one essay per directory. A `{{META}}` block at the top of each supplies title/date/blurb (plus optional `standfirst` and `medium`); the `/writing/` list, the home-page teaser, previous/next, the top back-link, the foot links and `sitemap.xml` are all generated from it, so **adding an essay is: create the directory, write the file** |
 | `build.py` | builds the pages (resolves `{{INCLUDE:}}`, then inlines images as data URIs) |
 | `check.py` | post-build invariants — `make check`, and `make deploy` runs it first so a failing build cannot publish |
 | `test_build.py` | `build.py`'s failure paths (bad `{{META}}`, include cycles, missing partials) against throwaway trees — `make test` |
