@@ -334,6 +334,17 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 
 :root { --col: 41.4rem; }   /* 36em at the body's 1.15rem */
 .article-head { max-width: var(--col); margin: 0 auto 2.4rem; }
+/* The way back, above the title. Mono and small so it reads as navigation
+   rather than as a kicker — the "Field notes" eyebrow that used to sit here
+   was dropped precisely because it looked like a label and explained
+   nothing. */
+.article-back {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .78rem; letter-spacing: .06em;
+  margin-bottom: 1.1rem;
+}
+.article-back a { color: var(--faint); }
+.article-back a:hover { color: var(--accent); }
 .article-head h1 {
   font-size: clamp(2rem, 4.4vw, 2.9rem);
   margin: .5rem 0 .9rem;
@@ -503,6 +514,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <section>
   <div class="wrap">
     <header class="article-head">
+      <p class="article-back"><a href="/writing/">&larr; All essays</a></p>
       <h1>Scheme in a Weekend, or, LLM: The Ultimate Intern</h1>
       <p class="standfirst">One weekend, 13,000 lines of Rust, all 1,225 conformance tests passing — and what it taught me about managing an AI that keeps declaring &ldquo;done&rdquo;.</p>
       <div class="article-meta eyebrow">
@@ -621,9 +633,7 @@ bd vc log               # commit log of the bead database itself</pre><p><em>It�
       <a class="prev" href="/writing/comment-that-lied/"><span class="dir">&larr; Newer</span>The Comment That Lied</a>
       <a class="next" href="/writing/persistence-of-memory/"><span class="dir">Older &rarr;</span>The Persistence of Memory</a>
     </nav>
-    <p class="article-foot">
-      Also on <a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099" target="_blank" rel="noopener noreferrer">Medium</a><span class="sep">&middot;</span><a href="/writing/">All essays</a>
-    </p>
+    <p class="article-foot"><a href="https://medium.com/@DavidEGoldfarb/scheme-in-a-weekend-or-llm-the-ultimate-intern-7e7b8b7b3099" target="_blank" rel="noopener noreferrer">Discuss on Medium &rarr;</a><span class="sep">&middot;</span><a href="/writing/">All essays</a></p>
   </div>
 </section>
 

@@ -178,6 +178,29 @@ def article_nav(arts, i):
     )
 
 
+def article_back_link():
+    """The way back, above the title. Deliberately NOT the Medium link: at the
+    top of an unread essay that is an exit ramp, and a reader who has just
+    arrived has nothing to discuss yet."""
+    return '      <p class="article-back"><a href="/writing/">&larr; All essays</a></p>'
+
+
+def article_foot_links(meta):
+    """The pair below the essay. The Medium link appears only for an essay
+    that HAS a Medium copy — generated from META rather than hand-written per
+    page, which is how the two ends stay in step and how an essay published
+    here and never syndicated gets the right foot on its own."""
+    parts = []
+    if meta.get("medium"):
+        parts.append(
+            f'<a href="{meta["medium"]}" target="_blank" '
+            f'rel="noopener noreferrer">Discuss on Medium &rarr;</a>'
+        )
+    parts.append('<a href="/writing/">All essays</a>')
+    joined = '<span class="sep">&middot;</span>'.join(parts)
+    return f'    <p class="article-foot">{joined}</p>'
+
+
 def article_jsonld(arts):
     """The blogPost array for the /writing/ Blog entity."""
     rows = [
@@ -280,6 +303,11 @@ def main():
         t = TEASER_RE.sub(
             lambda m: article_items(articles, int(m.group(1)), blurb=False), t
         )
+        t = t.replace("{{ARTICLE_BACK}}", article_back_link())
+        if "{{ARTICLE_FOOT}}" in t:
+            if not meta:
+                sys.exit(f"{rel}: {{{{ARTICLE_FOOT}}}} on a page with no META")
+            t = t.replace("{{ARTICLE_FOOT}}", article_foot_links(meta))
         if "{{ARTICLE_NAV}}" in t:
             if meta not in articles:
                 sys.exit(f"{rel}: {{{{ARTICLE_NAV}}}} on a page that is not an article")
