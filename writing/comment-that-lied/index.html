@@ -334,6 +334,17 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 
 :root { --col: 41.4rem; }   /* 36em at the body's 1.15rem */
 .article-head { max-width: var(--col); margin: 0 auto 2.4rem; }
+/* The way back, above the title. Mono and small so it reads as navigation
+   rather than as a kicker — the "Field notes" eyebrow that used to sit here
+   was dropped precisely because it looked like a label and explained
+   nothing. */
+.article-back {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: .78rem; letter-spacing: .06em;
+  margin-bottom: 1.1rem;
+}
+.article-back a { color: var(--faint); }
+.article-back a:hover { color: var(--accent); }
 .article-head h1 {
   font-size: clamp(2rem, 4.4vw, 2.9rem);
   margin: .5rem 0 .9rem;
@@ -503,6 +514,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 <section>
   <div class="wrap">
     <header class="article-head">
+      <p class="article-back"><a href="/writing/">&larr; All essays</a></p>
       <h1>The Comment That Lied</h1>
       <p class="standfirst">I told Claude to remember. It told me its memories were wrong.</p>
       <div class="article-meta eyebrow">
@@ -550,9 +562,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <nav class="article-nav" aria-label="More essays">
       <a class="next" href="/writing/scheme-in-a-weekend/"><span class="dir">Older &rarr;</span>Scheme in a Weekend, or, LLM: The Ultimate Intern</a>
     </nav>
-    <p class="article-foot">
-      <a href="/writing/">All essays</a>
-    </p>
+    <p class="article-foot"><a href="https://medium.com/@DavidEGoldfarb/the-comment-that-lied-2c96e79b9703" target="_blank" rel="noopener noreferrer">Discuss on Medium &rarr;</a><span class="sep">&middot;</span><a href="/writing/">All essays</a></p>
   </div>
 </section>
 
