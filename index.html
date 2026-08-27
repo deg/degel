@@ -9,9 +9,9 @@
 <meta property="og:image:alt" content="David Goldfarb — Software Consultant. Degel Software, every technology wave since 1980.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
-<title>David Goldfarb — Software Consultant | Degel Software</title>
-<meta name="description" content="I'm David Goldfarb: rapid prototyping, technical due diligence, and patent guidance — shipping through every technology wave since 1980, now building with AI daily.">
-<meta property="og:title" content="David Goldfarb — Software Consultant | Degel Software">
+<title>David Goldfarb — Fractional CTO &amp; Software Consultant</title>
+<meta name="description" content="I'm David Goldfarb: fractional CTO, rapid prototyping, technical due diligence, and patent guidance — shipping since 1980, building with AI every day.">
+<meta property="og:title" content="David Goldfarb — Fractional CTO &amp; Software Consultant">
 <meta property="og:description" content="Your next product, prototyped at AI speed.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://degel.com/">
@@ -44,6 +44,12 @@
   --deep-accent:#8fb3ff;
   --tint-b: color-mix(in srgb, #ffffff 45%, var(--paper));
   --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
+  /* card accents: six hue families >=45deg apart, uniform chroma, stepped per
+     surface. Deliberately NOT --w1..--w6, which mean technology ERAS -- those
+     have a 3x chroma spread (0.078-0.241) because each was picked for its own
+     wave, so as a set some shout and some read gray. Validated on both surfaces
+     via the dataviz validate_palette.js six checks. */
+  --c1: #5b6c0b; --c2: #8e3d5b; --c3: #8b77c4; --c4: #005a91; --c5: #ad6037; --c6: #209c7c;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -59,6 +65,7 @@
     --chip-bg:    #f2f4f7;
     --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
     --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+    --c1: #6f831a; --c2: #ad5072; --c3: #9881d7; --c4: #1974b3; --c5: #c46d3e; --c6: #16ab87;
     --deep: #0a1316;
     --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
   }
@@ -76,6 +83,7 @@
   --chip-bg:    #f2f4f7;
   --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
   --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+  --c1: #6f831a; --c2: #ad5072; --c3: #9881d7; --c4: #1974b3; --c5: #c46d3e; --c6: #16ab87;
   --deep: #0a1316;
   --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
 }
@@ -225,8 +233,13 @@ section { padding: 5.5rem 0; }
   border: 1px solid var(--line); border-radius: 14px;
   padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
 }
-.svc.s1 { --sc: var(--w6); } .svc.s2 { --sc: var(--w2); }
-.svc.s3 { --sc: var(--w1); } .svc.s4 { --sc: var(--w4); }
+/* Era spectrum in reading order: the grid runs w1->w6 the same direction as
+   every waveband and --spectrum. Keeps the two near-identical pairs
+   (w2/w5, w1/w6 - both under dE 30) from ever landing side by side, at
+   either breakpoint. Renumber these if the cards are ever reordered. */
+.svc.s1 { --sc: var(--c1); } .svc.s2 { --sc: var(--c2); }
+.svc.s3 { --sc: var(--c3); } .svc.s4 { --sc: var(--c4); }
+.svc.s5 { --sc: var(--c5); } .svc.s6 { --sc: var(--c6); }
 .mid-cta { margin-top: 2.6rem; }
 .svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--sc, var(--accent)); padding-top: .9rem; }
 .svc p { color: var(--muted); font-size: 1.02rem; }
@@ -235,15 +248,21 @@ section { padding: 5.5rem 0; }
 /* ============ work ============ */
 .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.3rem; }
 .case {
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  /* Same 4% accent wash as .svc, so both card grids share one surface
+     treatment. The bar styling deliberately differs (4px flush to the
+     card edge here, 3px inset above the heading there); the colour does not. */
+  background: color-mix(in srgb, var(--cc, var(--accent)) 4%, var(--card));
+  border: 1px solid var(--line); border-radius: 14px;
   border-top: 4px solid var(--cc, var(--line));
   padding: 1.5rem 1.5rem 1.4rem; box-shadow: var(--shadow);
   display: flex; flex-direction: column; gap: .75rem;
 }
-.case[data-client="marketbuzzr"] { --cc: var(--w6); }
-.case[data-client="heidibrun"] { --cc: var(--w1); }
-.case[data-client="basis-technology"] { --cc: var(--w5); }
-.case[data-client="basistech"] { --cc: var(--w2); }
+.case[data-client="marketbuzzr"] { --cc: var(--c1); }
+.case[data-client="heidibrun"] { --cc: var(--c2); }
+.case[data-client="basis-technology"] { --cc: var(--c3); }
+.case[data-client="basistech"] { --cc: var(--c4); }
+.case[data-client="family-health"] { --cc: var(--c5); }
+.case[data-client="social-analytics"] { --cc: var(--c6); }
 .case .sector { color: var(--accent); }
 .case .client { display: flex; align-items: center; gap: .55rem; }
 .case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
@@ -256,12 +275,12 @@ section { padding: 5.5rem 0; }
 .quotes-head .quotes-note { color: var(--muted); font-size: .95rem; margin-top: .4rem; }
 .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 1.6rem; }
 .quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
-.quotes figure:nth-child(1) { --qc: var(--w4); }
-.quotes figure:nth-child(2) { --qc: var(--w2); }
-.quotes figure:nth-child(3) { --qc: var(--w3); }
-.quotes figure:nth-child(4) { --qc: var(--w5); }
-.quotes figure:nth-child(5) { --qc: var(--w1); }
-.quotes figure:nth-child(6) { --qc: var(--w6); }
+.quotes figure:nth-child(1) { --qc: var(--c1); }
+.quotes figure:nth-child(2) { --qc: var(--c2); }
+.quotes figure:nth-child(3) { --qc: var(--c3); }
+.quotes figure:nth-child(4) { --qc: var(--c4); }
+.quotes figure:nth-child(5) { --qc: var(--c5); }
+.quotes figure:nth-child(6) { --qc: var(--c6); }
 .quotes blockquote {
   margin: 0 0 .8rem;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -274,10 +293,14 @@ section { padding: 5.5rem 0; }
    render <ul class="articles">. The teaser omits the blurb. */
 .articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
 .articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
-.articles li:nth-child(1) { --ac: var(--w6); }
-.articles li:nth-child(2) { --ac: var(--w1); }
-.articles li:nth-child(3) { --ac: var(--w5); }
-.articles li:nth-child(4) { --ac: var(--w3); }
+/* Cycles through all six so essay 5+ is never left on --accent, which is the
+   same hex as --w6 and made essays 1 and 5 identical. */
+.articles li:nth-child(6n+1) { --ac: var(--c1); }
+.articles li:nth-child(6n+2) { --ac: var(--c2); }
+.articles li:nth-child(6n+3) { --ac: var(--c3); }
+.articles li:nth-child(6n+4) { --ac: var(--c4); }
+.articles li:nth-child(6n+5) { --ac: var(--c5); }
+.articles li:nth-child(6n+6) { --ac: var(--c6); }
 .articles a {
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   font-size: 1.18rem; font-weight: 600; color: var(--ink);
@@ -328,7 +351,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "David Goldfarb",
-  "jobTitle": "Software Consultant",
+  "jobTitle": ["Fractional CTO", "Software Consultant"],
   "worksFor": {"@type": "Organization", "name": "Degel Software Ltd.", "foundingDate": "1988"},
   "email": "mailto:deg@degel.com",
   "telephone": "+972-54-723-0120",
@@ -336,7 +359,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   "alumniOf": {"@type": "CollegeOrUniversity", "name": "Massachusetts Institute of Technology"},
   "url": "https://degel.com/",
   "sameAs": ["https://www.linkedin.com/in/davidegoldfarb/", "https://github.com/deg", "https://medium.com/@DavidEGoldfarb"],
-  "knowsAbout": ["Rapid prototyping", "Technical due diligence", "Patent strategy", "LLM engineering", "AI-assisted software development"]
+  "knowsAbout": ["Fractional CTO", "Technical leadership", "Rapid prototyping", "Technical due diligence", "Patent strategy", "LLM engineering", "AI-assisted software development"]
 }
 </script>
 </head>
@@ -362,12 +385,12 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
   <div class="wrap">
     <p class="eyebrow">Degel Software Ltd. &middot; founded 1988</p>
     <h1>Your next product, prototyped at AI&nbsp;speed</h1>
-    <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. I do rapid prototyping, technical due diligence, patent guidance, and senior technical judgment &mdash; backed by hands-on shipping through <a href="#waves">every technology wave since 1980</a>. <strong>The AI wave is the biggest yet, and I build with it every day.</strong></p>
+    <p class="lede">I&rsquo;m David Goldfarb &mdash; MIT &rsquo;84, founder of Degel Software. I do fractional CTO work, rapid prototyping, technical due diligence, and patent guidance &mdash; backed by hands-on shipping through <a href="#waves">every technology wave since 1980</a>. <strong>The AI wave is the biggest yet, and I build with it every day.</strong></p>
     <div class="hero-ctas">
       <a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a>
       <a class="btn quiet" href="#waves">See the track record</a>
     </div>
-    <p class="kicker mono">1980 &rarr; 2026 &middot; six technology waves &middot; still shipping</p>
+    <p class="kicker mono">1980 &rarr; 2026 &middot; six technology waves &middot; still shipping code, not slides</p>
   </div>
 </header>
 
@@ -387,24 +410,32 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
     <div class="section-head">
       <p class="eyebrow">Services</p>
       <h2>What I do</h2>
-      <p>Four things, done with four decades of judgment and today&rsquo;s tools.</p>
+      <p>From a single question to an embedded role &mdash; with four decades of judgment behind it.</p>
     </div>
     <div class="svc-grid">
       <div class="svc s1">
-        <h3>Rapid prototyping, at AI speed</h3>
-        <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks, using AI wherever it actually helps.</p>
+        <h3>Fractional CTO</h3>
+        <p>Technology strategy, mentoring for development teams and their leaders, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. I&rsquo;ve been a startup CTO myself, through an NYSE IPO. I&rsquo;ve already made most of these mistakes, and shipped anyway.</p>
       </div>
       <div class="svc s2">
-        <h3>Technical due diligence</h3>
-        <p>Considering an investment, an acquisition, or a rebuild &mdash; or wanting an honest, impartial read of your own product before you bet on it? I evaluate technology stacks, architectures, and teams &mdash; and tell you what&rsquo;s really there, with the eye of someone who has built, bought, and retired every generation of them.</p>
+        <h3>Rapid prototyping, at AI speed</h3>
+        <p>You have a next-generation idea and a team that can&rsquo;t be distracted from the current product. I take it from whiteboard to working, demoable software in weeks, using AI wherever it actually helps, and solid engineering wherever vibe coding isn&rsquo;t good enough.</p>
       </div>
       <div class="svc s3">
-        <h3>Patent &amp; technical IP guidance</h3>
-        <p>I help you find your product&rsquo;s inventive bits and work alongside your patent attorneys through the whole arc &mdash; provisionals, utility applications, office actions, allowance. I&rsquo;m a named inventor on four US patents myself &mdash; I&rsquo;ve sat on your side of the table.</p>
+        <h3>AI workflow coaching</h3>
+        <p>Your developers are already using AI tools and getting uneven results. I work with the team on what actually changes: which parts of the workflow agents genuinely speed up, which ones they quietly break, and the review habits that catch the difference. I do this on my own projects every day &mdash; and <a href="#writing">write about what I find</a>.</p>
       </div>
       <div class="svc s4">
-        <h3>Senior technical judgment</h3>
-        <p>Mentoring for development teams and their leaders, technology strategy, and the 2 a.m. questions of a first-time founder &mdash; aligning technical and business decisions all the way to a successful exit. Engagements can be as light as a single research report: most recently, on transparent, trust-preserving ranking algorithms for a social-discussion platform. I&rsquo;ve already made most of these mistakes, and shipped anyway.</p>
+        <h3>Technical due diligence</h3>
+        <p>Two sides. Buying an investment, an acquisition, or a rebuild: you need to know what the stack, the architecture, and the team can actually carry. Being examined &mdash; raising, or selling &mdash; you&rsquo;d rather hear it first from someone on your side: I find what their reviewer will find, while there&rsquo;s still time to fix it. Built, bought, and retired every generation of this.</p>
+      </div>
+      <div class="svc s5">
+        <h3>Research &amp; technology decisions</h3>
+        <p>Should we adopt this, when, and how much of it &mdash; or: we&rsquo;re stuck here, and the obvious answers aren&rsquo;t working. I take the question as a single scoped piece of work and come back with a written answer: what has actually been made to work, what it costs to run, and where it breaks. Most recently, transparent and trust-preserving ranking algorithms for a social-discussion platform.</p>
+      </div>
+      <div class="svc s6">
+        <h3>Patent &amp; technical IP guidance</h3>
+        <p>I help you find your product&rsquo;s inventive bits and work alongside your patent attorneys through the whole arc &mdash; provisionals, utility applications, office actions, allowance. I&rsquo;m a named inventor on four US patents myself &mdash; I&rsquo;ve sat on your side of the table.</p>
       </div>
     </div>
     <p class="mid-cta"><a class="btn primary" href="mailto:deg@degel.com">Tell me what you&rsquo;re building</a></p>
@@ -566,11 +597,11 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
         <span class="sector eyebrow">Operations software &middot; 2024&ndash;</span>
         <p>Climate, air-quality, and device control for a 13,000-square-foot incubator space &mdash; live dashboards and alerting integrated with the building&rsquo;s HVAC and smart-device systems &mdash; plus a Gmail-integrated CRM that keeps their contact pipeline in one place.</p>
       </div>
-      <div class="case" data-client="">
+      <div class="case" data-client="family-health">
         <span class="sector eyebrow">Family health &middot; 2026&ndash;</span>
         <p>Working prototype for an early-stage parenting startup: an LLM-driven core that turns family-health questions into safe, practical guidance for parents.</p>
       </div>
-      <div class="case" data-client="">
+      <div class="case" data-client="social-analytics">
         <span class="sector eyebrow">Social-media analytics &middot; 2025</span>
         <p>Senior technical guidance for a social-media-analytics startup: I steered the architecture toward LLMs and proved it with fast prototypes, turning a research ML pipeline into something they could demo. I also reviewed the codebase and set up the practices to keep it shipping.</p>
       </div>
