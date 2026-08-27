@@ -225,6 +225,15 @@ def main():
         expect_caught=False,
     )
 
+    # --- deploy config ---
+    # The regression this guards: for months the recipe copied og.png and
+    # robots.txt and not CNAME, and nothing anywhere would have noticed.
+    mutate(
+        "the deploy dropping CNAME is caught",
+        "Makefile",
+        lambda s: s.replace("cp CNAME og.png", "cp og.png"),
+    )
+
     # --- articles ---
     mutate_new_page(
         "nested article still gets its metadata checked",

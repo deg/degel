@@ -14,7 +14,10 @@ wrong at least once:
     reporting readers back to Medium and breaking the offline property
 
 Anything requiring a browser (typography, spacing, contrast) is deliberately
-out of scope — look at the page for those. These are the invariants that can
+out of scope — look at the page for those. One check (check_cname_deploys) is
+about what DEPLOYS rather than about the HTML; it earns the exception because
+losing that one file silently unpoints the domain and no page would look
+wrong. These are the invariants that can
 be checked from the HTML alone, and that a human reviewer will not notice.
 
 The path -> URL mapping is imported from build.py rather than re-derived here:
@@ -224,6 +227,25 @@ def check_article_metadata(path, html):
     check(len(medium) <= 1, f"{path}: at most one link to the Medium copy", str(medium))
 
 
+def check_cname_deploys():
+    """CNAME is what points degel.com at GitHub Pages. It is not generated and
+    not in .build-outputs, so the deploy recipe is the only thing that puts it
+    on gh-pages — and for a long time the recipe did not, which nothing would
+    have caught: the site would still build, still pass every other check, and
+    simply stop answering on the custom domain."""
+    mk = (root / "Makefile").read_text()
+    copied = [ln for ln in mk.splitlines() if ln.strip().startswith("cp ")]
+    check(
+        (root / "CNAME").exists(),
+        "CNAME exists in the repo",
+    )
+    check(
+        any("CNAME" in ln for ln in copied),
+        "the deploy copies CNAME",
+        f"cp lines: {copied}",
+    )
+
+
 def check_sitemap():
     """The sitemap is generated, so this guards the generator: every listed
     URL must exist, and every built page must be listed."""
@@ -252,6 +274,7 @@ def main():
         if is_article(path):
             check_article_metadata(path, html)
     check_waveband_alternation(pathlib.Path("index.html").read_text())
+    check_cname_deploys()
     check_sitemap()
     print(
         f"\n{'ALL CHECKS PASS' if not failures else str(len(failures)) + ' FAILURE(S)'}"

@@ -26,7 +26,7 @@ deploy: check  ## publish to degel.com; MSG="what changed" required
 	@test -n "$(MSG)" || { echo 'usage: make deploy MSG="what changed"'; exit 1; }
 	@git diff --quiet -- src assets build.py check.py test_build.py test_check.py || { echo "ERROR: uncommitted source changes — commit them first"; exit 1; }
 	git worktree add .deploy-tmp gh-pages
-	cp og.png robots.txt .deploy-tmp/
+	cp CNAME og.png robots.txt .deploy-tmp/
 	rsync -a --files-from=.build-outputs . .deploy-tmp/
 	rsync -a --delete history/ .deploy-tmp/history/
 	cd .deploy-tmp && git add -A && \
