@@ -44,6 +44,12 @@
   --deep-accent:#8fb3ff;
   --tint-b: color-mix(in srgb, #ffffff 45%, var(--paper));
   --spectrum: linear-gradient(90deg, var(--w1), var(--w2), var(--w3), var(--w4), var(--w5), var(--w6));
+  /* card accents: six hue families >=45deg apart, uniform chroma, stepped per
+     surface. Deliberately NOT --w1..--w6, which mean technology ERAS -- those
+     have a 3x chroma spread (0.078-0.241) because each was picked for its own
+     wave, so as a set some shout and some read gray. Validated on both surfaces
+     via the dataviz validate_palette.js six checks. */
+  --c1: #5b6c0b; --c2: #8e3d5b; --c3: #8b77c4; --c4: #005a91; --c5: #ad6037; --c6: #209c7c;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -59,6 +65,7 @@
     --chip-bg:    #f2f4f7;
     --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
     --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+    --c1: #6f831a; --c2: #ad5072; --c3: #9881d7; --c4: #1974b3; --c5: #c46d3e; --c6: #16ab87;
     --deep: #0a1316;
     --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
   }
@@ -76,6 +83,7 @@
   --chip-bg:    #f2f4f7;
   --shadow:     0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
   --w1: #a78bfa; --w2: #2dd4bf; --w3: #fb923c; --w4: #f472b6; --w5: #4ade80; --w6: #6f98ff;
+  --c1: #6f831a; --c2: #ad5072; --c3: #9881d7; --c4: #1974b3; --c5: #c46d3e; --c6: #16ab87;
   --deep: #0a1316;
   --tint-b: color-mix(in srgb, #ffffff 6%, var(--paper));
 }
@@ -225,8 +233,13 @@ section { padding: 5.5rem 0; }
   border: 1px solid var(--line); border-radius: 14px;
   padding: 1.7rem 1.6rem 1.8rem; box-shadow: var(--shadow);
 }
-.svc.s1 { --sc: var(--w6); } .svc.s2 { --sc: var(--w2); }
-.svc.s3 { --sc: var(--w1); } .svc.s4 { --sc: var(--w4); }
+/* Era spectrum in reading order: the grid runs w1->w6 the same direction as
+   every waveband and --spectrum. Keeps the two near-identical pairs
+   (w2/w5, w1/w6 - both under dE 30) from ever landing side by side, at
+   either breakpoint. Renumber these if the cards are ever reordered. */
+.svc.s1 { --sc: var(--c1); } .svc.s2 { --sc: var(--c2); }
+.svc.s3 { --sc: var(--c3); } .svc.s4 { --sc: var(--c4); }
+.svc.s5 { --sc: var(--c5); } .svc.s6 { --sc: var(--c6); }
 .mid-cta { margin-top: 2.6rem; }
 .svc h3 { font-size: 1.28rem; margin: 0 0 .7rem; border-top: 3px solid var(--sc, var(--accent)); padding-top: .9rem; }
 .svc p { color: var(--muted); font-size: 1.02rem; }
@@ -235,15 +248,21 @@ section { padding: 5.5rem 0; }
 /* ============ work ============ */
 .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1.3rem; }
 .case {
-  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  /* Same 4% accent wash as .svc, so both card grids share one surface
+     treatment. The bar styling deliberately differs (4px flush to the
+     card edge here, 3px inset above the heading there); the colour does not. */
+  background: color-mix(in srgb, var(--cc, var(--accent)) 4%, var(--card));
+  border: 1px solid var(--line); border-radius: 14px;
   border-top: 4px solid var(--cc, var(--line));
   padding: 1.5rem 1.5rem 1.4rem; box-shadow: var(--shadow);
   display: flex; flex-direction: column; gap: .75rem;
 }
-.case[data-client="marketbuzzr"] { --cc: var(--w6); }
-.case[data-client="heidibrun"] { --cc: var(--w1); }
-.case[data-client="basis-technology"] { --cc: var(--w5); }
-.case[data-client="basistech"] { --cc: var(--w2); }
+.case[data-client="marketbuzzr"] { --cc: var(--c1); }
+.case[data-client="heidibrun"] { --cc: var(--c2); }
+.case[data-client="basis-technology"] { --cc: var(--c3); }
+.case[data-client="basistech"] { --cc: var(--c4); }
+.case[data-client="family-health"] { --cc: var(--c5); }
+.case[data-client="social-analytics"] { --cc: var(--c6); }
 .case .sector { color: var(--accent); }
 .case .client { display: flex; align-items: center; gap: .55rem; }
 .case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
@@ -256,12 +275,12 @@ section { padding: 5.5rem 0; }
 .quotes-head .quotes-note { color: var(--muted); font-size: .95rem; margin-top: .4rem; }
 .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.6rem; margin-top: 1.6rem; }
 .quotes figure { margin: 0; padding-left: 1.1rem; border-left: 3px solid var(--qc, var(--accent)); }
-.quotes figure:nth-child(1) { --qc: var(--w4); }
-.quotes figure:nth-child(2) { --qc: var(--w2); }
-.quotes figure:nth-child(3) { --qc: var(--w3); }
-.quotes figure:nth-child(4) { --qc: var(--w5); }
-.quotes figure:nth-child(5) { --qc: var(--w1); }
-.quotes figure:nth-child(6) { --qc: var(--w6); }
+.quotes figure:nth-child(1) { --qc: var(--c1); }
+.quotes figure:nth-child(2) { --qc: var(--c2); }
+.quotes figure:nth-child(3) { --qc: var(--c3); }
+.quotes figure:nth-child(4) { --qc: var(--c4); }
+.quotes figure:nth-child(5) { --qc: var(--c5); }
+.quotes figure:nth-child(6) { --qc: var(--c6); }
 .quotes blockquote {
   margin: 0 0 .8rem;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -274,10 +293,14 @@ section { padding: 5.5rem 0; }
    render <ul class="articles">. The teaser omits the blurb. */
 .articles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; max-width: 46em; }
 .articles li { border-left: 3px solid var(--ac, var(--accent)); padding-left: 1.1rem; }
-.articles li:nth-child(1) { --ac: var(--w6); }
-.articles li:nth-child(2) { --ac: var(--w1); }
-.articles li:nth-child(3) { --ac: var(--w5); }
-.articles li:nth-child(4) { --ac: var(--w3); }
+/* Cycles through all six so essay 5+ is never left on --accent, which is the
+   same hex as --w6 and made essays 1 and 5 identical. */
+.articles li:nth-child(6n+1) { --ac: var(--c1); }
+.articles li:nth-child(6n+2) { --ac: var(--c2); }
+.articles li:nth-child(6n+3) { --ac: var(--c3); }
+.articles li:nth-child(6n+4) { --ac: var(--c4); }
+.articles li:nth-child(6n+5) { --ac: var(--c5); }
+.articles li:nth-child(6n+6) { --ac: var(--c6); }
 .articles a {
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   font-size: 1.18rem; font-weight: 600; color: var(--ink);
