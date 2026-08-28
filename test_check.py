@@ -233,6 +233,17 @@ def main():
         "Makefile",
         lambda s: s.replace("cp CNAME og.png", "cp og.png"),
     )
+    # The guard this replaced used `git diff`, which is blind to untracked
+    # files — so the one change that first needed an untracked file to deploy
+    # (website-efe.1's portrait) sailed past it.
+    mutate(
+        "a clean-source guard that cannot see untracked files is caught",
+        "Makefile",
+        lambda s: s.replace(
+            'test -z "$$(git status --porcelain -- $(SOURCE_PATHS))"',
+            "git diff --quiet -- $(SOURCE_PATHS)",
+        ),
+    )
 
     # The JSON-LD portrait: three independent ways it can point at nothing,
     # none of which changes how a single page looks or builds.

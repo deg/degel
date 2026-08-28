@@ -1,5 +1,9 @@
 .DEFAULT_GOAL := help
 
+# Everything a page is built FROM. `deploy` refuses to publish while any of it
+# is dirty, so that what is live can always be rebuilt from what is committed.
+SOURCE_PATHS := src assets build.py check.py test_build.py test_check.py
+
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | awk -F':.*## ' '{printf "  make %-12s %s\n", $$1, $$2}'
 
@@ -24,7 +28,7 @@ serve: build  ## preview locally at http://localhost:8000
 
 deploy: check  ## publish to degel.com; MSG="what changed" required
 	@test -n "$(MSG)" || { echo 'usage: make deploy MSG="what changed"'; exit 1; }
-	@git diff --quiet -- src assets build.py check.py test_build.py test_check.py || { echo "ERROR: uncommitted source changes — commit them first"; exit 1; }
+	@test -z "$$(git status --porcelain -- $(SOURCE_PATHS))" || { echo "ERROR: uncommitted or untracked source changes — commit them first"; git status --short -- $(SOURCE_PATHS); exit 1; }
 	git worktree add .deploy-tmp gh-pages
 	cp CNAME og.png robots.txt .deploy-tmp/
 	mkdir -p .deploy-tmp/assets

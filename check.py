@@ -14,11 +14,15 @@ wrong at least once:
     reporting readers back to Medium and breaking the offline property
 
 Anything requiring a browser (typography, spacing, contrast) is deliberately
-out of scope — look at the page for those. One check (check_cname_deploys) is
-about what DEPLOYS rather than about the HTML; it earns the exception because
-losing that one file silently unpoints the domain and no page would look
-wrong. These are the invariants that can
-be checked from the HTML alone, and that a human reviewer will not notice.
+out of scope — look at the page for those.
+
+Three checks are about what DEPLOYS rather than about the HTML, and they
+share one justification: a page can build, render and pass every other check
+while the thing it depends on never reaches the live site. Losing CNAME
+unpoints the domain; an uncopied JSON-LD image, or one behind a robots
+Disallow, is structured data pointing at nothing; and a clean-source guard
+blind to untracked files publishes what the repo cannot rebuild. Nothing
+would look wrong in any of the three cases.
 
 The path -> URL mapping is imported from build.py rather than re-derived here:
 two copies of it had already drifted apart, and check.py agreeing with its own
@@ -247,6 +251,30 @@ def check_cname_deploys():
     )
 
 
+def check_deploy_guard_sees_untracked():
+    """The deploy refuses to publish while the sources are dirty, so that what
+    is live can always be rebuilt from what is committed. That guard was
+    written with `git diff`, which compares TRACKED files only — a brand-new
+    file walked straight past it.
+
+    It is not merely untidy. The deploy would copy the new file to gh-pages
+    while main had no record of it; a fresh clone would then be missing it and
+    fail check_jsonld_images_deploy, which fails `make check`, which `deploy`
+    depends on — every future deploy blocked from a tree that looks clean.
+    `git status --porcelain` reports modified AND untracked, and still honours
+    .gitignore, which is exactly the wanted semantics.
+    """
+    mk = (root / "Makefile").read_text()
+    guard = [ln for ln in mk.splitlines() if "commit them first" in ln]
+    check(len(guard) == 1, "the deploy has a clean-source guard", f"found: {guard}")
+    if len(guard) == 1:
+        check(
+            "git status --porcelain" in guard[0],
+            "the deploy's clean-source guard sees untracked files",
+            f"guard: {guard[0].strip()}",
+        )
+
+
 def check_jsonld_images_deploy():
     """Every image any page's JSON-LD claims under degel.com must be a file
     that actually reaches the live site, and that Google is allowed to fetch.
@@ -343,6 +371,7 @@ def main():
             check_article_metadata(path, html)
     check_waveband_alternation(pathlib.Path("index.html").read_text())
     check_cname_deploys()
+    check_deploy_guard_sees_untracked()
     check_jsonld_images_deploy()
     check_sitemap()
     print(
