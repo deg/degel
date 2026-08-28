@@ -247,7 +247,12 @@ section { padding: 5.5rem 0; }
 .case[data-client="social-analytics"] { --cc: var(--c6); }
 .case .sector { color: var(--accent); }
 .case .client { display: flex; align-items: center; gap: .55rem; }
-.case .client img { height: 1.5rem; width: auto; border-radius: 4px; }
+/* --chip-bg is transparent in light and #f2f4f7 in both dark blocks, so this
+   one rule gives dark-artwork client marks a plate to sit on in dark mode
+   and changes nothing in light. basistech.svg and basis-technology.svg carry
+   their wordmark IN the artwork, so without it the client's name — not just
+   a logo — disappears into the card. */
+.case .client img { height: 1.5rem; width: auto; border-radius: 4px; background: var(--chip-bg); padding: 2px 4px; }
 .case .client img.wide { height: 1.15rem; }
 .case .client a { font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
 .case p { color: var(--muted); font-size: 1rem; }
