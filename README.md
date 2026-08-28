@@ -39,12 +39,14 @@ make deploy MSG="what changed"    # publish to degel.com via a temp worktree
 make check-live                   # verify degel.com serves this exact build
 ```
 
-Deploy never switches your checkout: it opens `gh-pages` in a temporary
-worktree (`.deploy-tmp/`, gitignored), copies the built artifacts
-(every page listed in `.build-outputs`, which includes the generated
-`sitemap.xml`, plus `og.png`, `robots.txt`, `assets/david.jpg`, `history/`),
-commits, pushes, and cleans up. It refuses to run with uncommitted source
-changes.
+Deploy never switches your checkout. It assembles the whole live site in
+`.deploy-stage/` (every page listed in `.build-outputs`, which includes the
+generated `sitemap.xml`, plus `CNAME`, `og.png`, `robots.txt`,
+`assets/david.jpg` and `history/`), opens `gh-pages` in a temporary worktree
+(`.deploy-tmp/`), and MIRRORS the staging tree onto it with `--delete` — so a
+page whose source is gone comes down off the live site instead of staying
+published for good. Then it commits, pushes, and cleans up. It refuses to run
+with uncommitted or untracked source changes.
 
 `gh-pages` on `github.com/deg/degel` (public) serves degel.com via GitHub
 Pages. Deploys copy the built artifacts only — never `src/` or `build.py`,
@@ -53,4 +55,7 @@ symlink into the private `degel-website-internal-assets` repo, same as
 `CLAUDE.md` and the agent config — client-sensitive notes must never be
 committed here.
 
-Old soft-launch URL `/revamp-2026/` is a redirect stub on `gh-pages` only.
+`gh-pages` carries one file with no counterpart here: its own `.gitignore`,
+which keeps the private symlinked tooling off a public branch. The deploy
+mirror excludes it deliberately. (The old `/revamp-2026/` redirect stub is
+long gone — deleted in `636c257`.)

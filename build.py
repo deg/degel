@@ -231,6 +231,45 @@ def page_url(rel):
     return "/" + str(rel)
 
 
+def prune_stale(outputs):
+    """Delete the outputs the previous build produced and this one did not.
+
+    build.py mirrors src/ into the repo root and, until this existed, never
+    took anything back. Deleting a source left its page on disk, still
+    committed and reachable. On deploy it was worse: the manifest stopped
+    listing the page so nothing copied it, but nothing removed it either, and
+    it stayed live on gh-pages for good. A retired page could never come down.
+
+    The PREVIOUS manifest is the authority on what may be deleted, so this
+    only ever unlinks a path build.py wrote itself -- never something that
+    merely looks generated. If .build-outputs is missing (a fresh clone),
+    nothing is removed: the safe way to be wrong, and check.py catches the
+    leftover instead.
+    """
+    manifest = root / ".build-outputs"
+    if not manifest.exists():
+        return []
+    previous = {
+        pathlib.Path(line.strip())
+        for line in manifest.read_text().splitlines()
+        if line.strip()
+    }
+    stale = sorted(previous - set(outputs))
+    for rel in stale:
+        p = root / rel
+        p.unlink(missing_ok=True)
+        print(f"removed {rel}: source is gone")
+        # A page whose directory now holds nothing takes the directory with
+        # it -- writing/<slug>/index.html leaves an empty writing/<slug>/
+        # otherwise, and an empty directory is not nothing: it is a URL that
+        # still resolves on some servers.
+        d = p.parent
+        while d != root and d.is_dir() and not any(d.iterdir()):
+            d.rmdir()
+            d = d.parent
+    return stale
+
+
 def write_sitemap(pages, arts):
     """Generated from the same walk that emits the pages, so it cannot drift."""
     dates = {a["url"]: a["date"] for a in arts}
@@ -344,10 +383,12 @@ def main():
 
     n = write_sitemap(outputs, articles)
     outputs.append(pathlib.Path("sitemap.xml"))
+    removed = prune_stale(outputs)
     (root / ".build-outputs").write_text("".join(f"{p}\n" for p in outputs))
     print(
         f"{len(outputs) - 1} page(s), {len(articles)} article(s); "
         f"sitemap.xml: {n} URLs; manifest -> .build-outputs"
+        + (f"; removed {len(removed)} retired output(s)" if removed else "")
     )
 
 

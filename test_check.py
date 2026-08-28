@@ -275,7 +275,7 @@ def main():
     mutate(
         "the deploy dropping the JSON-LD image is caught",
         "Makefile",
-        lambda s: s.replace("\tcp assets/david.jpg .deploy-tmp/assets/\n", ""),
+        lambda s: s.replace("\tcp assets/david.jpg $(STAGE)/assets/\n", ""),
     )
     # This is the one that nearly shipped: the file deploys, the URL resolves
     # for a human, and no indexer is permitted to fetch it.
@@ -286,6 +286,39 @@ def main():
             "Disallow: /history/", "Disallow: /history/\nDisallow: /assets/"
         ),
     )
+    # --- retiring a page (website-efe.10) ---
+    # Reverting the mirror to a plain copy is exactly the bug: it can add and
+    # overwrite, never remove, so a retired page stays published for good.
+    mutate(
+        "a deploy that copies instead of mirroring is caught",
+        "Makefile",
+        lambda s: s.replace(
+            "rsync -a --delete --exclude=/.git --exclude=/.gitignore $(STAGE)/ .deploy-tmp/",
+            "rsync -a $(STAGE)/ .deploy-tmp/",
+        ),
+    )
+    # Dropping the anchored exclude would have the mirror delete the
+    # worktree's own .git file — which is a link to the real gitdir, not a
+    # directory — partway through a deploy.
+    mutate(
+        "a mirror that could delete the worktree's .git is caught",
+        "Makefile",
+        lambda s: s.replace("--exclude=/.git ", ""),
+    )
+    # The manifest and the tree must agree. Neither case can be tested with a
+    # rebuild: build.py regenerates the manifest, which would erase the
+    # mutation and let the case pass while testing nothing.
+    mutate_no_rebuild(
+        "a built page missing from the manifest is caught",
+        ".build-outputs",
+        lambda s: s.replace("writing/index.html\n", ""),
+    )
+    mutate_no_rebuild(
+        "a manifest entry with no file on disk is caught",
+        ".build-outputs",
+        lambda s: s + "writing/never-written/index.html\n",
+    )
+
     # --- the /history/ museum staying out of search results ---
     mutate(
         "dropping Disallow: /history/ from robots.txt is caught",

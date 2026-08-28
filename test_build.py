@@ -85,6 +85,43 @@ def expect_success(label, files):
         )
 
 
+def expect_retired(label, files, remove, gone, kept, drop_manifest=False):
+    """Build, retire a source, build again — assert the output came off disk.
+
+    This is the one build.py behaviour that cannot be tested with a single
+    build, because the previous manifest IS the input: build.py will only
+    unlink a path it has a record of having written itself.
+
+    drop_manifest simulates a fresh clone (.build-outputs is gitignored, so a
+    checkout has no record of the previous build). Nothing may be deleted in
+    that case — guessing would risk unlinking a file build.py never wrote —
+    and the leftover is check.py's to catch instead.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        shutil.copy(BUILD, pathlib.Path(tmp) / "build.py")
+        make_tree(tmp, files)
+        code, out = build_in(tmp)
+        made = (pathlib.Path(tmp) / gone).exists()
+        (pathlib.Path(tmp) / remove).unlink()
+        if drop_manifest:
+            (pathlib.Path(tmp) / ".build-outputs").unlink()
+        code2, out2 = build_in(tmp)
+        still_there = (pathlib.Path(tmp) / gone).exists()
+        kept_ok = (pathlib.Path(tmp) / kept).exists()
+    want_gone = not drop_manifest
+    ok = (
+        code == 0 and code2 == 0 and made and kept_ok and (still_there is not want_gone)
+    )
+    print(f"  {'ok  ' if ok else 'FAIL'}  {label}")
+    if not ok:
+        failures.append(label)
+        print(
+            f"          built={made} kept={kept_ok} still_there={still_there} "
+            f"(wanted gone={want_gone}); exits {code}/{code2}\n"
+            f"          output: {(out + out2).strip()[:200]}"
+        )
+
+
 def main():
     print("build.py failure paths\n")
 
@@ -165,6 +202,27 @@ def main():
         "a {{var}} with no META value is refused",
         {"src/writing/x/index.src.html": MINIMAL_META + "<p>{{nosuch}}</p>\n"},
         "no META value",
+    )
+
+    # --- retiring a page (website-efe.10) ---
+    TWO = {
+        "src/index.src.html": "<p>home</p>\n",
+        "src/gone/index.src.html": "<p>retired</p>\n",
+    }
+    expect_retired(
+        "deleting a source removes its output on the next build",
+        TWO,
+        remove="src/gone/index.src.html",
+        gone="gone/index.html",
+        kept="index.html",
+    )
+    expect_retired(
+        "with no previous manifest, nothing is deleted (a fresh clone)",
+        TWO,
+        remove="src/gone/index.src.html",
+        gone="gone/index.html",
+        kept="index.html",
+        drop_manifest=True,
     )
 
     print(
