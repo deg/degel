@@ -13,6 +13,7 @@ no webfonts, no external requests.
 | `build.py` | builds the pages (resolves `{{INCLUDE:}}`, then inlines images as data URIs) |
 | `check.py` | post-build invariants — `make check`, and `make deploy` runs it first so a failing build cannot publish |
 | `test_build.py` | `build.py`'s failure paths (bad `{{META}}`, include cycles, missing partials) against throwaway trees — `make test` |
+| `make_og.py` | regenerates `og.png`, the social card. Run by hand, not by `make build` — the card changes about once a year and rebuilding it would rewrite a 40KB binary in every commit. Needs Pillow and macOS Palatino |
 | `inject_archive_noindex.py` | gives every archived page under `history/` a robots `noindex`. Idempotent; re-run after importing another era. What counts as an archived page is imported from `check.py` so the two cannot disagree |
 | `test_check.py` | mutation tests: breaks one invariant in the sources at a time and asserts `check.py` notices. A checker that only ever passes proves nothing |
 | `index.html` | built output — fully self-contained, this is what deploys |

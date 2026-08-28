@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-PY := build.py check.py inject_archive_noindex.py test_build.py test_check.py
+PY := build.py check.py inject_archive_noindex.py make_og.py test_build.py test_check.py
 
 # Where the live site is assembled before it is mirrored onto gh-pages.
 STAGE := .deploy-stage
