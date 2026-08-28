@@ -35,13 +35,12 @@ silently disabled the guard.
 No dependencies: stdlib only, matching build.py and the rest of the site.
 """
 
-import glob
 import json
 import pathlib
 import re
 import sys
 
-from build import page_url
+from build import expected_outputs, page_url
 
 root = pathlib.Path(__file__).resolve().parent
 failures = []
@@ -71,8 +70,17 @@ def check(ok, label, detail=""):
 
 
 def pages():
-    """Every built page, home first."""
-    return ["index.html"] + sorted(glob.glob("writing/**/index.html", recursive=True))
+    """Every built page, home first.
+
+    Derived from build.py's own source walk, not from a glob of this file's
+    own devising. The glob it replaced was `index.html` plus `writing/**`, so
+    a page at any other path was invisible to every per-page check below AND
+    broke check_sitemap, which compared the generated sitemap against it
+    (website-efe.16). The service pages would all have landed outside
+    `writing/`. Same lesson as page_url: one definition, imported.
+    """
+    built = [str(p) for p in expected_outputs()]
+    return sorted(built, key=lambda p: (p != "index.html", p))
 
 
 def archive_pages():
@@ -505,11 +513,36 @@ def check_deploy_retires_pages():
     }
     missing = sorted(p for p in listed if not (root / p).exists())
     check(not missing, "every manifest entry exists on disk", str(missing))
-    orphans = sorted(set(pages()) - listed)
+
+    # And the reverse, which the --delete mirror made dangerous: the manifest
+    # is the deploy's whole idea of what the site contains. A page build.py
+    # produces but the manifest omits is no longer merely uncopied -- it is
+    # absent from the staging tree, so the mirror DELETES it from the live
+    # site.
+    unlisted = sorted({str(p) for p in expected_outputs()} - listed)
     check(
-        not orphans,
-        "no built page is missing from the manifest",
-        f"orphaned outputs: {orphans}",
+        not unlisted,
+        "the manifest lists every page build.py produces",
+        f"a deploy would take these down: {unlisted}",
+    )
+    # pages() is now derived from src/, so comparing it to the manifest can
+    # only catch a stale MANIFEST -- never a stale FILE. Stale files need a
+    # look at the disk: any .html that build.py would not produce, outside
+    # the hand-written archive, is something a previous build left behind.
+    should_exist = {str(p) for p in expected_outputs()}
+    # src/ holds the SOURCES, whose names end .src.html and so match *.html;
+    # history/ is the hand-written archive, which build.py never produced;
+    # .deploy-* are the transient staging tree and worktree.
+    strays = sorted(
+        rel
+        for rel in (str(f.relative_to(root)) for f in root.rglob("*.html"))
+        if not rel.startswith(("src/", "history/", ".deploy"))
+        and rel not in should_exist
+    )
+    check(
+        not strays,
+        "no output on disk that build.py would not produce",
+        f"stray pages: {strays}",
     )
 
 

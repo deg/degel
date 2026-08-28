@@ -215,6 +215,37 @@ def article_jsonld(arts):
     return ",\n".join(rows)
 
 
+def page_sources():
+    """Every source that becomes a page. A basename starting `_` is a shared
+    partial and is never emitted."""
+    return [
+        s
+        for s in sorted(src_root.rglob("*.src.html"))
+        if not s.relative_to(src_root).name.startswith("_")
+    ]
+
+
+def output_path(rel):
+    """Where a source is written, given its path RELATIVE TO src/. The output
+    is the same path minus the `.src`, relative to the repo root -- which is
+    the mirror rule, stated once."""
+    rel = pathlib.Path(rel)
+    return rel.with_name(rel.name[: -len(".src.html")] + ".html")
+
+
+def expected_outputs():
+    """Every page path this tree SHOULD produce, without building anything.
+
+    check.py imports this for the same reason it imports page_url: it had its
+    own, narrower idea of what counts as a page -- `index.html` plus a glob of
+    `writing/**` -- so a page anywhere else was invisible to every per-page
+    check and broke check_sitemap outright. That is not hypothetical; it is
+    website-efe.16, and it would have blocked the service pages. One
+    definition, imported, not a second one that agrees until it doesn't.
+    """
+    return [output_path(s.relative_to(src_root)) for s in page_sources()]
+
+
 def page_url(rel):
     """The URL a built page is served at, given its path relative to the root.
 
@@ -304,11 +335,7 @@ def main():
     if not src_root.is_dir():
         sys.exit("no src/ directory — run from the repo root")
 
-    sources = [
-        s
-        for s in sorted(src_root.rglob("*.src.html"))
-        if not s.relative_to(src_root).name.startswith("_")
-    ]
+    sources = page_sources()
     if not sources:
         sys.exit("no pages found under src/")
 
@@ -375,7 +402,7 @@ def main():
         if left:
             sys.exit(f"{rel}: unresolved directive(s): {', '.join(left)[:200]}")
 
-        dest = root / rel.with_name(rel.name[: -len(".src.html")] + ".html")
+        dest = root / output_path(rel)
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(t)
         outputs.append(dest.relative_to(root))

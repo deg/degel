@@ -100,6 +100,26 @@ def mutate_new_page(label, rel, body, expect_caught=True):
         failures.append(label)
 
 
+PLAIN = """<!DOCTYPE html>
+<html lang="en">
+<head>
+{{INCLUDE:_meta.html}}
+<title>Probe</title>
+<meta name="description" content="A probe page.">
+<meta property="og:url" content="https://degel.com/service-probe/">
+<link rel="canonical" href="https://degel.com/service-probe/">
+{{INCLUDE:_style.html}}
+</head>
+<body>
+{{INCLUDE:_nav.html}}
+<main id="content"><section><div class="wrap"><p>Body.</p></div></section></main>
+{{INCLUDE:_contact.html}}
+{{INCLUDE:_footer.html}}
+</body>
+</html>
+"""
+
+
 ARTICLE = """{{META
 title: Probe
 date: 2026-07-01
@@ -309,7 +329,7 @@ def main():
     # rebuild: build.py regenerates the manifest, which would erase the
     # mutation and let the case pass while testing nothing.
     mutate_no_rebuild(
-        "a built page missing from the manifest is caught",
+        "a manifest that has lost a page is caught",
         ".build-outputs",
         lambda s: s.replace("writing/index.html\n", ""),
     )
@@ -377,6 +397,25 @@ def main():
             '"datePublished": "{{date}}"',
             '"datePublished": "{{date}}",\n "image": "https://degel.com/assets/nobody.jpg"',
         ),
+    )
+
+    # --- a page that is not the home page and not an article (efe.16) ---
+    # check.py's page list used to be `index.html` plus a glob of writing/**,
+    # so a page anywhere else was checked by nothing and broke check_sitemap.
+    # The service pages will all live outside writing/.
+    mutate_new_page(
+        "a page outside writing/ is checked like any other",
+        "src/service-probe/index.src.html",
+        PLAIN.replace(
+            'href="https://degel.com/service-probe/"',
+            'href="https://degel.com/wrong/"',
+        ),
+    )
+    mutate_new_page(
+        "a sound page outside writing/ passes (must not false-alarm)",
+        "src/service-probe/index.src.html",
+        PLAIN,
+        expect_caught=False,
     )
 
     # --- articles ---
