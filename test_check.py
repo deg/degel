@@ -234,6 +234,53 @@ def main():
         lambda s: s.replace("cp CNAME og.png", "cp og.png"),
     )
 
+    # The JSON-LD portrait: three independent ways it can point at nothing,
+    # none of which changes how a single page looks or builds.
+    mutate(
+        "JSON-LD image naming a file that is not in the repo is caught",
+        "src/index.src.html",
+        lambda s: s.replace(
+            '"image": "https://degel.com/assets/david.jpg"',
+            '"image": "https://degel.com/assets/nobody.jpg"',
+        ),
+    )
+    mutate(
+        "the deploy dropping the JSON-LD image is caught",
+        "Makefile",
+        lambda s: s.replace("\tcp assets/david.jpg .deploy-tmp/assets/\n", ""),
+    )
+    # This is the one that nearly shipped: the file deploys, the URL resolves
+    # for a human, and no indexer is permitted to fetch it.
+    mutate(
+        "a JSON-LD image behind a robots.txt Disallow is caught",
+        "robots.txt",
+        lambda s: s.replace(
+            "Disallow: /history/", "Disallow: /history/\nDisallow: /assets/"
+        ),
+    )
+    # A different deployed file, copied by a different recipe line, must still
+    # pass — the check must not be keyed to one hard-coded path.
+    mutate(
+        "a JSON-LD image at the repo root (must pass)",
+        "src/index.src.html",
+        lambda s: s.replace(
+            '"image": "https://degel.com/assets/david.jpg"',
+            '"image": "https://degel.com/og.png"',
+        ),
+        expect_caught=False,
+    )
+    # Not just the home page. The entities are cross-linked by @id so that
+    # later pages can reference them, which means later pages will carry
+    # JSON-LD of their own.
+    mutate_new_page(
+        "a broken JSON-LD image on a page other than the home page is caught",
+        "src/writing/probe/index.src.html",
+        (ARTICLE % {"extra": ""}).replace(
+            '"datePublished": "{{date}}"',
+            '"datePublished": "{{date}}",\n "image": "https://degel.com/assets/nobody.jpg"',
+        ),
+    )
+
     # --- articles ---
     mutate_new_page(
         "nested article still gets its metadata checked",

@@ -27,6 +27,8 @@ deploy: check  ## publish to degel.com; MSG="what changed" required
 	@git diff --quiet -- src assets build.py check.py test_build.py test_check.py || { echo "ERROR: uncommitted source changes — commit them first"; exit 1; }
 	git worktree add .deploy-tmp gh-pages
 	cp CNAME og.png robots.txt .deploy-tmp/
+	mkdir -p .deploy-tmp/assets
+	cp assets/david.jpg .deploy-tmp/assets/
 	rsync -a --files-from=.build-outputs . .deploy-tmp/
 	rsync -a --delete history/ .deploy-tmp/history/
 	cd .deploy-tmp && git add -A && \

@@ -13,17 +13,43 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "David Goldfarb",
-  "jobTitle": ["Fractional CTO", "Software Consultant"],
-  "worksFor": {"@type": "Organization", "name": "Degel Software Ltd.", "foundingDate": "1988"},
-  "email": "mailto:deg@degel.com",
-  "telephone": "+972-54-723-0120",
-  "address": {"@type": "PostalAddress", "addressLocality": "Beit Shemesh", "addressCountry": "IL"},
-  "alumniOf": {"@type": "CollegeOrUniversity", "name": "Massachusetts Institute of Technology"},
-  "url": "https://degel.com/",
-  "sameAs": ["https://www.linkedin.com/in/davidegoldfarb/", "https://github.com/deg", "https://medium.com/@DavidEGoldfarb"],
-  "knowsAbout": ["Fractional CTO", "Technical leadership", "Rapid prototyping", "Technical due diligence", "Patent strategy", "LLM engineering", "AI-assisted software development"]
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://degel.com/#david",
+      "name": "David Goldfarb",
+      "jobTitle": ["Fractional CTO", "Software Consultant"],
+      "worksFor": {"@id": "https://degel.com/#degel"},
+      "image": "https://degel.com/assets/david.jpg",
+      "email": "mailto:deg@degel.com",
+      "telephone": "+972-54-723-0120",
+      "address": {"@type": "PostalAddress", "addressLocality": "Beit Shemesh", "addressCountry": "IL"},
+      "alumniOf": {"@type": "CollegeOrUniversity", "name": "Massachusetts Institute of Technology"},
+      "url": "https://degel.com/",
+      "sameAs": ["https://www.linkedin.com/in/davidegoldfarb/", "https://github.com/deg", "https://medium.com/@DavidEGoldfarb"],
+      "knowsAbout": ["Fractional CTO", "Technical leadership", "Rapid prototyping", "Technical due diligence", "Patent strategy", "LLM engineering", "AI-assisted software development"]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://degel.com/#degel",
+      "name": "Degel Software Ltd.",
+      "founder": {"@id": "https://degel.com/#david"},
+      "foundingDate": "1988",
+      "url": "https://degel.com/",
+      "email": "mailto:deg@degel.com",
+      "telephone": "+972-54-723-0120",
+      "address": {"@type": "PostalAddress", "addressLocality": "Beit Shemesh", "addressCountry": "IL"},
+      "areaServed": "Worldwide",
+      "serviceType": [
+        "Fractional CTO",
+        "AI prototyping",
+        "AI development workflow coaching",
+        "Technical due diligence",
+        "Technology research and evaluation",
+        "Software patent technical consulting"
+      ]
+    }
+  ]
 }
 </script>
 </head>

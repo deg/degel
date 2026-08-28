@@ -32,6 +32,7 @@ No dependencies: stdlib only, matching build.py and the rest of the site.
 """
 
 import glob
+import json
 import pathlib
 import re
 import sys
@@ -246,6 +247,73 @@ def check_cname_deploys():
     )
 
 
+def check_jsonld_images_deploy():
+    """Every image any page's JSON-LD claims under degel.com must be a file
+    that actually reaches the live site, and that Google is allowed to fetch.
+    Three ways this fails silently, and the second one nearly shipped:
+
+      * the file is not in the repo at all;
+      * it is in the repo but only the deploy recipe can put it on gh-pages —
+        assets/ is not in .build-outputs, so an uncopied file 404s while every
+        page still builds and every other check still passes;
+      * it deploys fine but robots.txt forbids crawling its path, so the
+        structured data points at something no indexer will ever read.
+
+    The portrait was very nearly declared at its /history/ URL, which deploys
+    but is Disallowed — valid JSON, valid HTML, and worth nothing.
+
+    Every page, not just the home page: the entities are cross-linked by @id
+    precisely so that later pages can reference and extend them, and a page
+    added tomorrow must not escape the check by not existing today.
+    """
+    blocks = []
+    for path in pages():
+        blocks += re.findall(
+            r'<script type="application/ld\+json">(.*?)</script>',
+            pathlib.Path(path).read_text(),
+            re.S,
+        )
+    urls = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k == "image" and isinstance(v, str):
+                    urls.append(v)
+                else:
+                    walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+
+    for b in blocks:
+        walk(json.loads(b))
+
+    mk = (root / "Makefile").read_text()
+    copied = [ln for ln in mk.splitlines() if ln.strip().startswith("cp ")]
+    disallowed = re.findall(
+        r"^Disallow:\s*(\S+)", (root / "robots.txt").read_text(), re.M
+    )
+
+    # Deduped: a shared partial declaring one would otherwise report it seven
+    # times and bury everything else.
+    for url in dict.fromkeys(urls):
+        if not url.startswith("https://degel.com/"):
+            continue
+        rel = url[len("https://degel.com/") :]
+        check((root / rel).exists(), f"JSON-LD image exists in the repo: {rel}")
+        check(
+            any(rel in ln for ln in copied),
+            f"the deploy copies the JSON-LD image: {rel}",
+            f"cp lines: {copied}",
+        )
+        check(
+            not any(("/" + rel).startswith(d) for d in disallowed),
+            f"robots.txt lets crawlers fetch the JSON-LD image: {rel}",
+            f"Disallow: {disallowed}",
+        )
+
+
 def check_sitemap():
     """The sitemap is generated, so this guards the generator: every listed
     URL must exist, and every built page must be listed."""
@@ -275,6 +343,7 @@ def main():
             check_article_metadata(path, html)
     check_waveband_alternation(pathlib.Path("index.html").read_text())
     check_cname_deploys()
+    check_jsonld_images_deploy()
     check_sitemap()
     print(
         f"\n{'ALL CHECKS PASS' if not failures else str(len(failures)) + ' FAILURE(S)'}"
