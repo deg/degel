@@ -1,8 +1,12 @@
 .DEFAULT_GOAL := help
 
+PY := build.py check.py inject_archive_noindex.py test_build.py test_check.py
+
 # Everything a page is built FROM. `deploy` refuses to publish while any of it
 # is dirty, so that what is live can always be rebuilt from what is committed.
-SOURCE_PATHS := src assets build.py check.py test_build.py test_check.py
+# `history/` is here because the deploy rsyncs it wholesale: an uncommitted
+# edit to an archived page goes live with nothing recording what it was.
+SOURCE_PATHS := src assets history $(PY)
 
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | awk -F':.*## ' '{printf "  make %-12s %s\n", $$1, $$2}'
@@ -12,8 +16,6 @@ build:  ## regenerate the site's pages from src/
 
 check: build  ## verify the built pages (links, canonicals, self-containment)
 	python3 check.py
-
-PY := build.py check.py test_build.py test_check.py
 
 lint:  ## ruff over the build and check scripts
 	ruff check $(PY)

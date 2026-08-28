@@ -64,6 +64,23 @@ def mutate(label, rel, transform, expect_caught=True):
         failures.append(label)
 
 
+def mutate_no_rebuild(label, rel, transform, expect_caught=True):
+    """As mutate, but does NOT rebuild. For a generated artifact -- sitemap.xml
+    -- where rebuilding would overwrite the mutation and the case would pass
+    while testing nothing at all."""
+    path = root / rel
+    original = path.read_text()
+    try:
+        path.write_text(transform(original))
+        n = check_failures()
+    finally:
+        path.write_text(original)
+    ok = (n > 0) if expect_caught else (n == 0)
+    print(f"  {'ok  ' if ok else 'FAIL'}  {label} ({'caught' if n else 'passed'}, {n})")
+    if not ok:
+        failures.append(label)
+
+
 def mutate_new_page(label, rel, body, expect_caught=True):
     """Add a whole new source page, rebuild, assert, then remove it."""
     src = root / rel
@@ -269,6 +286,43 @@ def main():
             "Disallow: /history/", "Disallow: /history/\nDisallow: /assets/"
         ),
     )
+    # --- the /history/ museum staying out of search results ---
+    mutate(
+        "dropping Disallow: /history/ from robots.txt is caught",
+        "robots.txt",
+        lambda s: s.replace("Disallow: /history/\n", ""),
+    )
+    mutate(
+        "an archived page losing its noindex is caught",
+        "history/index.html",
+        lambda s: s.replace('<meta name="robots" content="noindex, nofollow">', ""),
+    )
+    mutate_no_rebuild(
+        "the sitemap advertising an archive URL is caught",
+        "sitemap.xml",
+        lambda s: s.replace(
+            "</urlset>", "<url><loc>https://degel.com/history/</loc></url></urlset>"
+        ),
+    )
+    mutate(
+        "a crawlable <a> to the archive is caught",
+        "src/_footer.html",
+        lambda s: s.replace("</footer>", '<a href="/history/">museum</a></footer>'),
+    )
+    # The control that matters. The museum's door is a JS assignment that reads
+    # character-for-character like an href attribute; if the check ever starts
+    # flagging it, the honest fix is a plain <a>, which is the one thing this
+    # whole arrangement exists to prevent.
+    mutate(
+        "the JS-attached door is NOT read as a crawlable link",
+        "src/_footer.html",
+        lambda s: s.replace(
+            "</footer>",
+            "</footer>\n<script>var x = function(){ location.href = '/history/'; };</script>",
+        ),
+        expect_caught=False,
+    )
+
     # A different deployed file, copied by a different recipe line, must still
     # pass — the check must not be keyed to one hard-coded path.
     mutate(

@@ -75,6 +75,25 @@ def pages():
     return ["index.html"] + sorted(glob.glob("writing/**/index.html", recursive=True))
 
 
+def archive_pages():
+    """Every page in the retired-site archive, whatever it calls itself.
+
+    The 2001-2015 site used .htm and the 2016-2026 one .html. Missing an
+    extension here is not hypothetical: the original noindex injection matched
+    .html only, so 32 .htm originals went ten days with no tag at all while
+    everything looked done.
+
+    inject_archive_noindex.py imports this rather than re-deriving it, on the
+    same principle as page_url: the checker and the thing that satisfies it
+    must not be able to disagree about what they are talking about.
+    """
+    return sorted(
+        p
+        for p in (root / "history").rglob("*")
+        if p.is_file() and p.suffix.lower() in (".html", ".htm", ".shtml")
+    )
+
+
 def is_article(path):
     """A page under writing/ that is not the index. Depth-independent: an
     earlier version keyed on the number of slashes and silently skipped every
@@ -342,6 +361,92 @@ def check_jsonld_images_deploy():
         )
 
 
+def check_archive_stays_out_of_search():
+    """The /history/ museum must not pollute searches for the current site.
+
+    Not a secrecy requirement -- the archive is public, and so is the repo it
+    lives in. The requirement is only that stale 2001-2025 pages never surface
+    as results for Degel queries. Four separate things hold that up, and each
+    has already been proposed for removal at least once, so each is asserted
+    here. The full argument, including the options rejected and why, is in
+    docs/archive-indexing.md.
+
+    1. robots.txt Disallows /history/. This is the one that cannot go. Seven
+       PDFs, four .txt files and the .zip/.sis/.asp era artifacts cannot carry
+       a meta tag, and GitHub Pages cannot send X-Robots-Tag -- so not being
+       fetched is the only thing keeping their CONTENT out of a results page.
+       Drop the line and a 2017 resume becomes indexable, in full.
+    2. Every archived page carries a robots noindex. Dormant while (1) stands,
+       since a crawler that may not fetch a page can never read a tag inside
+       it. It is contingency armour for the day (1) regresses.
+    3. The sitemap never advertises an archive URL.
+    4. No deployed page links to /history/ with a crawlable href. This is the
+       layer doing the actual work: the museum's door is attached by JS, so a
+       crawler is never handed the URL in the first place. A plain <a> added
+       here would undo more than the other three protect.
+    """
+    disallowed = re.findall(
+        r"^Disallow:\s*(\S+)", (root / "robots.txt").read_text(), re.M
+    )
+    check(
+        any(d.rstrip("/") == "/history" for d in disallowed),
+        "robots.txt still Disallows /history/",
+        f"Disallow lines: {disallowed}",
+    )
+
+    archive = archive_pages()
+    missing = [
+        str(p.relative_to(root))
+        for p in archive
+        if not re.search(rb"""name\s*=\s*["']robots["']""", p.read_bytes(), re.I)
+    ]
+    check(
+        archive and not missing,
+        f"all {len(archive)} archived pages carry a robots meta",
+        f"missing: {missing}",
+    )
+
+    xml = (root / "sitemap.xml").read_text()
+    check(
+        "/history" not in xml,
+        "the sitemap does not advertise the archive",
+    )
+
+    # Scoped to real elements, and this matters more than it looks. The
+    # museum's door is `window.location.href = '/history/'` inside a <script>,
+    # which a loose /href\s*=/ scan flags as a link -- flagging the one
+    # mechanism that makes the archive undiscoverable. Reading attributes off
+    # the tags themselves cannot reach into script CONTENT, so the JS door is
+    # invisible here and a real <a> is not. Do not "fix" this into a plain
+    # text search.
+    #
+    # Same-origin only: an outbound link to some other site's /history/ path
+    # is a link the reader may follow, not a door into ours.
+    linked = []
+    for path in pages():
+        html = pathlib.Path(path).read_text()
+        for tag in ("a", "link", "area"):
+            for attrs, _ in elements(html, tag):
+                m = re.search(r"""href\s*=\s*["']([^"']+)["']""", attrs)
+                if not m:
+                    continue
+                bare = m.group(1).split("#", 1)[0]
+                for prefix in (
+                    "/history",
+                    "history",
+                    "./history",
+                    "https://degel.com/history",
+                ):
+                    if bare.startswith(prefix):
+                        linked.append(f"{path}: {m.group(1)}")
+                        break
+    check(
+        not linked,
+        "no deployed page links to the archive with a crawlable href",
+        str(linked[:3]),
+    )
+
+
 def check_sitemap():
     """The sitemap is generated, so this guards the generator: every listed
     URL must exist, and every built page must be listed."""
@@ -373,6 +478,7 @@ def main():
     check_cname_deploys()
     check_deploy_guard_sees_untracked()
     check_jsonld_images_deploy()
+    check_archive_stays_out_of_search()
     check_sitemap()
     print(
         f"\n{'ALL CHECKS PASS' if not failures else str(len(failures)) + ' FAILURE(S)'}"
