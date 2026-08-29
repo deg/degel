@@ -122,6 +122,27 @@ def archive_pages():
     )
 
 
+def makefile():
+    """The deploy recipe's text.
+
+    Four checks below read it, and this repo has twice been bitten by a second
+    copy of a rule quietly disagreeing with the first. One reader, one place
+    to look when the recipe is reworded.
+    """
+    return (root / "Makefile").read_text()
+
+
+def deploy_copies():
+    """The recipe's `cp` lines -- everything that reaches gh-pages by hand
+    rather than through the build manifest."""
+    return [ln for ln in makefile().splitlines() if ln.strip().startswith("cp ")]
+
+
+def robots_disallows():
+    """Every path robots.txt tells a compliant crawler not to fetch."""
+    return re.findall(r"^Disallow:\s*(\S+)", (root / "robots.txt").read_text(), re.M)
+
+
 def is_article(path):
     """A page under writing/ that is not the index. Depth-independent: an
     earlier version keyed on the number of slashes and silently skipped every
@@ -288,8 +309,7 @@ def check_cname_deploys():
     on gh-pages — and for a long time the recipe did not, which nothing would
     have caught: the site would still build, still pass every other check, and
     simply stop answering on the custom domain."""
-    mk = (root / "Makefile").read_text()
-    copied = [ln for ln in mk.splitlines() if ln.strip().startswith("cp ")]
+    copied = deploy_copies()
     check(
         (root / "CNAME").exists(),
         "CNAME exists in the repo",
@@ -314,8 +334,7 @@ def check_deploy_guard_sees_untracked():
     `git status --porcelain` reports modified AND untracked, and still honours
     .gitignore, which is exactly the wanted semantics.
     """
-    mk = (root / "Makefile").read_text()
-    guard = [ln for ln in mk.splitlines() if "commit them first" in ln]
+    guard = [ln for ln in makefile().splitlines() if "commit them first" in ln]
     check(len(guard) == 1, "the deploy has a clean-source guard", f"found: {guard}")
     if len(guard) == 1:
         check(
@@ -367,11 +386,8 @@ def check_jsonld_images_deploy():
     for b in blocks:
         walk(json.loads(b))
 
-    mk = (root / "Makefile").read_text()
-    copied = [ln for ln in mk.splitlines() if ln.strip().startswith("cp ")]
-    disallowed = re.findall(
-        r"^Disallow:\s*(\S+)", (root / "robots.txt").read_text(), re.M
-    )
+    copied = deploy_copies()
+    disallowed = robots_disallows()
 
     # Deduped: a shared partial declaring one would otherwise report it seven
     # times and bury everything else.
@@ -416,9 +432,7 @@ def check_archive_stays_out_of_search():
        crawler is never handed the URL in the first place. A plain <a> added
        here would undo more than the other three protect.
     """
-    disallowed = re.findall(
-        r"^Disallow:\s*(\S+)", (root / "robots.txt").read_text(), re.M
-    )
+    disallowed = robots_disallows()
     check(
         any(d.rstrip("/") == "/history" for d in disallowed),
         "robots.txt still Disallows /history/",
@@ -500,10 +514,9 @@ def check_deploy_retires_pages():
     throwaway tree and looking. Asserting it here by grepping build.py for a
     function name would test the spelling, not the behaviour.
     """
-    mk = (root / "Makefile").read_text()
     mirror = [
         ln
-        for ln in mk.splitlines()
+        for ln in makefile().splitlines()
         if "rsync" in ln and "--delete" in ln and ".deploy-tmp" in ln
     ]
     check(
