@@ -39,11 +39,31 @@ import json
 import pathlib
 import re
 import sys
+import urllib.parse
 
 from build import expected_outputs, page_url
 
 root = pathlib.Path(__file__).resolve().parent
 failures = []
+
+# Attribute matching is quote-agnostic. It was not: the pattern required
+# double quotes, so <script src='https://...'> -- exactly how Cloudflare hands
+# you its snippet -- was invisible to this check entirely. The allowlist below
+# would have been theatre without this fix.
+SRC_RE = re.compile(r"""src\s*=\s*(["'])(https?://[^"']+)\1""")
+
+# The ONE third party this site is allowed to talk to (website-efe.3).
+#
+# Round 1's rule was no framework, no CDN, no webfonts, no external requests.
+# Analytics breaks the last of those, deliberately and for a stated reason:
+# GitHub Pages exposes no logs and no headers, so there is no first-party way
+# to know anything about visitors, and Search Console only ever shows traffic
+# that came from Google search -- never LinkedIn, which is the busiest way in.
+#
+# Kept to a single host on purpose. This is an exception, not a relaxation:
+# every other external load still fails the build, and test_check.py proves it
+# with a mutation that adds a different host.
+ALLOWED_HOSTS = {"static.cloudflareinsights.com"}
 
 # <link> relations that describe the page rather than load anything.
 NON_FETCHING_REL = {
@@ -120,18 +140,21 @@ def check_self_contained(path, html):
     alone, so an external stylesheet — a webfont, the case this docstring
     names — went straight through.
     """
-    offenders = re.findall(r'src="(https?://[^"]+)"', html)
+    offenders = [m.group(2) for m in re.finditer(SRC_RE, html)]
     for tag in re.findall(r"<link\b[^>]*>", html):
-        href = re.search(r'href="(https?://[^"]+)"', tag)
-        rel = re.search(r'rel="([^"]*)"', tag)
+        href = re.search(SRC_RE.pattern.replace("src", "href"), tag)
+        rel = re.search(r'rel=["\']([^"\']*)["\']', tag)
         # A denylist, not an allowlist: a rel that merely DESCRIBES the page
         # fetches nothing, and everything else is assumed to. A rel invented
         # tomorrow then shows up as a loud false positive rather than a
         # silent miss, which is the right way round for this property.
         if href and not (rel and rel.group(1).lower() in NON_FETCHING_REL):
-            offenders.append(href.group(1))
+            offenders.append(href.group(2))
     offenders += re.findall(r"url\(\s*['\"]?(https?://[^)'\"]+)", html)
     offenders += re.findall(r"@import\s+['\"]?(https?://[^;'\"]+)", html)
+    offenders = [
+        u for u in offenders if urllib.parse.urlparse(u).hostname not in ALLOWED_HOSTS
+    ]
     check(not offenders, f"{path}: no external resource loads", str(offenders[:2]))
     check("medium.com/_/stat" not in html, f"{path}: no tracking pixel")
 

@@ -181,6 +181,38 @@ def main():
     ]:
         mutate(label, "src/_meta.html", lambda s, i=inject: s + i)
 
+    # --- the one allowed third party (website-efe.3) ---
+    # The analytics beacon is an exception, not a relaxation. A DIFFERENT
+    # external host must still fail, or the allowlist is just a hole.
+    mutate(
+        "a second third-party host is still caught",
+        "src/_meta.html",
+        lambda s: s + '<script src="https://cdn.other.example/x.js"></script>\n',
+    )
+    # Single quotes are how Cloudflare hands you the snippet, and how this
+    # check used to be blind: the pattern required double quotes, so an
+    # external script written this way was invisible.
+    mutate(
+        "a single-quoted external script is caught",
+        "src/_meta.html",
+        lambda s: s + "<script src='https://cdn.other.example/x.js'></script>\n",
+    )
+    # And the allowed host must NOT be flagged, or the site cannot build.
+    mutate(
+        "the allowed analytics host is not flagged (must pass)",
+        "src/_meta.html",
+        lambda s: s
+        + '<script src="https://static.cloudflareinsights.com/beacon.min.js"></script>\n',
+        expect_caught=False,
+    )
+    # A lookalike hostname must not inherit the exemption.
+    mutate(
+        "a host merely ending in the allowed one is caught",
+        "src/_meta.html",
+        lambda s: s
+        + '<script src="https://evil-static.cloudflareinsights.com.attacker.test/x.js"></script>\n',
+    )
+
     # A <link> whose rel merely describes the page fetches nothing. Flagging
     # those would make the check unusable — every page carries a canonical.
     # (Injecting a second canonical would trip check_canonical instead, which
