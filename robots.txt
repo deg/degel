@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /history/
+Disallow: /resume.pdf
 Sitemap: https://degel.com/sitemap.xml

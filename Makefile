@@ -53,7 +53,7 @@ deploy: check  ## publish to degel.com; MSG="what changed" required
 	rm -rf $(STAGE)
 	mkdir -p $(STAGE)/assets
 	rsync -a --files-from=.build-outputs . $(STAGE)/
-	cp CNAME og.png robots.txt $(STAGE)/
+	cp CNAME og.png robots.txt resume.pdf $(STAGE)/
 	cp assets/david.jpg $(STAGE)/assets/
 	rsync -a history/ $(STAGE)/history/
 	git worktree remove --force .deploy-tmp 2>/dev/null || true
