@@ -569,10 +569,12 @@ def check_deploy_retires_pages():
     # src/ holds the SOURCES, whose names end .src.html and so match *.html;
     # history/ is the hand-written archive, which build.py never produced;
     # .deploy-* are the transient staging tree and worktree.
+    # tmp/ is hand-written too: pages parked on the site by unguessable URL,
+    # never linked, never built. Excluded for the same reason as history/.
     strays = sorted(
         rel
         for rel in (str(f.relative_to(root)) for f in root.rglob("*.html"))
-        if not rel.startswith(("src/", "history/", ".deploy"))
+        if not rel.startswith(("src/", "history/", "tmp/", ".deploy"))
         and rel not in should_exist
     )
     check(

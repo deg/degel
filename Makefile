@@ -9,7 +9,11 @@ STAGE := .deploy-stage
 # is dirty, so that what is live can always be rebuilt from what is committed.
 # `history/` is here because the deploy rsyncs it wholesale: an uncommitted
 # edit to an archived page goes live with nothing recording what it was.
-SOURCE_PATHS := src assets history $(PY)
+# `tmp/` is rsynced wholesale for the same reason. It holds hand-written pages
+# that build.py does not produce -- short-lived things shared by unguessable
+# URL, noindexed, and Disallowed in robots.txt. Delete the directory and the
+# --delete mirror takes them off the live site.
+SOURCE_PATHS := src assets history tmp $(PY)
 
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | awk -F':.*## ' '{printf "  make %-12s %s\n", $$1, $$2}'
@@ -56,6 +60,7 @@ deploy: check  ## publish to degel.com; MSG="what changed" required
 	cp CNAME og.png robots.txt resume.pdf $(STAGE)/
 	cp assets/david.jpg $(STAGE)/assets/
 	rsync -a history/ $(STAGE)/history/
+	rsync -a tmp/ $(STAGE)/tmp/
 	git worktree remove --force .deploy-tmp 2>/dev/null || true
 	rm -rf .deploy-tmp
 	git worktree prune
