@@ -13,7 +13,10 @@ STAGE := .deploy-stage
 # that build.py does not produce -- short-lived things shared by unguessable
 # URL, noindexed, and Disallowed in robots.txt. Delete the directory and the
 # --delete mirror takes them off the live site.
-SOURCE_PATHS := src assets history tmp $(PY)
+# The hand-made deployables are here too: og.png, resume.pdf and the icons
+# reach the live site by cp, so a regenerated-but-uncommitted one would
+# publish with nothing in git recording what went live.
+SOURCE_PATHS := src assets history tmp og.png resume.pdf favicon.ico apple-touch-icon.png $(PY)
 
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | awk -F':.*## ' '{printf "  make %-12s %s\n", $$1, $$2}'

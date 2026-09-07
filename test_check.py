@@ -81,6 +81,22 @@ def mutate_no_rebuild(label, rel, transform, expect_caught=True):
         failures.append(label)
 
 
+def mutate_bytes_no_rebuild(label, rel, transform, expect_caught=True):
+    """As mutate_no_rebuild, for a binary artifact -- the ICO -- whose
+    mutation is a byte edit rather than a text one."""
+    path = root / rel
+    original = path.read_bytes()
+    try:
+        path.write_bytes(transform(original))
+        n = check_failures()
+    finally:
+        path.write_bytes(original)
+    ok = (n > 0) if expect_caught else (n == 0)
+    print(f"  {'ok  ' if ok else 'FAIL'}  {label} ({'caught' if n else 'passed'}, {n})")
+    if not ok:
+        failures.append(label)
+
+
 def mutate_new_page(label, rel, body, expect_caught=True):
     """Add a whole new source page, rebuild, assert, then remove it."""
     src = root / rel
@@ -321,6 +337,15 @@ def main():
         "a look-alike name does not stand in for favicon.ico",
         "Makefile",
         lambda s: s.replace(" favicon.ico ", " not-favicon.ico "),
+    )
+    # The regression this guards shipped on the first run: Pillow silently
+    # drops any requested ICO size larger than its base image, so the script
+    # wrote a one-frame ICO and reported success. Setting the directory's
+    # image count to 1 reproduces exactly that file shape.
+    mutate_bytes_no_rebuild(
+        "a one-frame favicon.ico is caught",
+        "favicon.ico",
+        lambda b: b[:4] + (1).to_bytes(2, "little") + b[6:],
     )
     # Each of the three declarations in the head has a client that needs it.
     mutate(

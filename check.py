@@ -316,7 +316,7 @@ def check_cname_deploys():
         "CNAME exists in the repo",
     )
     check(
-        any("CNAME" in ln for ln in copied),
+        any("CNAME" in ln.split() for ln in copied),
         "the deploy copies CNAME",
         f"cp lines: {copied}",
     )
@@ -363,21 +363,6 @@ def check_favicon(path, html):
     )
 
 
-def ico_sizes(path):
-    """The (width, height) of every image in an ICO, from its directory.
-
-    Six bytes of header (reserved, type, count), then sixteen per entry whose
-    first two bytes are width and height, with 0 meaning 256.
-    """
-    data = path.read_bytes()
-    count = struct.unpack_from("<HHH", data, 0)[2]
-    sizes = []
-    for i in range(count):
-        w, h = struct.unpack_from("<BB", data, 6 + 16 * i)
-        sizes.append((w or 256, h or 256))
-    return sizes
-
-
 def check_favicon_deploys():
     """The icon files are not built and not in .build-outputs, so, like CNAME,
     only a cp line in the deploy recipe gets them onto gh-pages -- and the
@@ -407,6 +392,28 @@ def check_favicon_deploys():
             "favicon.ico carries 16px and 32px renderings",
             f"sizes: {sizes}",
         )
+
+
+def ico_sizes(path):
+    """The (width, height) of every image in an ICO, from its directory.
+
+    Six bytes of header (reserved, type, count), then sixteen per entry whose
+    first two bytes are width and height, with 0 meaning 256.
+    """
+    data = path.read_bytes()
+    if len(data) < 6:
+        return []
+    reserved, kind, count = struct.unpack_from("<HHH", data, 0)
+    # Anything that is not an ICO directory, or is cut short, yields no sizes
+    # -- a labelled FAIL upstream, not a struct traceback that the mutation
+    # harness would count as "passed".
+    if reserved != 0 or kind != 1 or len(data) < 6 + 16 * count:
+        return []
+    sizes = []
+    for i in range(count):
+        w, h = struct.unpack_from("<BB", data, 6 + 16 * i)
+        sizes.append((w or 256, h or 256))
+    return sizes
 
 
 def check_deploy_guard_sees_untracked():
