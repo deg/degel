@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-PY := build.py check.py inject_archive_noindex.py make_og.py test_build.py test_check.py
+PY := build.py check.py inject_archive_noindex.py make_og.py make_favicon.py test_build.py test_check.py
 
 # Where the live site is assembled before it is mirrored onto gh-pages.
 STAGE := .deploy-stage
@@ -57,7 +57,7 @@ deploy: check  ## publish to degel.com; MSG="what changed" required
 	rm -rf $(STAGE)
 	mkdir -p $(STAGE)/assets
 	rsync -a --files-from=.build-outputs . $(STAGE)/
-	cp CNAME og.png robots.txt resume.pdf $(STAGE)/
+	cp CNAME og.png robots.txt resume.pdf favicon.ico apple-touch-icon.png $(STAGE)/
 	cp assets/david.jpg $(STAGE)/assets/
 	rsync -a history/ $(STAGE)/history/
 	rsync -a tmp/ $(STAGE)/tmp/

@@ -302,6 +302,49 @@ def main():
         "Makefile",
         lambda s: s.replace("cp CNAME og.png", "cp og.png"),
     )
+    # --- the favicon (website-c50) ---
+    # Both icon files reach gh-pages only through the cp line, and the mirror
+    # deletes whatever is not staged; a page-level check cannot see a 404.
+    mutate(
+        "the deploy dropping favicon.ico is caught",
+        "Makefile",
+        lambda s: s.replace(" favicon.ico ", " "),
+    )
+    mutate(
+        "the deploy dropping apple-touch-icon.png is caught",
+        "Makefile",
+        lambda s: s.replace(" apple-touch-icon.png ", " "),
+    )
+    # A name that merely contains the wanted one must not satisfy the check:
+    # this is the third time a substring test has quietly stopped guarding.
+    mutate(
+        "a look-alike name does not stand in for favicon.ico",
+        "Makefile",
+        lambda s: s.replace(" favicon.ico ", " not-favicon.ico "),
+    )
+    # Each of the three declarations in the head has a client that needs it.
+    mutate(
+        "a page without the inlined SVG icon is caught",
+        "src/_meta.html",
+        lambda s: s.replace(
+            '<link rel="icon" href="{{IMG:degel-emblem.svg}}" type="image/svg+xml">\n',
+            "",
+        ),
+    )
+    mutate(
+        "a page without the /favicon.ico link is caught",
+        "src/_meta.html",
+        lambda s: s.replace(
+            '<link rel="icon" href="/favicon.ico" sizes="32x32">\n', ""
+        ),
+    )
+    mutate(
+        "a page without the apple-touch-icon link is caught",
+        "src/_meta.html",
+        lambda s: s.replace(
+            '<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n', ""
+        ),
+    )
     # The guard this replaced used `git diff`, which is blind to untracked
     # files — so the one change that first needed an untracked file to deploy
     # (website-efe.1's portrait) sailed past it.

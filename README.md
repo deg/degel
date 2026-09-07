@@ -14,11 +14,12 @@ no webfonts, no external requests.
 | `check.py` | post-build invariants — `make check`, and `make deploy` runs it first so a failing build cannot publish |
 | `test_build.py` | `build.py`'s failure paths (bad `{{META}}`, include cycles, missing partials) against throwaway trees — `make test` |
 | `make_og.py` | regenerates `og.png`, the social card. Run by hand, not by `make build` — the card changes about once a year and rebuilding it would rewrite a 40KB binary in every commit. Needs Pillow and macOS Palatino |
+| `make_favicon.py` | regenerates `favicon.ico` and `apple-touch-icon.png` from `assets/degel-emblem.svg`, the wrench-through-D emblem of the 2001-2015 site. The SVG itself is inlined into every page head by the build; the two files are for Safari, home screens and the unprompted `/favicon.ico` probe. Run by hand, same reasoning as `make_og.py`. Needs Pillow and `rsvg-convert` (`brew install librsvg`) |
 | `inject_archive_noindex.py` | gives every archived page under `history/` a robots `noindex`. Idempotent; re-run after importing another era. What counts as an archived page is imported from `check.py` so the two cannot disagree |
 | `test_check.py` | mutation tests: breaks one invariant in the sources at a time and asserts `check.py` notices. A checker that only ever passes proves nothing |
 | `index.html` | built output — fully self-contained, this is what deploys |
-| `assets/` | logo/image sources for the build. Inlined as data URIs, so nothing here deploys — except `david.jpg`, which also deploys as a real file because the JSON-LD `Person.image` needs a URL |
-| `og.png`, `robots.txt`, `CNAME`, `assets/david.jpg` | deployable artifacts, copied by the deploy recipe rather than built |
+| `assets/` | logo/image sources for the build, including `degel-emblem.svg`, the favicon. Inlined as data URIs, so nothing here deploys — except `david.jpg`, which also deploys as a real file because the JSON-LD `Person.image` needs a URL |
+| `og.png`, `robots.txt`, `CNAME`, `resume.pdf`, `favicon.ico`, `apple-touch-icon.png`, `assets/david.jpg` | deployable artifacts, copied by the deploy recipe rather than built |
 | `sitemap.xml` | **generated** by `build.py` from the same walk that emits the pages — never hand-edit |
 | `docs/` | design rationale too long to sit in `DECISIONS.md` — currently `archive-indexing.md`, why the museum is kept out of search the way it is. Not deployed |
 | `history/pre-2026/` | the retired pre-2026 site, exactly as archived on the live domain (noindexed) |
@@ -42,8 +43,8 @@ make check-live                   # verify degel.com serves this exact build
 
 Deploy never switches your checkout. It assembles the whole live site in
 `.deploy-stage/` (every page listed in `.build-outputs`, which includes the
-generated `sitemap.xml`, plus `CNAME`, `og.png`, `robots.txt`,
-`assets/david.jpg` and `history/`), opens `gh-pages` in a temporary worktree
+generated `sitemap.xml`, plus `CNAME`, `og.png`, `robots.txt`, `resume.pdf`,
+`favicon.ico`, `apple-touch-icon.png`, `assets/david.jpg`, `history/` and `tmp/`), opens `gh-pages` in a temporary worktree
 (`.deploy-tmp/`), and MIRRORS the staging tree onto it with `--delete` — so a
 page whose source is gone comes down off the live site instead of staying
 published for good. Then it commits, pushes, and cleans up. It refuses to run

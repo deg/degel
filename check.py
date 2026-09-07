@@ -38,6 +38,7 @@ No dependencies: stdlib only, matching build.py and the rest of the site.
 import json
 import pathlib
 import re
+import struct
 import sys
 import urllib.parse
 
@@ -319,6 +320,93 @@ def check_cname_deploys():
         "the deploy copies CNAME",
         f"cp lines: {copied}",
     )
+
+
+def check_favicon(path, html):
+    """Every page carries the icon three ways, and each has a reason.
+
+    The SVG, inlined as a data URI, is the favicon proper: it fetches nothing,
+    which is the round-1 rule, and it is crisp at every size. But Safari
+    ignores SVG favicons and asks for /favicon.ico, and iOS home screens and
+    link previews want apple-touch-icon.png -- both of which 404ed from launch
+    until 2026-09-07, with nothing here to say so (website-c50). The two file
+    links point at the repo root, so check_links_resolve already proves the
+    files exist; this check proves each page still declares all three, since
+    a partial edit that dropped one would build and pass everything else.
+    """
+    links = re.findall(r"<link\b[^>]*>", html)
+
+    def rel_of(tag):
+        m = re.search(r'rel=["\']([^"\']*)["\']', tag)
+        return m.group(1).lower() if m else ""
+
+    def href_of(tag):
+        m = re.search(r'href=["\']([^"\']*)["\']', tag)
+        return m.group(1) if m else ""
+
+    icons = [href_of(t) for t in links if rel_of(t) == "icon"]
+    check(
+        any(h.startswith("data:image/svg+xml") for h in icons),
+        f"{path}: favicon is an inlined SVG",
+        f"icon hrefs: {[h[:40] for h in icons]}",
+    )
+    check(
+        "/favicon.ico" in icons,
+        f"{path}: declares /favicon.ico for Safari",
+        f"icon hrefs: {[h[:40] for h in icons]}",
+    )
+    touch = [href_of(t) for t in links if rel_of(t) == "apple-touch-icon"]
+    check(
+        touch == ["/apple-touch-icon.png"],
+        f"{path}: declares the apple-touch-icon",
+        str(touch),
+    )
+
+
+def ico_sizes(path):
+    """The (width, height) of every image in an ICO, from its directory.
+
+    Six bytes of header (reserved, type, count), then sixteen per entry whose
+    first two bytes are width and height, with 0 meaning 256.
+    """
+    data = path.read_bytes()
+    count = struct.unpack_from("<HHH", data, 0)[2]
+    sizes = []
+    for i in range(count):
+        w, h = struct.unpack_from("<BB", data, 6 + 16 * i)
+        sizes.append((w or 256, h or 256))
+    return sizes
+
+
+def check_favicon_deploys():
+    """The icon files are not built and not in .build-outputs, so, like CNAME,
+    only a cp line in the deploy recipe gets them onto gh-pages -- and the
+    mirror's --delete takes them straight back off if that line goes. The
+    pages would still link to them, and Safari would be back to a 404 that
+    no page-level check can see.
+
+    The ICO is also checked for carrying more than one size: a single-size
+    icon looks fine at the size it was made and is resampled to mush at the
+    others, and nothing about the file's name or presence says which it is.
+    """
+    copied = deploy_copies()
+    for name in ("favicon.ico", "apple-touch-icon.png"):
+        check((root / name).exists(), f"{name} exists in the repo")
+        # Tokenised, not substring: a name that merely CONTAINS the wanted one
+        # must not satisfy this (the --exclude=/.git lesson).
+        check(
+            any(name in ln.split() for ln in copied),
+            f"the deploy copies {name}",
+            f"cp lines: {copied}",
+        )
+    ico = root / "favicon.ico"
+    if ico.exists():
+        sizes = ico_sizes(ico)
+        check(
+            {(16, 16), (32, 32)} <= set(sizes),
+            "favicon.ico carries 16px and 32px renderings",
+            f"sizes: {sizes}",
+        )
 
 
 def check_deploy_guard_sees_untracked():
@@ -609,10 +697,12 @@ def main():
         check_links_resolve(path, html)
         check_one_nav(path, html)
         check_canonical(path, html)
+        check_favicon(path, html)
         if is_article(path):
             check_article_metadata(path, html)
     check_waveband_alternation(pathlib.Path("index.html").read_text())
     check_cname_deploys()
+    check_favicon_deploys()
     check_deploy_guard_sees_untracked()
     check_jsonld_images_deploy()
     check_archive_stays_out_of_search()

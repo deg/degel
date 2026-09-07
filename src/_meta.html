@@ -5,7 +5,13 @@
 <meta property="og:image" content="https://degel.com/og.png">
 <meta property="og:image:alt" content="David Goldfarb — Fractional CTO and Software Consultant. Degel Software, every technology wave since 1980.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cline x1='4' y1='2.5' x2='4' y2='26' stroke='%23445566' stroke-width='1.6' stroke-linecap='round'/%3E%3Cpath fill='%230038b8' d='M5 3.6 Q8.5 2.2 11 3.6 T17 3.8 L17 9.8 Q13.5 11.2 11 9.8 T5 9.6 Z'/%3E%3C/svg%3E">
+<!-- The favicon is the wrench-through-D emblem from the 2001-2015 site, inlined
+     as SVG so the page fetches nothing. favicon.ico and apple-touch-icon.png
+     are for Safari, home screens and the unprompted probes; make_favicon.py
+     generates both from the same assets/degel-emblem.svg. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="{{IMG:degel-emblem.svg}}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <!-- Cloudflare Web Analytics — the only external request this site makes, see
      DECISIONS.md Round 12 and website-efe.3. defer/module so it cannot delay
