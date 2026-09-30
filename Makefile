@@ -63,7 +63,9 @@ deploy: check  ## publish to degel.com; MSG="what changed" required
 	cp CNAME og.png robots.txt resume.pdf favicon.ico apple-touch-icon.png $(STAGE)/
 	cp assets/david.jpg $(STAGE)/assets/
 	rsync -a history/ $(STAGE)/history/
-	rsync -a tmp/ $(STAGE)/tmp/
+	# Guarded: tmp/ is meant to be deleted once a parked page comes down, and
+	rsync exits 23 on a missing source, which would abort the next deploy.
+	if [ -d tmp ]; then rsync -a tmp/ $(STAGE)/tmp/; fi
 	git worktree remove --force .deploy-tmp 2>/dev/null || true
 	rm -rf .deploy-tmp
 	git worktree prune
