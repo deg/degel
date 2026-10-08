@@ -16,6 +16,7 @@ _website_notes.txt
 .dolt/
 *.db
 .beads-credential-key
+.beads.gate.lock
 .beads/proxieddb/
 
 # macOS noise
