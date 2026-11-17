@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{{INCLUDE:_meta.html}}
+<title>Toys &mdash; David Goldfarb</title>
+<meta name="description" content="Things David Goldfarb builds for fun, by vibe engineering: a CP/M computer, a Scheme interpreter and a gallery of cellular automata, all running in your browser.">
+<meta property="og:title" content="Toys &mdash; David Goldfarb">
+<meta property="og:description" content="A CP/M computer, a Scheme interpreter and a gallery of cellular automata, all running in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://degel.com/toys/">
+<link rel="canonical" href="https://degel.com/toys/">
+{{INCLUDE:_style.html}}
+{{INCLUDE:_style-toys.html}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://degel.com/toys/",
+  "name": "Toys",
+  "url": "https://degel.com/toys/",
+  "author": {"@type": "Person", "name": "David Goldfarb", "url": "https://degel.com/"},
+  "hasPart": [
+    {"@type": "WebApplication", "name": "Simple rules, strange worlds", "url": "https://automata.degel.com/", "browserRequirements": "Requires WebAssembly"},
+    {"@type": "WebApplication", "name": "CPeMulator", "url": "https://cpemulator.degel.com/", "browserRequirements": "Requires WebAssembly"},
+    {"@type": "WebApplication", "name": "nscheme", "url": "https://nscheme.degel.com/", "browserRequirements": "Requires WebAssembly"}
+  ]
+}
+</script>
+</head>
+<body>
+
+{{INCLUDE:_nav.html}}
+
+<main id="content">
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Toys</p>
+      <h2>Things I build for&nbsp;fun</h2>
+      <p>I build these for fun, with AI agents writing most of the code and me doing the engineering: the design, the tests the code has to pass, review of everything that comes back, and refusing &ldquo;done&rdquo; until it is. I call it <em>vibe engineering</em>: the speed of vibe coding, with the discipline that makes the result trustworthy. My <a href="/writing/">essays</a> describe how that works in practice, and <a href="https://github.com/deg/beads-utils" target="_blank" rel="noopener noreferrer">beads-utils</a> is the tooling I built for it.</p>
+    </div>
+
+    <div class="toy-grid">
+
+      <article class="toy" data-toy="automata">
+        <a class="toy-shot" href="https://automata.degel.com/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="{{IMG:toy-automata.webp}}" alt="" width="800" height="500"></a>
+        <div class="toy-body">
+          <span class="eyebrow">Cellular automata &amp; more &middot; Rust</span>
+          <h3><a href="https://automata.degel.com/" target="_blank" rel="noopener noreferrer">Simple rules, strange worlds</a></h3>
+          <p>Grids of cells that follow their neighbours, and a number squared over and over. Conway&rsquo;s Game of Life, Langton&rsquo;s ant, Wireworld, Lenia, snowflakes, sandpiles and the Mandelbrot set, all running live. Draw on the grid, change the rules, and watch what grows.</p>
+          <p class="toy-links"><a class="btn primary" href="https://automata.degel.com/" target="_blank" rel="noopener noreferrer">Try it</a><a href="https://github.com/deg/cellular-automata" target="_blank" rel="noopener noreferrer">Source</a></p>
+        </div>
+      </article>
+
+      <article class="toy" data-toy="cpemulator">
+        <a class="toy-shot" href="https://cpemulator.degel.com/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="{{IMG:toy-cpemulator.webp}}" alt="" width="800" height="500"></a>
+        <div class="toy-body">
+          <span class="eyebrow">Z80 &amp; CP/M 2.2 &middot; Rust</span>
+          <h3><a href="https://cpemulator.degel.com/" target="_blank" rel="noopener noreferrer">CPeMulator</a></h3>
+          <p>CP/M was the operating system most 8-bit business computers ran around 1980. This boots the genuine, unmodified CP/M&nbsp;2.2 on a Z80 emulator written from scratch in Rust. Play Zork, write in WordStar, compile with Turbo Pascal, all at an <code>A&gt;</code> prompt.</p>
+          <p class="toy-links"><a class="btn primary" href="https://cpemulator.degel.com/" target="_blank" rel="noopener noreferrer">Try it</a><a href="https://github.com/deg/CPeMulator" target="_blank" rel="noopener noreferrer">Source</a></p>
+        </div>
+      </article>
+
+      <article class="toy" data-toy="nscheme">
+        <a class="toy-shot" href="https://nscheme.degel.com/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"><img src="{{IMG:toy-nscheme.webp}}" alt="" width="800" height="500"></a>
+        <div class="toy-body">
+          <span class="eyebrow">R7RS Scheme &middot; Rust</span>
+          <h3><a href="https://nscheme.degel.com/" target="_blank" rel="noopener noreferrer">nscheme</a></h3>
+          <p>A Scheme interpreter in Rust: the R7RS-small core plus the R7RS-large libraries, compiled to WebAssembly so it runs in the page. Type a program and run it. It began as a weekend experiment in AI-assisted coding.</p>
+          <p class="toy-links"><a class="btn primary" href="https://nscheme.degel.com/" target="_blank" rel="noopener noreferrer">Try it</a><a href="https://github.com/deg/nscheme" target="_blank" rel="noopener noreferrer">Source</a><a href="/writing/scheme-in-a-weekend/">The story</a></p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<div class="contact-compact">
+{{INCLUDE:_contact.html}}
+</div>
+
+</main>
+
+{{INCLUDE:_footer.html}}
+{{INCLUDE:_script.html}}
+</body>
+</html>

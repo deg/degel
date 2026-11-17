@@ -143,14 +143,18 @@ nav[aria-label="Site"]::after { content: ""; display: block; height: 3px; backgr
 .brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
 .nav-links { display: flex; gap: 1.4rem; margin-left: auto; align-items: center; }
-.nav-links a { color: #c4d1d4; font-size: .94rem; font-weight: 500; }
+.nav-links a { color: #c4d1d4; font-size: .94rem; font-weight: 500; white-space: nowrap; }
 .nav-links a:hover { color: var(--deep-ink); text-decoration: none; }
 .nav-links a.cta {
   color: #0d1726; background: var(--deep-accent);
   padding: .45rem .95rem; border-radius: 999px; font-weight: 600;
 }
 .nav-links a.cta:hover { filter: brightness(1.08); }
-@media (max-width: 40rem) { .nav-links a:not(.cta) { display: none; } }
+/* Below this width the row of links does not fit beside the brand: it wrapped
+   labels onto two lines ("What I / do"), from 660px to 760px with five links
+   and to 820px once Toys made six. 54rem (864px) leaves room for system
+   fonts wider than the Mac's. Phones and portrait tablets get brand + CTA. */
+@media (max-width: 54rem) { .nav-links a:not(.cta) { display: none; } }
 
 /* ============ hero ============ */
 header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--tint-a), var(--paper)); }
@@ -356,6 +360,14 @@ section { padding: 5.5rem 0; }
 .contact-meta { margin-top: 1.6rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: .92rem; color: var(--deep-muted); }
 .contact-meta a { color: var(--deep-muted); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--deep-muted) 40%, transparent); text-underline-offset: 3px; }
 .contact-meta a:hover { color: var(--deep-ink); }
+/* The same block, scaled down for a page other than home. _contact.html closes
+   the home page, where a 2.7rem headline is the point; at the foot of an essay
+   or the Toys page it shouts over what it follows. Lived in _style-article.html
+   until a second kind of page needed it. */
+.contact-compact section { padding: 3.4rem 0; }
+.contact-compact .contact h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); }
+.contact-compact .contact .big-mail { font-size: clamp(1.1rem, 2vw, 1.3rem); }
+.contact-compact .contact-meta { margin-top: 1.2rem; font-size: .86rem; }
 
 /* ============ footer ============ */
 footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
@@ -510,14 +522,6 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
 }
 .article-foot a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .article-foot .sep { margin: 0 .6rem; color: var(--line); }
-
-/* ---- the shared contact block, scaled for an article page ----
-   _contact.html closes the home page, where a 2.7rem headline is the point.
-   At the foot of an essay it shouts over the article it follows. */
-.contact-compact section { padding: 3.4rem 0; }
-.contact-compact .contact h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); }
-.contact-compact .contact .big-mail { font-size: clamp(1.1rem, 2vw, 1.3rem); }
-.contact-compact .contact-meta { margin-top: 1.2rem; font-size: .86rem; }
 </style>
 <script type="application/ld+json">
 {
@@ -548,6 +552,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <a href="/#waves">Track record</a>
       <a href="/#work">Recent work</a>
       <a href="/writing/">Essays</a>
+      <a href="/toys/">Toys</a>
       <a href="/#about">About</a>
       <a class="cta" href="mailto:deg@degel.com">Email David</a>
     </div>

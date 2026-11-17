@@ -143,14 +143,18 @@ nav[aria-label="Site"]::after { content: ""; display: block; height: 3px; backgr
 .brand { display: flex; align-items: center; gap: .5rem; font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 1.15rem; font-weight: 600; color: var(--deep-ink); letter-spacing: .01em; }
 .brand:hover { text-decoration: none; }
 .nav-links { display: flex; gap: 1.4rem; margin-left: auto; align-items: center; }
-.nav-links a { color: #c4d1d4; font-size: .94rem; font-weight: 500; }
+.nav-links a { color: #c4d1d4; font-size: .94rem; font-weight: 500; white-space: nowrap; }
 .nav-links a:hover { color: var(--deep-ink); text-decoration: none; }
 .nav-links a.cta {
   color: #0d1726; background: var(--deep-accent);
   padding: .45rem .95rem; border-radius: 999px; font-weight: 600;
 }
 .nav-links a.cta:hover { filter: brightness(1.08); }
-@media (max-width: 40rem) { .nav-links a:not(.cta) { display: none; } }
+/* Below this width the row of links does not fit beside the brand: it wrapped
+   labels onto two lines ("What I / do"), from 660px to 760px with five links
+   and to 820px once Toys made six. 54rem (864px) leaves room for system
+   fonts wider than the Mac's. Phones and portrait tablets get brand + CTA. */
+@media (max-width: 54rem) { .nav-links a:not(.cta) { display: none; } }
 
 /* ============ hero ============ */
 header.hero { padding: 6rem 0 3rem; background: linear-gradient(180deg, var(--tint-a), var(--paper)); }
@@ -356,6 +360,14 @@ section { padding: 5.5rem 0; }
 .contact-meta { margin-top: 1.6rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: .92rem; color: var(--deep-muted); }
 .contact-meta a { color: var(--deep-muted); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--deep-muted) 40%, transparent); text-underline-offset: 3px; }
 .contact-meta a:hover { color: var(--deep-ink); }
+/* The same block, scaled down for a page other than home. _contact.html closes
+   the home page, where a 2.7rem headline is the point; at the foot of an essay
+   or the Toys page it shouts over what it follows. Lived in _style-article.html
+   until a second kind of page needed it. */
+.contact-compact section { padding: 3.4rem 0; }
+.contact-compact .contact h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); }
+.contact-compact .contact .big-mail { font-size: clamp(1.1rem, 2vw, 1.3rem); }
+.contact-compact .contact-meta { margin-top: 1.2rem; font-size: .86rem; }
 
 /* ============ footer ============ */
 footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
@@ -474,6 +486,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
       <a href="/#waves">Track record</a>
       <a href="/#work">Recent work</a>
       <a href="/writing/">Essays</a>
+      <a href="/toys/">Toys</a>
       <a href="/#about">About</a>
       <a class="cta" href="mailto:deg@degel.com">Email David</a>
     </div>
@@ -649,7 +662,7 @@ footer { border-top: 1px solid var(--line); padding: 2.2rem 0 3rem; }
           <span class="years eyebrow">2023&ndash;now</span>
           <h3>AI-augmented development</h3>
           <p>I work inside this one daily. Most of that time goes to MarketBuzzr &mdash; I&rsquo;m co-founder and technical lead, building its multi-stage LLM pipeline and the product around it &mdash; and to the client work below: workflow automation, operations software, LLM-first prototypes.</p>
-          <p>The fun spills into weekends. One produced a <a href="https://github.com/deg/nscheme" target="_blank" rel="noopener noreferrer">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite; the next, a <a href="https://github.com/deg/CPeMulator" target="_blank" rel="noopener noreferrer">Z80 and CP/M emulator</a> that boots the genuine 1979 operating system and runs Zork, WordStar, Turbo Pascal, and many other great applications from back then.</p>
+          <p>The fun spills into weekends. One produced a <a href="https://nscheme.degel.com/" target="_blank" rel="noopener noreferrer">13,000-line Scheme interpreter in Rust</a> &mdash; a language I&rsquo;d never used &mdash; passing all 1,225 tests of the standard conformance suite; the next, a <a href="https://cpemulator.degel.com/" target="_blank" rel="noopener noreferrer">Z80 and CP/M emulator</a> that boots the genuine 1979 operating system and runs Zork, WordStar, Turbo Pascal, and many other great applications from back then; most recently, a <a href="https://automata.degel.com/" target="_blank" rel="noopener noreferrer">gallery of cellular automata</a> and other simple rules. All three run in your browser: see <a href="/toys/">Toys</a>.</p>
           <div class="artifacts">
             <span class="label">Era artifacts</span>
             <span class="chip color-chip"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgd2lkdGg9IjI4IgogICAgIGhlaWdodD0iMjgiCiAgICAgdmlld0JveD0iMCAwIDI4IDI4Ij4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIKICAgICAgICAgICAgICAgICAgICBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIKICAgICAgICAgICAgICAgICAgICB4MT0iMjQuMTEzIgogICAgICAgICAgICAgICAgICAgIHkxPSI0LjAyMyIKICAgICAgICAgICAgICAgICAgICB4Mj0iMy44ODciCiAgICAgICAgICAgICAgICAgICAgeTI9IjIzLjk3NyI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzZlZTBmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM1ZWE0ZmYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHJ4PSI4IiByeT0iOCIKICAgICAgICBmaWxsPSJ1cmwoI2cpIi8+CgogIDx0ZXh0IHg9IjE0IiB5PSIxNCIKICAgICAgICB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICAgIGZvbnQtZmFtaWx5PSJzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIFNlZ29lIFVJLCBSb2JvdG8sIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIyMCIKICAgICAgICBmb250LXdlaWdodD0iODAwIgogICAgICAgIGZpbGw9IiMwYTBmMmEiCiAgICAgICAgZHk9IjAuMzVlbSI+TTwvdGV4dD4KPC9zdmc+Cg==" alt="MarketBuzzr"></span>

@@ -1,0 +1,50 @@
+<style>
+/* ============ the Toys page ============
+   Included only by /toys/, after _style.html. Every rule is scoped under
+   .toy-grid or .toy, so nothing here can reach another page.
+
+   Tokens only — no new colors — so dark mode follows _style.html with no
+   @media or [data-theme] block of its own. The accent (--tc) colours only the
+   bar under each picture: the --c tokens are validated as fills, and some
+   are below AA as small text, so the text stays on --ink and --muted.   */
+
+/* Three columns or one, never two: two columns left the third card alone on a
+   row of its own. One column is capped so a card's picture stays card-sized. */
+.toy-grid {
+  display: grid; gap: 1.5rem;
+  grid-template-columns: minmax(0, 34rem);
+}
+@media (min-width: 62rem) { .toy-grid { grid-template-columns: repeat(3, 1fr); } }
+.toy[data-toy="automata"]   { --tc: var(--c6); }
+.toy[data-toy="cpemulator"] { --tc: var(--c4); }
+.toy[data-toy="nscheme"]    { --tc: var(--c3); }
+.toy {
+  /* Same 4% accent wash, border, radius and shadow as .case and .svc. */
+  background: color-mix(in srgb, var(--tc, var(--accent)) 4%, var(--card));
+  border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
+  overflow: hidden; display: flex; flex-direction: column;
+}
+/* The screenshot. Every image is cut to 16:10 (800x500); aspect-ratio holds
+   the space before it decodes, so nothing below it jumps. */
+.toy-shot {
+  display: block; aspect-ratio: 16 / 10; overflow: hidden;
+  background: var(--deep); border-bottom: 4px solid var(--tc, var(--line));
+}
+.toy-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (prefers-reduced-motion: no-preference) {
+  .toy-shot img { transition: transform .35s ease; }
+  .toy:hover .toy-shot img { transform: scale(1.035); }
+}
+.toy-body { padding: 1.3rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: .65rem; flex: 1; }
+.toy h3 { font-size: 1.32rem; }
+.toy h3 a { color: var(--ink); }
+.toy h3 a:hover { color: var(--accent); text-decoration: none; }
+.toy p { color: var(--muted); font-size: 1rem; }
+/* margin-top:auto pins the links to the card's foot, so the three rows line up
+   across the grid however long each description runs. */
+.toy-links {
+  margin-top: auto; padding-top: .5rem;
+  display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap; font-size: .95rem;
+}
+.toy-links .btn { padding: .5rem 1.15rem; font-size: .92rem; }
+</style>
